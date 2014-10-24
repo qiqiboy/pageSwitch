@@ -1,0 +1,150 @@
+﻿@charset "utf-8";
+ 
+/* reset css */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+/* to preserve line-height and selector appearance */
+sup {
+	vertical-align:text-top;
+}
+sub {
+	vertical-align:text-bottom;
+}
+input,
+button,
+textarea,
+select {
+	font-family:inherit;
+	font-size:inherit;
+	font-weight:inherit;
+	width:auto;
+	overflow:visible;
+}
+/*because legend doesn't inherit in IE */
+legend {
+	color:#000;
+}
+h1,h2,h3,h4,h5,h6{
+	font-weight:normal;
+}
+/* end reset css */
+html,
+body {
+	height:100%;
+}
+a,a:active{
+	color:#333;
+	text-decoration:none;
+	outline:none;
+}
+/*float clear*/
+.clear:after {
+	content: "\200c";
+	display :block;
+	height: 0;
+	font-size: 0;
+	clear: both;
+}
+.none{
+	display:none;
+	overflow:hidden;
+}
+
+a,button,
+input[type=submit],
+input[type=button]{
+    -webkit-tap-highlight-color:rgba(0,0,0,0);
+}
+
+body {
+	color:#333;
+	font-family:"Microsoft YaHei", Arial, Verdana, serif;
+	font-size:14px;
+	line-height:1.4;
+    -webkit-user-select:none; /* 禁止选择 */
+    -webkit-touch-callout:none; /* 禁用弹出 */
+}
+.wrapper{
+	width:100%;
+	display:block;
+	min-width:320px;
+}
+.main{
+	margin:0 auto;
+}
+#wrap{
+    position:relative;
+    min-height:100%;
+    _height:100%;
+}
+#pages{
+    position:absolute;
+    text-align:center;
+    height:100%;
+    width:100%;
+    overflow:hidden;
+}
+.page{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+}
+.page1{
+    background:red;
+}
+.page2{
+    background:yellow;
+}
+.page3{
+    background:green;
+}
+.page4{
+    background:black;
+}
+.page5{
+    background:grey;
+}
+
