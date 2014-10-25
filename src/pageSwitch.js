@@ -115,7 +115,7 @@
 
         ev.oldEvent=oldEvent;
 
-        ev.target=oldEvent.target||oldEvent.srcElement||document;
+        ev.target=oldEvent.target||oldEvent.srcElement||document.documentElement;
         if(ev.target.nodeType===3){
             ev.target=ev.target.parentNode;
         }
@@ -305,9 +305,10 @@
                             percent=this.percent+offset/total;
                             tpage=this.pages[tpageIndex=this.fixIndex(this.current+(percent>0?-1:1))];
                             _tpage=this.pages[this.fixIndex(this.current+(percent>0?1:-1))];
-                            percent/=tpage?1:3;
                             if(tpage){
                                 tpage.style.display='block';
+                            }else{
+                                percent/=3;
                             }
                             if(_tpage){
                                 _tpage.style.display='none';
