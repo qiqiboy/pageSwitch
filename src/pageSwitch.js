@@ -297,9 +297,9 @@
                             cpage=this.pages[this.current],
                             pos=this.percent*total,
                             total=this[['width','height'][dir]],
-                            tpage,tpageIndex,_tpage,cpos,percent;
+                            tpage,tpageIndex,_tpage,percent;
                         if(this.drag==null && this.rect.toString()!=rect.toString()){
-                            this.drag=Math.abs(offset)>Math.abs(rect[1-dir]-this.rect[1-dir]);
+                            this.drag=Math.abs(offset)>=Math.abs(rect[1-dir]-this.rect[1-dir]);
                         }
                         if(this.drag){
                             percent=this.percent+offset/total;
