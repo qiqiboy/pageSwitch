@@ -147,9 +147,9 @@
             this.loop=false;
             this.ease=function(t,b,c,d){ return -c * ((t=t/d-1)*t*t*t - 1) + b; }
             this.length=this.pages.length;
-            addListener(this.container,STARTEVENT.replace(),handler);
+            addListener(this.container,STARTEVENT+" mousewheel DOMMouseScroll".replace(),handler);
             addListener(document,MOVEEVENT,handler);
-            addListener(window,"resize mousewheel DOMMouseScroll",handler);
+            addListener(window,"resize",handler);
             each(this.pages,function(page){
                  page.style.cssText='position:absolute;top:0;left:0;width:100%;height:100%;display:none;';
                  page.percent=0;
