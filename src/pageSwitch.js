@@ -100,12 +100,6 @@
         });
     }
 
-    function position(elem){
-        var rect=elem.getBoundingClientRect(),
-            parentRect=(elem.offsetParent||document.documentElement).getBoundingClientRect();
-        return {x:rect.left-parentRect.left,y:rect.top-parentRect.top};
-    }
-
     function filterEvent(oldEvent){
         var ev={};
 
@@ -207,8 +201,8 @@
         },
         resize:function(){
             this.pages[this.current].style.display='block'; 
-            this.height=this.container.offsetHeight;
-            this.width=this.container.offsetWidth;
+            this.height=this.container.clientHeight;
+            this.width=this.container.clientWidth;
         },
         slide:function(index){
             var self=this,
