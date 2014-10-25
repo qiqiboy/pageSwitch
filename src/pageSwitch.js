@@ -118,7 +118,7 @@
         ev.target=oldEvent.target||oldEvent.srcElement||document;
         if(ev.target.nodeType===3){
             ev.target=ev.target.parentNode;
-		}
+        }
 
         ev.preventDefault=function(){
             oldEvent.preventDefault && oldEvent.preventDefault();
@@ -219,6 +219,7 @@
                 ease=this.ease,
                 current=Math.min(this.length-1,Math.max(0,this.fixIndex(index))),
                 cpage,tpage,tpageIndex,_tpage,percent;
+
             cpage=this.pages[current];
             tpage=this.pages[tpageIndex=this.fixIndex(current==this.current?current+(cpage.percent>0?-1:1):this.current)];
             
