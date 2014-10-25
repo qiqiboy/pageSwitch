@@ -25,6 +25,8 @@
             "pointerdown pointermove pointerup pointercancel" :
             isTouch ? "touchstart touchmove touchend touchcancel" :
             "mousedown mousemove mouseup",
+        STARTEVENT=EVENT.split(" ")[0],
+        MOVEEVENT=EVENT.split(" ").slice(1).join(" "),
         transform=function(){
             var divstyle=document.documentElement.style,
                 tests="transform webkitTransform mozTransform msTransform oTransform".split(" "),
@@ -36,7 +38,7 @@
             }
             return '';
         }();
-        console.log(transform)
+
     function type(obj){
         if(obj==null){
             return String(obj);
@@ -107,7 +109,7 @@
     function filterEvent(oldEvent){
         var ev={};
 
-        each("clientX clientY type".split(" "),function(prop){
+        each("clientX clientY type wheelDelta detail".split(" "),function(prop){
             ev[prop]=oldEvent[prop];
         });
 
@@ -137,77 +139,141 @@
     }
     
     struct.prototype={
+        constructor:struct,
         init:function(){
-            var self=this;
+            var self=this,
+                handler=function(ev){
+                    self.handleEvent(ev);
+                }
             this.pages=children(this.container);
             this.duration=600;
             this.direction=1;
             this.current=0;
+            this.loop=false;
+            this.ease=function(t,b,c,d){ return -c * ((t=t/d-1)*t*t*t - 1) + b; }
             this.length=this.pages.length;
-            addListener(this.container,EVENT+" resize mousewheel DOMMouseScroll",function(ev){
-                self.handleEvent(ev);
-            });
+            addListener(this.container,STARTEVENT.replace(),handler);
+            addListener(document,MOVEEVENT,handler);
+            addListener(window,"resize mousewheel DOMMouseScroll",handler);
             each(this.pages,function(page){
                  page.style.cssText='position:absolute;top:0;left:0;width:100%;height:100%;display:none;';
                  page.percent=0;
             });
             this.resize();
         },
-        setPos:function(elem,value){
+        /* 更改切换效果，重写该方法即可
+         * @param Float percent 过度百分比
+         * @param int tpageIndex 上一个页面次序。注意，该值可能非法，所以需要测试是否存在该页面
+         */
+        onupdate:function(percent,tpageIndex){
+            var current=this.current,
+                cpage=this.pages[this.current],
+                tpage=this.pages[tpageIndex],
+                dir=this.direction,
+                prop;
             if(transform){
-                elem.style[transform]='translate'+['X','Y'][this.direction]+'('+value+'%)'+(transform.replace('Transform','Perspective') in elem.style?' translateZ(0)':'');
+                prop=['X','Y'][dir];
+                if(percent<0){
+                    cpage.style[transform]='translate'+prop+'('+percent*100+'%)';
+                    cpage.style.zIndex=1;
+                    if(tpage){
+                        tpage.style[transform]='scale('+((1-tpage.percent)*.2+.8)+')';
+                        tpage.style.zIndex=0;
+                    }
+                }else{
+                    if(tpage){
+                        tpage.style[transform]='translate'+prop+'('+tpage.percent*100+'%)';
+                        tpage.style.zIndex=1;
+                    }
+                    cpage.style[transform]='scale('+((1-percent)*.2+.8)+')';
+                    cpage.style.zIndex=0;
+                }
             }else{
-                elem.style[['left','top'][this.direction]]=value+'%';
+                prop=['left','top'][dir];
+                cpage.style[prop]=percent*100+'%';
+                if(tpage){
+                    tpage.style[prop]=tpage.percent*100+'%';
+                }
             }
+
         },
-        onin:function(elem,percent){
-            this.setPos(elem,elem.percent=percent);
-        },
-        onout:function(elem,percent){
-            this.setPos(elem,elem.percent=percent>0?percent-100:100+percent);
+        fire:function(ev,percent,tpageIndex){
+            var func=this['on'+ev],
+                args=[].slice.call(arguments,1);
+            if(ev=='update'){
+                this.pages[this.current].percent=percent;
+                if(this.pages[tpageIndex]){
+                    this.pages[tpageIndex].percent=percent>0?percent-1:1+percent;
+                }
+            }
+            if(type(func)=='function'){
+                func.apply(this,args);
+            }
         },
         resize:function(){
             this.pages[this.current].style.display='block'; 
             this.height=this.container.offsetHeight;
             this.width=this.container.offsetWidth;
         },
-        slide:function(index,tpage){
+        slide:function(index){
             var self=this,
                 dir=this.direction,
                 total=this[['width','height'][dir]],
                 duration=this.duration,
-                cpage,percent,stime=+new Date;
-            index=Math.min(this.length-1,Math.max(0,index));
-            cpage=this.pages[index];
-            if(index!=this.current){
-                tpage=this.pages[this.current];
-            }
+                stime=+new Date,
+                ease=this.ease,
+                current=Math.min(this.length-1,Math.max(0,this.fixIndex(index))),
+                cpage,tpage,tpageIndex,_tpage,percent;
+            cpage=this.pages[current];
+            tpage=this.pages[tpageIndex=this.fixIndex(current==this.current?current+(cpage.percent>0?-1:1):this.current)];
+            
+            each(this.pages,function(page,index){
+                if(index!=current&&index!=tpageIndex){
+                    page.style.display='none';
+                }
+            });
 
             if(cpage.style.display=='none'){
                 cpage.style.display='block';
-                percent=index>this.current?100:-100;
+                percent=index>this.current?1:-1;
             }else{
                 percent=cpage.percent;
             }
 
-            this.current=index;
+            duration*=Math.abs(percent);
+
+            this.fire('before',current);
+
+            this.current=current;
 
             ani();
 
+            return this;
+
             function ani(){
-                var s=Math.min(1,(+new Date-stime)/(duration*Math.abs(percent)/100)),
+                var offset=Math.min(duration,+new Date-stime),
+                    s=ease(offset,0,1,duration)||0,
                     cp=percent*(1-s);
-                self.onin(cpage,cp);
-                if(tpage){
-                    self.onout(tpage,cp);
-                }
-                if(s==1){
-                    if(tpage)tpage.style.display='none';
-                    self.timer=null;
+                self.fire('update',cp,tpageIndex);
+                if(offset==duration){
+                    if(tpage){
+                        tpage.style.display='none';
+                    }
+                    self.fire('after',current);
+                    delete self.timer;
                 }else{
                     self.timer=nextFrame(ani);
                 }
             }
+        },
+        prev:function(){
+            return this.slide(this.current-1);
+        },
+        next:function(){
+            return this.slide(this.current+1);
+        },
+        fixIndex:function(index){
+            return this.loop?(this.length+index)%this.length:index;
         },
         handleEvent:function(oldEvent){
             var ev=filterEvent(oldEvent);
@@ -217,10 +283,11 @@
                 case 'touchstart':
                 case 'pointerdown':
                     var nn=ev.target.nodeName.toLowerCase();
-                    if(nn!='a' && nn!='img'){
+                    if(isTouch || nn!='a' && nn!='img'){
                         this.rect=[ev.clientX,ev.clientY];
                         this.percent=this.pages[this.current].percent;
                         this.time=+new Date;
+                        cancelFrame(this.timer);
                     }
                     break;
 
@@ -234,28 +301,23 @@
                             cpage=this.pages[this.current],
                             pos=this.percent*total,
                             total=this[['width','height'][dir]],
-                            tpage,_tpage,cpos,percent;
+                            tpage,tpageIndex,_tpage,cpos,percent;
                         if(this.drag==null && this.rect.toString()!=rect.toString()){
                             this.drag=Math.abs(offset)>Math.abs(rect[1-dir]-this.rect[1-dir]);
-                            cancelFrame(this.timer);
                         }
                         if(this.drag){
-                            percent=this.percent+offset/total*100;
-                            tpage=this.pages[this.current+(percent>0?-1:1)];
-                            _tpage=this.pages[this.current+(percent>0?1:-1)];
-                            this.onin(cpage,percent/(tpage?1:3));
-                            //this.setPos(cpage,(cpage.percent=percent/(tpage?1:3))+'%');
+                            percent=this.percent+offset/total;
+                            tpage=this.pages[tpageIndex=this.fixIndex(this.current+(percent>0?-1:1))];
+                            _tpage=this.pages[this.fixIndex(this.current+(percent>0?1:-1))];
+                            percent/=tpage?1:3;
                             if(tpage){
                                 tpage.style.display='block';
-                                //this.setPos(tpage,(tpage.percnet=(cpos>0?percent-100:100+percent))+'%');
-                                this.onout(tpage,percent);
                             }
                             if(_tpage){
                                 _tpage.style.display='none';
                             }
+                            this.fire('update',percent,tpageIndex);
                             this._offset=offset;
-                            this._cpage=cpage;
-                            this._tpage=tpage;
                             ev.preventDefault();
                         }
                     }
@@ -266,28 +328,35 @@
                 case 'touchcancel':
                 case 'pointerup':
                 case 'pointercancel':
-                    if(this.drag!=null){
-                        if(this.drag){
-                            var index=this.current;
-                            if(+new Date-this.time<250 && Math.abs(this._offset)>30){
-                                index+=this._offset>0?-1:1;
-                            }else if(Math.abs(this._cpage.percent)>50){
-                                index+=this._cpage.percent>0?-1:1;
-                            }
-                            this.slide(index,this._tpage);
-                            ev.preventDefault();
+                    var self=this,
+                        cpage=this.pages[this.current],
+                        index=this.current;
+                    if(this.drag==true){
+                        if(+new Date-this.time<250 && Math.abs(this._offset)>30){
+                            index+=this._offset>0?-1:1;
+                        }else if(Math.abs(cpage.percent)>.5){
+                            index+=cpage.percent>0?-1:1;
                         }
-                        this.rect=this.drag=this.time=this._offset=this.percent=this._cpage=this._tpage=null;
+                        ev.preventDefault();
+                    }
+                    if(this.time){
+                        this.slide(index);
+                        each("rect drag time percnet _offset".split(" "),function(prop){
+                            delete self[prop];
+                        });
                     }
                     break;
 
                 case 'resize':
-
+                    this.resize();
                     break;
 
                 case 'mousewheel':
                 case 'dommousescroll':
-                    
+                    if(!this.timer){
+                        var wd=ev.wheelDelta||-ev.detail;
+                        this[wd>0?'prev':'next']();
+                    }
                     break;
             }
         }
@@ -303,8 +372,3 @@
     this.container=typeof wrap=='string'?document.getElementById(wrap):wrap;
     this.init();
 });
-
-a=new pageSwitch('pages');
-//a.setPos=function(elem,value){
-  //  elem.style.webkitTransform='translateY('+value+'%) scale('+(value>0?100-value:100+value)/100+')'
-//}
