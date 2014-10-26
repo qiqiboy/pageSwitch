@@ -27,17 +27,148 @@
             "mousedown mousemove mouseup",
         STARTEVENT=EVENT.split(" ")[0],
         MOVEEVENT=EVENT.split(" ").slice(1).join(" "),
-        transform=function(){
-            var divstyle=document.documentElement.style,
-                tests="transform WebkitTransform MozTransform msTransform OTransform".split(" "),
+        divstyle=document.documentElement.style,
+        camelCase=function(str){
+			return (str+'').replace(/^-ms-/, 'ms-').replace(/-([a-z]|[0-9])/ig, function(all, letter){
+				return (letter+'').toUpperCase();
+			});
+		},
+        cssVendor=function(){
+            var tests="-webkit- -moz -o- -ms-".split(" "),
                 prop;
             while(prop=tests.shift()){
-                if(prop in divstyle){
+                if(camelCase(prop+'transform') in divstyle){
                     return prop;
                 }
             }
             return '';
-        }();
+        }(),
+        cssTest=function(name){
+			var prop=camelCase(name),
+                _prop=camelCase(cssVendor+prop);
+			return (prop in divstyle) && prop || (_prop in divstyle) && _prop || '';
+        },
+        opacity=cssTest('opacity'),
+        transform=cssTest('transform'),
+        perspective=cssTest('perspective'),
+        backfaceVisibility=cssTest('backface-visibility'),
+        EASE={
+            linear:function(t,b,c,d){ return c*t/d + b; },
+            ease:function(t,b,c,d){ return -c * ((t=t/d-1)*t*t*t - 1) + b; }
+        },
+        TRANSITION={
+            /* 更改切换效果
+             * @param Float percent 过度百分比
+             * @param int tpageIndex 上一个页面次序。注意，该值可能非法，所以需要测试是否存在该页面
+             */
+            slide:function(percent,tpageIndex){
+                var current=this.current,
+                    cpage=this.pages[this.current],
+                    tpage=this.pages[tpageIndex],
+                    dir=this.direction,
+                    prop;
+                if(transform){
+                    prop=['X','Y'][dir];
+                    cpage.style[transform]='translate'+prop+'('+percent*100+'%)';
+                    if(tpage){
+                        tpage.style[transform]='translate'+prop+'('+tpage.percent*100+'%)';
+                    }
+                }else{
+                    prop=['left','top'][dir];
+                    cpage.style[prop]=percent*100+'%';
+                    if(tpage){
+                        tpage.style[prop]=tpage.percent*100+'%';
+                    }
+                }
+            },
+            fade:function(percent,tpageIndex){
+                var current=this.current,
+                    cpage=this.pages[this.current],
+                    tpage=this.pages[tpageIndex];
+                if(opacity){
+                    cpage.style.opacity=1-Math.abs(percent);
+                    if(tpage){
+                        tpage.style.opacity=Math.abs(percent);
+                    }
+                }else{
+                    cpage.style.filter='alpha(opacity='+(1-Math.abs(percent))*100+')';
+                    if(tpage){
+                        tpage.style.filter='alpha(opacity='+Math.abs(percent)*100+')';
+                    }
+                }
+            },
+            slideScale:function(percent,tpageIndex){
+                var current=this.current,
+                    cpage=this.pages[this.current],
+                    tpage=this.pages[tpageIndex],
+                    dir=this.direction,
+                    prop;
+                if(transform){
+                    prop=['X','Y'][dir];
+                    if(percent<0){
+                        cpage.style[transform]='translate'+prop+'('+percent*100+'%)';
+                        cpage.style.zIndex=1;
+                        if(tpage){
+                            tpage.style[transform]='scale('+((1-tpage.percent)*.2+.8)+')';
+                            tpage.style.zIndex=0;
+                        }
+                    }else{
+                        if(tpage){
+                            tpage.style[transform]='translate'+prop+'('+tpage.percent*100+'%)';
+                            tpage.style.zIndex=1;
+                        }
+                        cpage.style[transform]='scale('+((1-percent)*.2+.8)+')';
+                        cpage.style.zIndex=0;
+                    }
+                }else TRANSITION.slide.apply(this,arguments);
+            },
+            scale:function(percent,tpageIndex){
+                var current=this.current,
+                    cpage=this.pages[this.current],
+                    tpage=this.pages[tpageIndex];
+                if(transform){
+                    cpage.style[transform]='scale('+(1-Math.abs(percent))+')';
+                    cpage.style.zIndex=1;
+                    if(tpage){
+                        tpage.style[transform]='scale('+Math.abs(percent)+')';
+                        tpage.style.zIndex=0;
+                    }
+                }else TRANSITION.slide.apply(this,arguments);
+            },
+            skew:function(percent,tpageIndex){
+                var current=this.current,
+                    cpage=this.pages[this.current],
+                    tpage=this.pages[tpageIndex];
+                if(transform){
+                    cpage.style[transform]='skew('+percent*90+'deg)';
+                    cpage.style.zIndex=this.timer?0:1;
+                    if(tpage){
+                        tpage.style[transform]='skew('+tpage.percent*90+'deg)';
+                        tpage.style.zIndex=this.timer?1:0;
+                    }
+                }else TRANSITION.slide.apply(this,arguments);
+            },
+            rotate:function(percent,tpageIndex){
+                var current=this.current,
+                    cpage=this.pages[this.current],
+                    tpage=this.pages[tpageIndex],
+                    dir=this.direction,
+                    prop;
+                if(perspective){
+                    prop=['X','Y'][1-dir];
+                    cpage.style[backfaceVisibility]='hidden';
+                    cpage.style[perspective]='1000px';
+                    cpage.style[transform]='rotate'+prop+'('+Math.abs(percent)*90+'deg)';
+                    cpage.style.zIndex=1;
+                    if(tpage){
+                        tpage.style[backfaceVisibility]='hidden';
+                        tpage.style[perspective]='600px';
+                        tpage.style[transform]='rotate'+prop+'('+(1-Math.abs(tpage.percent))*90+'deg)';
+                        tpage.style.zIndex=0;
+                    }
+                }else TRANSITION.slideScale.apply(this,arguments);
+            }
+        }
 
     function type(obj){
         if(obj==null){
@@ -129,17 +260,20 @@
     
     struct.prototype={
         constructor:struct,
-        init:function(){
+        init:function(config){
             var self=this,
                 handler=function(ev){
                     self.handleEvent(ev);
                 }
+            this.duration=config.duration||600;
+            this.direction=config.direction||1;
+            this.current=config.start||0;
+            this.loop=config.loop||false;
+            this.ease=typeof(config.ease)=='function'?config.ease:EASE[config.ease]||EASE.ease;
+            this.transite=typeof(config.transition)=='function'?config.transition:TRANSITION[config.transition]||TRANSITION.slideScale;
+            this.onbefore=config.onbefore;
+            this.onafter=config.onafter;
             this.pages=children(this.container);
-            this.duration=600;
-            this.direction=1;
-            this.current=0;
-            this.loop=false;
-            this.ease=function(t,b,c,d){ return -c * ((t=t/d-1)*t*t*t - 1) + b; }
             this.length=this.pages.length;
             addListener(this.container,STARTEVENT+" mousewheel DOMMouseScroll",handler);
             addListener(document,MOVEEVENT,handler);
@@ -150,42 +284,6 @@
             });
             this.resize();
         },
-        /* 更改切换效果，重写该方法即可
-         * @param Float percent 过度百分比
-         * @param int tpageIndex 上一个页面次序。注意，该值可能非法，所以需要测试是否存在该页面
-         */
-        onupdate:function(percent,tpageIndex){
-            var current=this.current,
-                cpage=this.pages[this.current],
-                tpage=this.pages[tpageIndex],
-                dir=this.direction,
-                prop;
-            if(transform){
-                prop=['X','Y'][dir];
-                if(percent<0){
-                    cpage.style[transform]='translate'+prop+'('+percent*100+'%)';
-                    cpage.style.zIndex=1;
-                    if(tpage){
-                        tpage.style[transform]='scale('+((1-tpage.percent)*.2+.8)+')';
-                        tpage.style.zIndex=0;
-                    }
-                }else{
-                    if(tpage){
-                        tpage.style[transform]='translate'+prop+'('+tpage.percent*100+'%)';
-                        tpage.style.zIndex=1;
-                    }
-                    cpage.style[transform]='scale('+((1-percent)*.2+.8)+')';
-                    cpage.style.zIndex=0;
-                }
-            }else{
-                prop=['left','top'][dir];
-                cpage.style[prop]=percent*100+'%';
-                if(tpage){
-                    tpage.style[prop]=tpage.percent*100+'%';
-                }
-            }
-
-        },
         fire:function(ev,percent,tpageIndex){
             var func=this['on'+ev],
                 args=[].slice.call(arguments,1);
@@ -194,6 +292,7 @@
                 if(this.pages[tpageIndex]){
                     this.pages[tpageIndex].percent=percent>0?percent-1:1+percent;
                 }
+                this.transite.apply(this,args);
             }
             if(type(func)=='function'){
                 func.apply(this,args);
@@ -353,11 +452,11 @@
 
     ROOT.pageSwitch=struct;
 	
-})(window, function(wrap){
+})(window, function(wrap,config){
     if(!(this instanceof arguments.callee)){
-        return new arguments.callee(wrap);
+        return new arguments.callee(wrap,config);
     }
     
     this.container=typeof wrap=='string'?document.getElementById(wrap):wrap;
-    this.init();
+    this.init(config||{});
 });
