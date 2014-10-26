@@ -29,10 +29,10 @@
         MOVEEVENT=EVENT.split(" ").slice(1).join(" "),
         divstyle=document.documentElement.style,
         camelCase=function(str){
-			return (str+'').replace(/^-ms-/, 'ms-').replace(/-([a-z]|[0-9])/ig, function(all, letter){
-				return (letter+'').toUpperCase();
-			});
-		},
+            return (str+'').replace(/^-ms-/, 'ms-').replace(/-([a-z]|[0-9])/ig, function(all, letter){
+                return (letter+'').toUpperCase();
+            });
+        },
         cssVendor=function(){
             var tests="-webkit- -moz -o- -ms-".split(" "),
                 prop;
@@ -46,7 +46,7 @@
         cssTest=function(name){
 			var prop=camelCase(name),
                 _prop=camelCase(cssVendor+prop);
-			return (prop in divstyle) && prop || (_prop in divstyle) && _prop || '';
+            return (prop in divstyle) && prop || (_prop in divstyle) && _prop || '';
         },
         opacity=cssTest('opacity'),
         transform=cssTest('transform'),
@@ -128,10 +128,10 @@
                     tpage=this.pages[tpageIndex];
                 if(transform){
                     cpage.style[transform]='scale('+(1-Math.abs(percent))+')';
-                    cpage.style.zIndex=1;
+                    cpage.style.zIndex=this.drag?1:0;
                     if(tpage){
                         tpage.style[transform]='scale('+Math.abs(percent)+')';
-                        tpage.style.zIndex=0;
+                        tpage.style.zIndex=this.drag?0:1;
                     }
                 }else TRANSITION.slide.apply(this,arguments);
             },
@@ -141,11 +141,12 @@
                     tpage=this.pages[tpageIndex];
                 if(transform){
                     cpage.style[transform]='skew('+percent*90+'deg)';
-                    cpage.style.zIndex=this.timer?0:1;
+                    cpage.style.zIndex=this.drag?1:0;
                     if(tpage){
                         tpage.style[transform]='skew('+tpage.percent*90+'deg)';
-                        tpage.style.zIndex=this.timer?1:0;
+                        tpage.style.zIndex=this.drag?0:1;
                     }
+                    TRANSITION.fade.apply(this,arguments);
                 }else TRANSITION.slide.apply(this,arguments);
             },
             rotate:function(percent,tpageIndex){
@@ -158,12 +159,12 @@
                     prop=['X','Y'][1-dir];
                     cpage.style[backfaceVisibility]='hidden';
                     cpage.style[perspective]='1000px';
-                    cpage.style[transform]='rotate'+prop+'('+Math.abs(percent)*90+'deg)';
+                    cpage.style[transform]='rotate'+prop+'('+Math.abs(percent)*180+'deg)';
                     cpage.style.zIndex=1;
                     if(tpage){
                         tpage.style[backfaceVisibility]='hidden';
-                        tpage.style[perspective]='600px';
-                        tpage.style[transform]='rotate'+prop+'('+(1-Math.abs(tpage.percent))*90+'deg)';
+                        tpage.style[perspective]='1000px';
+                        tpage.style[transform]='rotate'+prop+'('+Math.abs(tpage.percent)*180+'deg)';
                         tpage.style.zIndex=0;
                     }
                 }else TRANSITION.slideScale.apply(this,arguments);
@@ -333,6 +334,8 @@
             this.fire('before',current);
 
             this.current=current;
+            
+            cancelFrame(this.timer);
 
             ani();
 
@@ -429,7 +432,7 @@
                     }
                     if(this.time){
                         this.slide(index);
-                        each("rect drag time percnet _offset".split(" "),function(prop){
+                        each("rect drag time timer percnet _offset".split(" "),function(prop){
                             delete self[prop];
                         });
                     }
@@ -441,7 +444,7 @@
 
                 case 'mousewheel':
                 case 'dommousescroll':
-                    if(!this.timer){
+                    if(!this.timer && !this.drag){
                         var wd=ev.wheelDelta||-ev.detail;
                         this[wd>0?'prev':'next']();
                     }
