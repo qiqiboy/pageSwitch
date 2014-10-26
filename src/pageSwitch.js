@@ -311,7 +311,7 @@
                 stime=+new Date,
                 ease=this.ease,
                 current=Math.min(this.length-1,Math.max(0,this.fixIndex(index))),
-                cpage,tpage,tpageIndex,_tpage,percent;
+                cpage,tpage,tpageIndex,percent;
 
             cpage=this.pages[current];
             tpage=this.pages[tpageIndex=this.fixIndex(current==this.current?current+(cpage.percent>0?-1:1):this.current)];
