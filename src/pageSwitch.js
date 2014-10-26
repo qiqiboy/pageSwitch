@@ -29,7 +29,7 @@
         MOVEEVENT=EVENT.split(" ").slice(1).join(" "),
         transform=function(){
             var divstyle=document.documentElement.style,
-                tests="transform webkitTransform mozTransform msTransform oTransform".split(" "),
+                tests="transform WebkitTransform MozTransform msTransform OTransform".split(" "),
                 prop;
             while(prop=tests.shift()){
                 if(prop in divstyle){
@@ -141,7 +141,7 @@
             this.loop=false;
             this.ease=function(t,b,c,d){ return -c * ((t=t/d-1)*t*t*t - 1) + b; }
             this.length=this.pages.length;
-            addListener(this.container,STARTEVENT+" mousewheel DOMMouseScroll".replace(),handler);
+            addListener(this.container,STARTEVENT+" mousewheel DOMMouseScroll",handler);
             addListener(document,MOVEEVENT,handler);
             addListener(window,"resize",handler);
             each(this.pages,function(page){
@@ -207,7 +207,6 @@
         slide:function(index){
             var self=this,
                 dir=this.direction,
-                total=this[['width','height'][dir]],
                 duration=this.duration,
                 stime=+new Date,
                 ease=this.ease,
@@ -289,7 +288,6 @@
                             dir=this.direction,
                             offset=rect[dir]-this.rect[dir],
                             cpage=this.pages[this.current],
-                            pos=this.percent*total,
                             total=this[['width','height'][dir]],
                             tpage,tpageIndex,_tpage,percent;
                         if(this.drag==null && this.rect.toString()!=rect.toString()){
