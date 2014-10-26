@@ -44,7 +44,7 @@
             return '';
         }(),
         cssTest=function(name){
-			var prop=camelCase(name),
+            var prop=camelCase(name),
                 _prop=camelCase(cssVendor+prop);
             return (prop in divstyle) && prop || (_prop in divstyle) && _prop || '';
         },
