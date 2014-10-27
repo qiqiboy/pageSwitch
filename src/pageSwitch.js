@@ -271,9 +271,9 @@
                     self.handleEvent(ev);
                 }
             this.events={};
-            this.duration=config.duration||600;
-            this.direction=config.direction||1;
-            this.current=config.start||0;
+            this.duration=isNaN(parseInt(config.duration))?600:parseInt(config.duration);
+            this.direction=parseInt(config.direction)==0?0:1;
+            this.current=parseInt(config.start)||0;
             this.loop=!!config.loop;
             this.mousewheel=!!config.mousewheel;
             this.pages=children(this.container);
@@ -362,7 +362,7 @@
 
             function ani(){
                 var offset=Math.min(duration,+new Date-stime),
-                    s=ease(offset,0,1,duration)||0,
+                    s=duration?ease(offset,0,1,duration):1,
                     cp=percent*(1-s);
                 self.fire('update',cp,tpageIndex);
                 if(offset==duration){
