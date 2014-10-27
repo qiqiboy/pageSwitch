@@ -62,8 +62,7 @@
              * @param int tpageIndex 上一个页面次序。注意，该值可能非法，所以需要测试是否存在该页面
              */
             fade:function(percent,tpageIndex){
-                var current=this.current,
-                    cpage=this.pages[this.current],
+                var cpage=this.pages[this.current],
                     tpage=this.pages[tpageIndex];
                 if(opacity){
                     cpage.style.opacity=1-Math.abs(percent);
@@ -83,8 +82,7 @@
         var XY={X:'left',Y:'top'};
 
         TRANSITION['scroll'+name]=function(percent,tpageIndex){
-            var current=this.current,
-                cpage=this.pages[this.current],
+            var cpage=this.pages[this.current],
                 tpage=this.pages[tpageIndex],
                 dir=this.direction,
                 fire3D=perspective?' translateZ(0)':'',
@@ -104,8 +102,7 @@
         }
 
         TRANSITION['slide'+name]=function(percent,tpageIndex){
-            var current=this.current,
-                cpage=this.pages[this.current],
+            var cpage=this.pages[this.current],
                 tpage=this.pages[tpageIndex],
                 dir=this.direction,
                 fire3D=perspective?' translateZ(0)':'',
@@ -130,8 +127,7 @@
         }
 
         TRANSITION['rotate'+name]=function(percent,tpageIndex){
-            var current=this.current,
-                cpage=this.pages[this.current],
+            var cpage=this.pages[this.current],
                 tpage=this.pages[tpageIndex],
                 dir=this.direction,
                 fire3D=perspective?' translateZ(0)':'',
@@ -150,8 +146,7 @@
         }
 
         TRANSITION['scale'+name]=function(percent,tpageIndex){
-            var current=this.current,
-                cpage=this.pages[this.current],
+            var cpage=this.pages[this.current],
                 tpage=this.pages[tpageIndex],
                 fire3D=perspective?' translateZ(0)':'',
                 prop=name;
@@ -166,16 +161,15 @@
         }
 
         TRANSITION['skew'+name]=function(percent,tpageIndex){
-            var current=this.current,
-                cpage=this.pages[this.current],
+            var cpage=this.pages[this.current],
                 tpage=this.pages[tpageIndex],
                 fire3D=perspective?' translateZ(0)':'',
                 prop=name;
             if(transform){
-                cpage.style[transform]='skew'+prop+'('+percent*90+'deg)'+fire3D;
+                cpage.style[transform]='skew'+prop+'('+percent*180+'deg)'+fire3D;
                 cpage.style.zIndex=this.drag?1:0;
                 if(tpage){
-                    tpage.style[transform]='skew'+prop+'('+tpage.percent*90+'deg)'+fire3D;
+                    tpage.style[transform]='skew'+prop+'('+tpage.percent*180+'deg)'+fire3D;
                     tpage.style.zIndex=this.drag?0:1;
                 }
                 TRANSITION.fade.apply(this,arguments);
