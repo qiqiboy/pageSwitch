@@ -268,7 +268,7 @@
         init:function(config){
             var self=this,
                 handler=function(ev){
-                    self.handleEvent(ev);
+                    !self.frozen && self.handleEvent(ev);
                 }
             this.events={};
             this.duration=isNaN(parseInt(config.duration))?600:parseInt(config.duration);
@@ -323,6 +323,9 @@
             this.pages[this.current].style.display='block'; 
             this.height=this.container.clientHeight;
             this.width=this.container.clientWidth;
+        },
+        freeze:function(able){
+            this.frozen=type(able)=='undefined'?true:!!able;
         },
         slide:function(index){
             var self=this,
