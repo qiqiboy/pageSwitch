@@ -65,3 +65,6 @@ pw.setTransition(function(percent,tpageIndex){
 
 ## 兼容性
 兼容全平台，包括IE6+
+
+## DEMO
+http://u.boy.im/pageswitch
