@@ -167,7 +167,7 @@
                     cpage.style[transform]='perspective(1000px) rotate'+prop+'('+Math.abs(percent)*180*fix+'deg)'+fire3D;
                     cpage.style.zIndex=1;
                     if(tpage){
-                        tpage.style[perspective]='1000px';
+                        tpage.style[backfaceVisibility]='hidden';
                         tpage.style[transform]='perspective(1000px) rotate'+prop+'('+Math.abs(tpage.percent)*180*-fix+'deg)'+fire3D;
                         tpage.style.zIndex=0;
                     }
