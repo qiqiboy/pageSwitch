@@ -29,5 +29,35 @@ pw.setTransition();		//重新设定转场方式
 pw.on(event,callback);	//event可选值 before（页面切换前） after（页面切换后） update（页面切换中）
 ````
 
+## setEase 示例
+
+pw.setEase(function(t,b,c,d){
+	return c*t/d + b;
+});
+
+## setTransition 示例
+
+pw.setTransition(function(percent,tpageIndex){
+	/*
+	 * @param Float percent 目标页面过渡比率 0-1
+	 * @param Int tpageIndex 前一页面次序，该数值可能非法（所以需要测试是否存在该次序页面）
+	 */
+	 
+	var current=this.current,						//目标次序
+		cpage=this.pages[this.current],				//目标页面
+		tpage=this.pages[tpageIndex];				//前一张页面
+	if('opacity' in cpage.style){					//检测透明度css支持
+		cpage.style.opacity=1-Math.abs(percent);	//目标页面根据切换比率设置其渐显
+		if(tpage){									//这里检测下是否存在前一张页面
+			tpage.style.opacity=Math.abs(percent);	//设置前一张页面渐隐
+		}
+	}else{
+		cpage.style.filter='alpha(opacity='+(1-Math.abs(percent))*100+')';
+		if(tpage){
+			tpage.style.filter='alpha(opacity='+Math.abs(percent)*100+')';
+		}
+	}
+});
+
 ## 兼容性
 兼容全平台，包括IE6+
