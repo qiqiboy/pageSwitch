@@ -289,7 +289,6 @@
 
             addListener(this.container,STARTEVENT+" click"+(this.mousewheel?" mousewheel DOMMouseScroll":""),handler);
             addListener(document,MOVEEVENT,handler);
-            addListener(window,"resize",handler);
 
             this.setEase(config.ease);
             this.setTransition(config.transition);
@@ -303,7 +302,7 @@
                  page.style.cssText='position:absolute;top:0;left:0;width:100%;height:100%;display:none;';
                  page.percent=0;
             });
-            this.resize();
+            this.pages[this.current].style.display='block'; 
         },
         on:function(ev,callback){
             if(!this.events[ev]){
@@ -326,11 +325,6 @@
                     func.apply(self,args);
                 }
             });
-        },
-        resize:function(){
-            this.pages[this.current].style.display='block'; 
-            this.height=this.container.clientHeight;
-            this.width=this.container.clientWidth;
         },
         freeze:function(able){
             this.frozen=type(able)=='undefined'?true:!!able;
@@ -421,13 +415,13 @@
                             dir=this.direction,
                             offset=rect[dir]-this.rect[dir],
                             cpage=this.pages[this.current],
-                            total=this[['width','height'][dir]],
+                            total=cpage['offset'+['Width','Height'][dir]],
                             tpage,tpageIndex,_tpage,percent;
                         if(this.drag==null && this.rect.toString()!=rect.toString()){
                             this.drag=Math.abs(offset)>=Math.abs(rect[1-dir]-this.rect[1-dir]);
                         }
                         if(this.drag){
-                            percent=this.percent+offset/total;
+                            percent=this.percent+total&&offset/total;
                             tpage=this.pages[tpageIndex=this.fixIndex(this.current+(percent>0?-1:1))];
                             _tpage=this.pages[this.fixIndex(this.current+(percent>0?1:-1))];
                             if(tpage){
@@ -473,10 +467,6 @@
                     if(this.timer){
                         ev.preventDefault();
                     }
-                    break;
-
-                case 'resize':
-                    this.resize();
                     break;
 
                 case 'mousewheel':
