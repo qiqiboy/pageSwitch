@@ -12,19 +12,51 @@
 <body>
     <div id="wrap" class="wrapper">
         <div id="pages">
-            <div class="page page1">page1</div>
-            <div class="page page2">page2</div>
-            <div class="page page3">page3</div>
+            <div class="page page1">
+                <h1>图片</h1>
+                <div class="box">
+                    <img src="https://www.google.com.hk/images/srpr/logo11w.png" />
+                </div>
+            </div>
+            <div class="page page2">
+                <h1>文本</h1>
+                <div class="box">
+                    <p>不久前，针对微博用户@Mor-小某的“锤子手机还是不错的！试用后感觉很不错！就是3000多买个它感觉贵了！
+                    定价2600的话还能接受！”这句话，罗永浩在微博上表示“明白，我们考虑一下”。但就在大家还没回过神来的时候，
+                    锤子科技已经迅速宣布了降价，其中16GB 3G版的售价直接下调到了1980元，32G/64G也分别调整到了2080/2480元。</p>
+                    <p>不久前，针对微博用户@Mor-小某的“锤子手机还是不错的！试用后感觉很不错！就是3000多买个它感觉贵了！
+                    定价2600的话还能接受！”这句话，罗永浩在微博上表示“明白，我们考虑一下”。但就在大家还没回过神来的时候，
+                    锤子科技已经迅速宣布了降价，其中16GB 3G版的售价直接下调到了1980元，32G/64G也分别调整到了2080/2480元。</p>
+                </div>
+            </div>
+            <div class="page page3">
+                <h1>链接图片</h1>
+                <div class="box">
+                    <a href="https://github.com/qiqiboy"><img src="https://www.google.com.hk/images/srpr/logo11w.png" /></a>
+                </div>
+            </div>
             <div class="page page4">page4</div>
             <div class="page page5">page5</div>
+        </div>
+        <div id="ctl">
+            <button onclick="a.setTransition('fade')">渐隐(fade)</button>
+            <button onclick="a.setTransition('scroll')">滚动(scroll)</button>
+            <button onclick="a.setTransition('slide')">下拉(slide)</button>
+            <button onclick="a.setTransition('scale')">缩放(scale)</button>
+            <button onclick="a.setTransition('skew')">扭曲(skew)</button>
+            <button onclick="a.setTransition('rotate')">翻转(rotate)</button>
+            <button style="color:red;" onclick="a.loop=!a.loop;if(a.loop){this.textContent='取消循环'}else{this.textContent='循环'}">循环</button>
         </div>
     </div>
 	<script type="text/javascript" src="src/pageSwitch.js"></script>
     <script>
-        var a=new pageSwitch('pages');
-        //a.loop=true;    //是否循环
-        a.duration=600; //页面过渡时间
-        a.direction=1;  //页面切换方向，1垂直，0水平
+    var a=new pageSwitch('pages',{
+        duration:600,
+        start:0,
+        loop:false,
+        ease:'ease',
+        transition:'rotate'
+    });
     </script>
 </body>
 </html>

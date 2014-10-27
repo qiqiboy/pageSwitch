@@ -61,17 +61,18 @@
              * @param Float percent 过度百分比
              * @param int tpageIndex 上一个页面次序。注意，该值可能非法，所以需要测试是否存在该页面
              */
-            slide:function(percent,tpageIndex){
+            scroll:function(percent,tpageIndex){
                 var current=this.current,
                     cpage=this.pages[this.current],
                     tpage=this.pages[tpageIndex],
                     dir=this.direction,
+                    fire3D=perspective?' translateZ(0)':'',
                     prop;
                 if(transform){
                     prop=['X','Y'][dir];
-                    cpage.style[transform]='translate'+prop+'('+percent*100+'%)';
+                    cpage.style[transform]='translate'+prop+'('+percent*100+'%)'+fire3D;
                     if(tpage){
-                        tpage.style[transform]='translate'+prop+'('+tpage.percent*100+'%)';
+                        tpage.style[transform]='translate'+prop+'('+tpage.percent*100+'%)'+fire3D;
                     }
                 }else{
                     prop=['left','top'][dir];
@@ -97,77 +98,80 @@
                     }
                 }
             },
-            slideScale:function(percent,tpageIndex){
+            slide:function(percent,tpageIndex){
                 var current=this.current,
                     cpage=this.pages[this.current],
                     tpage=this.pages[tpageIndex],
                     dir=this.direction,
+                    fire3D=perspective?' translateZ(0)':'',
                     prop;
                 if(transform){
                     prop=['X','Y'][dir];
                     if(percent<0){
-                        cpage.style[transform]='translate'+prop+'('+percent*100+'%)';
+                        cpage.style[transform]='translate'+prop+'('+percent*100+'%)'+fire3D;
                         cpage.style.zIndex=1;
                         if(tpage){
-                            tpage.style[transform]='scale('+((1-tpage.percent)*.2+.8)+')';
+                            tpage.style[transform]='scale('+((1-tpage.percent)*.2+.8)+')'+fire3D;
                             tpage.style.zIndex=0;
                         }
                     }else{
                         if(tpage){
-                            tpage.style[transform]='translate'+prop+'('+tpage.percent*100+'%)';
+                            tpage.style[transform]='translate'+prop+'('+tpage.percent*100+'%)'+fire3D;
                             tpage.style.zIndex=1;
                         }
-                        cpage.style[transform]='scale('+((1-percent)*.2+.8)+')';
+                        cpage.style[transform]='scale('+((1-percent)*.2+.8)+')'+fire3D;
                         cpage.style.zIndex=0;
                     }
-                }else TRANSITION.slide.apply(this,arguments);
+                }else TRANSITION.scroll.apply(this,arguments);
             },
             scale:function(percent,tpageIndex){
                 var current=this.current,
                     cpage=this.pages[this.current],
-                    tpage=this.pages[tpageIndex];
+                    tpage=this.pages[tpageIndex],
+                    fire3D=perspective?' translateZ(0)':'';
                 if(transform){
-                    cpage.style[transform]='scale('+(1-Math.abs(percent))+')';
-                    cpage.style.zIndex=this.drag?1:0;
+                    cpage.style[transform]='scale('+(1-Math.abs(percent))+')';+fire3D
+                    cpage.style.zIndex=percent<0?1:0;
                     if(tpage){
-                        tpage.style[transform]='scale('+Math.abs(percent)+')';
-                        tpage.style.zIndex=this.drag?0:1;
+                        tpage.style[transform]='scale('+Math.abs(percent)+')'+fire3D;
+                        tpage.style.zIndex=percent<0?0:1;
                     }
-                }else TRANSITION.slide.apply(this,arguments);
+                }else TRANSITION.scroll.apply(this,arguments);
             },
             skew:function(percent,tpageIndex){
                 var current=this.current,
                     cpage=this.pages[this.current],
-                    tpage=this.pages[tpageIndex];
+                    tpage=this.pages[tpageIndex],
+                    fire3D=perspective?' translateZ(0)':'';
                 if(transform){
-                    cpage.style[transform]='skew('+percent*90+'deg)';
+                    cpage.style[transform]='skew('+percent*90+'deg)'+fire3D;
                     cpage.style.zIndex=this.drag?1:0;
                     if(tpage){
-                        tpage.style[transform]='skew('+tpage.percent*90+'deg)';
+                        tpage.style[transform]='skew('+tpage.percent*90+'deg)'+fire3D;
                         tpage.style.zIndex=this.drag?0:1;
                     }
                     TRANSITION.fade.apply(this,arguments);
-                }else TRANSITION.slide.apply(this,arguments);
+                }else TRANSITION.scroll.apply(this,arguments);
             },
             rotate:function(percent,tpageIndex){
                 var current=this.current,
                     cpage=this.pages[this.current],
                     tpage=this.pages[tpageIndex],
                     dir=this.direction,
+                    fire3D=perspective?' translateZ(0)':'',
+                    fix=percent>0?-1:1,
                     prop;
                 if(perspective){
                     prop=['X','Y'][1-dir];
                     cpage.style[backfaceVisibility]='hidden';
-                    cpage.style[perspective]='1000px';
-                    cpage.style[transform]='rotate'+prop+'('+Math.abs(percent)*180+'deg)';
+                    cpage.style[transform]='perspective(1000px) rotate'+prop+'('+Math.abs(percent)*180*fix+'deg)'+fire3D;
                     cpage.style.zIndex=1;
                     if(tpage){
-                        tpage.style[backfaceVisibility]='hidden';
                         tpage.style[perspective]='1000px';
-                        tpage.style[transform]='rotate'+prop+'('+Math.abs(tpage.percent)*180+'deg)';
+                        tpage.style[transform]='perspective(1000px) rotate'+prop+'('+Math.abs(tpage.percent)*180*-fix+'deg)'+fire3D;
                         tpage.style.zIndex=0;
                     }
-                }else TRANSITION.slideScale.apply(this,arguments);
+                }else TRANSITION.slide.apply(this,arguments);
             }
         }
 
@@ -270,15 +274,23 @@
             this.direction=config.direction||1;
             this.current=config.start||0;
             this.loop=config.loop||false;
-            this.ease=typeof(config.ease)=='function'?config.ease:EASE[config.ease]||EASE.ease;
-            this.transite=typeof(config.transition)=='function'?config.transition:TRANSITION[config.transition]||TRANSITION.slideScale;
             this.onbefore=config.onbefore;
             this.onafter=config.onafter;
             this.pages=children(this.container);
             this.length=this.pages.length;
+
             addListener(this.container,STARTEVENT+" mousewheel DOMMouseScroll",handler);
-            addListener(document,MOVEEVENT,handler);
+            addListener(document,MOVEEVENT+" click",handler);
             addListener(window,"resize",handler);
+
+            this.setEase(config.ease);
+            this.setTransition(config.transition);
+        },
+        setEase:function(ease){
+            this.ease=typeof(ease)=='function'?ease:EASE[ease]||EASE.ease;
+        },
+        setTransition:function(transition){
+            this.transite=typeof(transition)=='function'?transition:TRANSITION[transition]||TRANSITION.slide;
             each(this.pages,function(page){
                  page.style.cssText='position:absolute;top:0;left:0;width:100%;height:100%;display:none;';
                  page.percent=0;
@@ -374,11 +386,12 @@
                 case 'touchstart':
                 case 'pointerdown':
                     var nn=ev.target.nodeName.toLowerCase();
-                    if(isTouch || nn!='a' && nn!='img'){
-                        this.rect=[ev.clientX,ev.clientY];
-                        this.percent=this.pages[this.current].percent;
-                        this.time=+new Date;
-                        cancelFrame(this.timer);
+                    cancelFrame(this.timer);
+                    this.rect=[ev.clientX,ev.clientY];
+                    this.percent=this.pages[this.current].percent;
+                    this.time=+new Date;
+                    if(!isTouch && (nn=='a' || nn=='img')){
+                        ev.preventDefault();
                     }
                     break;
 
@@ -431,10 +444,16 @@
                         ev.preventDefault();
                     }
                     if(this.time){
-                        this.slide(index);
                         each("rect drag time timer percnet _offset".split(" "),function(prop){
                             delete self[prop];
                         });
+                        this.slide(index);
+                    }
+                    break;
+
+                case 'click':
+                    if(this.timer){
+                        ev.preventDefault();
                     }
                     break;
 

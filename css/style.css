@@ -147,4 +147,27 @@ body {
 .page5{
     background:grey;
 }
+h1{
+    text-align:center;
+    font-size:30px;
+}
+.box{
+    text-align:center;
+    margin:50px 0;
+}
+.box img{
+    max-width:90%;
+}
+
+#ctl{
+    position:fixed;
+    bottom:0;
+    left:0;
+    width:100%;
+    text-align:center;
+    z-index:100;
+}
+#ctl button{
+    margin:5px;
+}
 
