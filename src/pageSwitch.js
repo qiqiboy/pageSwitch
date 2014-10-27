@@ -270,17 +270,17 @@
                 handler=function(ev){
                     self.handleEvent(ev);
                 }
+            this.events={};
             this.duration=config.duration||600;
             this.direction=config.direction||1;
             this.current=config.start||0;
-            this.loop=config.loop||false;
-            this.onbefore=config.onbefore;
-            this.onafter=config.onafter;
+            this.loop=!!config.loop;
+            this.mousewheel=!!config.mousewheel;
             this.pages=children(this.container);
             this.length=this.pages.length;
 
-            addListener(this.container,STARTEVENT+" mousewheel DOMMouseScroll",handler);
-            addListener(document,MOVEEVENT+" click",handler);
+            addListener(this.container,STARTEVENT+" click"+(this.mousewheel?" mousewheel DOMMouseScroll":""),handler);
+            addListener(document,MOVEEVENT,handler);
             addListener(window,"resize",handler);
 
             this.setEase(config.ease);
@@ -297,8 +297,14 @@
             });
             this.resize();
         },
+        on:function(ev,callback){
+            if(!this.events[ev]){
+                this.events[ev]=[];
+            }
+            this.events[ev].push(callback);
+        },
         fire:function(ev,percent,tpageIndex){
-            var func=this['on'+ev],
+            var self=this,
                 args=[].slice.call(arguments,1);
             if(ev=='update'){
                 this.pages[this.current].percent=percent;
@@ -307,9 +313,11 @@
                 }
                 this.transite.apply(this,args);
             }
-            if(type(func)=='function'){
-                func.apply(this,args);
-            }
+            each(this.events[ev]||[],function(func){
+                if(type(func)=='function'){
+                    func.apply(self,args);
+                }
+            });
         },
         resize:function(){
             this.pages[this.current].style.display='block'; 
@@ -322,36 +330,35 @@
                 duration=this.duration,
                 stime=+new Date,
                 ease=this.ease,
-                current=Math.min(this.length-1,Math.max(0,this.fixIndex(index))),
+                current=this.current,
+                fixIndex=Math.min(this.length-1,Math.max(0,this.fixIndex(index))),
                 cpage,tpage,tpageIndex,percent;
 
-            cpage=this.pages[current];
-            tpage=this.pages[tpageIndex=this.fixIndex(current==this.current?current+(cpage.percent>0?-1:1):this.current)];
+            cpage=this.pages[fixIndex];
+            tpage=this.pages[tpageIndex=this.fixIndex(fixIndex==current?fixIndex+(cpage.percent>0?-1:1):current)];
             
             each(this.pages,function(page,index){
-                if(index!=current&&index!=tpageIndex){
+                if(index!=fixIndex&&index!=tpageIndex){
                     page.style.display='none';
                 }
             });
 
             if(cpage.style.display=='none'){
                 cpage.style.display='block';
-                percent=index>this.current?1:-1;
+                percent=index>current?1:-1;
             }else{
                 percent=cpage.percent;
             }
 
             duration*=Math.abs(percent);
 
-            this.fire('before',current);
+            this.fire('before',current,fixIndex);
 
-            this.current=current;
+            this.current=fixIndex;
             
             cancelFrame(this.timer);
 
             ani();
-
-            return this;
 
             function ani(){
                 var offset=Math.min(duration,+new Date-stime),
@@ -362,7 +369,7 @@
                     if(tpage){
                         tpage.style.display='none';
                     }
-                    self.fire('after',current);
+                    self.fire('after',fixIndex,current);
                     delete self.timer;
                 }else{
                     self.timer=nextFrame(ani);
