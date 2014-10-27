@@ -61,27 +61,6 @@
              * @param Float percent 过度百分比
              * @param int tpageIndex 上一个页面次序。注意，该值可能非法，所以需要测试是否存在该页面
              */
-            scroll:function(percent,tpageIndex){
-                var current=this.current,
-                    cpage=this.pages[this.current],
-                    tpage=this.pages[tpageIndex],
-                    dir=this.direction,
-                    fire3D=perspective?' translateZ(0)':'',
-                    prop;
-                if(transform){
-                    prop=['X','Y'][dir];
-                    cpage.style[transform]='translate'+prop+'('+percent*100+'%)'+fire3D;
-                    if(tpage){
-                        tpage.style[transform]='translate'+prop+'('+tpage.percent*100+'%)'+fire3D;
-                    }
-                }else{
-                    prop=['left','top'][dir];
-                    cpage.style[prop]=percent*100+'%';
-                    if(tpage){
-                        tpage.style[prop]=tpage.percent*100+'%';
-                    }
-                }
-            },
             fade:function(percent,tpageIndex){
                 var current=this.current,
                     cpage=this.pages[this.current],
@@ -97,83 +76,112 @@
                         tpage.style.filter='alpha(opacity='+Math.abs(percent)*100+')';
                     }
                 }
-            },
-            slide:function(percent,tpageIndex){
-                var current=this.current,
-                    cpage=this.pages[this.current],
-                    tpage=this.pages[tpageIndex],
-                    dir=this.direction,
-                    fire3D=perspective?' translateZ(0)':'',
-                    prop;
-                if(transform){
-                    prop=['X','Y'][dir];
-                    if(percent<0){
-                        cpage.style[transform]='translate'+prop+'('+percent*100+'%)'+fire3D;
-                        cpage.style.zIndex=1;
-                        if(tpage){
-                            tpage.style[transform]='scale('+((1-tpage.percent)*.2+.8)+')'+fire3D;
-                            tpage.style.zIndex=0;
-                        }
-                    }else{
-                        if(tpage){
-                            tpage.style[transform]='translate'+prop+'('+tpage.percent*100+'%)'+fire3D;
-                            tpage.style.zIndex=1;
-                        }
-                        cpage.style[transform]='scale('+((1-percent)*.2+.8)+')'+fire3D;
-                        cpage.style.zIndex=0;
-                    }
-                }else TRANSITION.scroll.apply(this,arguments);
-            },
-            scale:function(percent,tpageIndex){
-                var current=this.current,
-                    cpage=this.pages[this.current],
-                    tpage=this.pages[tpageIndex],
-                    fire3D=perspective?' translateZ(0)':'';
-                if(transform){
-                    cpage.style[transform]='scale('+(1-Math.abs(percent))+')';+fire3D
-                    cpage.style.zIndex=percent<0?1:0;
-                    if(tpage){
-                        tpage.style[transform]='scale('+Math.abs(percent)+')'+fire3D;
-                        tpage.style.zIndex=percent<0?0:1;
-                    }
-                }else TRANSITION.scroll.apply(this,arguments);
-            },
-            skew:function(percent,tpageIndex){
-                var current=this.current,
-                    cpage=this.pages[this.current],
-                    tpage=this.pages[tpageIndex],
-                    fire3D=perspective?' translateZ(0)':'';
-                if(transform){
-                    cpage.style[transform]='skew('+percent*90+'deg)'+fire3D;
-                    cpage.style.zIndex=this.drag?1:0;
-                    if(tpage){
-                        tpage.style[transform]='skew('+tpage.percent*90+'deg)'+fire3D;
-                        tpage.style.zIndex=this.drag?0:1;
-                    }
-                    TRANSITION.fade.apply(this,arguments);
-                }else TRANSITION.scroll.apply(this,arguments);
-            },
-            rotate:function(percent,tpageIndex){
-                var current=this.current,
-                    cpage=this.pages[this.current],
-                    tpage=this.pages[tpageIndex],
-                    dir=this.direction,
-                    fire3D=perspective?' translateZ(0)':'',
-                    fix=percent>0?-1:1,
-                    prop;
-                if(perspective){
-                    prop=['X','Y'][1-dir];
-                    cpage.style[backfaceVisibility]='hidden';
-                    cpage.style[transform]='perspective(1000px) rotate'+prop+'('+Math.abs(percent)*180*fix+'deg)'+fire3D;
-                    cpage.style.zIndex=1;
-                    if(tpage){
-                        tpage.style[backfaceVisibility]='hidden';
-                        tpage.style[transform]='perspective(1000px) rotate'+prop+'('+Math.abs(tpage.percent)*180*-fix+'deg)'+fire3D;
-                        tpage.style.zIndex=0;
-                    }
-                }else TRANSITION.slide.apply(this,arguments);
             }
         }
+    
+    each("X Y ".split(" "),function(name){
+        var XY={X:'left',Y:'top'};
+
+        TRANSITION['scroll'+name]=function(percent,tpageIndex){
+            var current=this.current,
+                cpage=this.pages[this.current],
+                tpage=this.pages[tpageIndex],
+                dir=this.direction,
+                fire3D=perspective?' translateZ(0)':'',
+                prop=name||['X','Y'][dir];
+            if(transform){
+                cpage.style[transform]='translate'+prop+'('+percent*100+'%)'+fire3D;
+                if(tpage){
+                    tpage.style[transform]='translate'+prop+'('+tpage.percent*100+'%)'+fire3D;
+                }
+            }else{
+                prop=XY[prop];
+                cpage.style[prop]=percent*100+'%';
+                if(tpage){
+                    tpage.style[prop]=tpage.percent*100+'%';
+                }
+            }
+        }
+
+        TRANSITION['slide'+name]=function(percent,tpageIndex){
+            var current=this.current,
+                cpage=this.pages[this.current],
+                tpage=this.pages[tpageIndex],
+                dir=this.direction,
+                fire3D=perspective?' translateZ(0)':'',
+                prop=name||['X','Y'][dir];
+            if(transform){
+                if(percent<0){
+                    cpage.style[transform]='translate'+prop+'('+percent*100+'%)'+fire3D;
+                    cpage.style.zIndex=1;
+                    if(tpage){
+                        tpage.style[transform]='scale('+((1-tpage.percent)*.2+.8)+')'+fire3D;
+                        tpage.style.zIndex=0;
+                    }
+                }else{
+                    if(tpage){
+                        tpage.style[transform]='translate'+prop+'('+tpage.percent*100+'%)'+fire3D;
+                        tpage.style.zIndex=1;
+                    }
+                    cpage.style[transform]='scale('+((1-percent)*.2+.8)+')'+fire3D;
+                    cpage.style.zIndex=0;
+                }
+            }else TRANSITION['scroll'+name].apply(this,arguments);
+        }
+
+        TRANSITION['rotate'+name]=function(percent,tpageIndex){
+            var current=this.current,
+                cpage=this.pages[this.current],
+                tpage=this.pages[tpageIndex],
+                dir=this.direction,
+                fire3D=perspective?' translateZ(0)':'',
+                fix=percent>0?-1:1,
+                prop=name||['X','Y'][1-dir];
+            if(perspective){
+                cpage.style[backfaceVisibility]='hidden';
+                cpage.style[transform]='perspective(1000px) rotate'+prop+'('+Math.abs(percent)*180*fix+'deg)'+fire3D;
+                cpage.style.zIndex=1;
+                if(tpage){
+                    tpage.style[backfaceVisibility]='hidden';
+                    tpage.style[transform]='perspective(1000px) rotate'+prop+'('+Math.abs(tpage.percent)*180*-fix+'deg)'+fire3D;
+                    tpage.style.zIndex=0;
+                }
+            }else TRANSITION['slide'+name].apply(this,arguments);
+        }
+
+        TRANSITION['scale'+name]=function(percent,tpageIndex){
+            var current=this.current,
+                cpage=this.pages[this.current],
+                tpage=this.pages[tpageIndex],
+                fire3D=perspective?' translateZ(0)':'',
+                prop=name;
+            if(transform){
+                cpage.style[transform]='scale'+prop+'('+(1-Math.abs(percent))+')';+fire3D
+                cpage.style.zIndex=percent<0?1:0;
+                if(tpage){
+                    tpage.style[transform]='scale'+prop+'('+Math.abs(percent)+')'+fire3D;
+                    tpage.style.zIndex=percent<0?0:1;
+                }
+            }else TRANSITION['scroll'+name].apply(this,arguments);
+        }
+
+        TRANSITION['skew'+name]=function(percent,tpageIndex){
+            var current=this.current,
+                cpage=this.pages[this.current],
+                tpage=this.pages[tpageIndex],
+                fire3D=perspective?' translateZ(0)':'',
+                prop=name;
+            if(transform){
+                cpage.style[transform]='skew'+prop+'('+percent*90+'deg)'+fire3D;
+                cpage.style.zIndex=this.drag?1:0;
+                if(tpage){
+                    tpage.style[transform]='skew'+prop+'('+tpage.percent*90+'deg)'+fire3D;
+                    tpage.style.zIndex=this.drag?0:1;
+                }
+                TRANSITION.fade.apply(this,arguments);
+            }else TRANSITION['scroll'+name].apply(this,arguments);
+        }
+    });
 
     function type(obj){
         if(obj==null){
