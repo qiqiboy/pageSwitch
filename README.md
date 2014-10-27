@@ -31,12 +31,15 @@ pw.on(event,callback);	//event可选值 before（页面切换前） after（页�
 
 ## setEase 示例
 
+```javascript
 pw.setEase(function(t,b,c,d){
 	return c*t/d + b;
 });
+````
 
 ## setTransition 示例
 
+```javascript
 pw.setTransition(function(percent,tpageIndex){
 	/*
 	 * @param Float percent 目标页面过渡比率 0-1
@@ -58,6 +61,7 @@ pw.setTransition(function(percent,tpageIndex){
 		}
 	}
 });
+````
 
 ## 兼容性
 兼容全平台，包括IE6+
