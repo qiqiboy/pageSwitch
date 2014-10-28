@@ -99,6 +99,10 @@
                     tpage.style[prop]=tpage.percent*100+'%';
                 }
             }
+            cpage.style.zIndex=this.drag?1:0;
+            if(tpage){
+                tpage.style.zIndex=this.drag?0:1;
+            }
         }
 
         TRANSITION['slide'+name]=function(percent,tpageIndex){
@@ -241,7 +245,7 @@
     function filterEvent(oldEvent){
         var ev={};
 
-        each("clientX clientY type wheelDelta detail".split(" "),function(prop){
+        each("clientX clientY type wheelDelta detail which keyCode".split(" "),function(prop){
             ev[prop]=oldEvent[prop];
         });
 
@@ -278,11 +282,12 @@
             this.current=parseInt(config.start)||0;
             this.loop=!!config.loop;
             this.mousewheel=!!config.mousewheel;
+            this.arrawkey=!!config.arrowkey;
             this.pages=children(this.container);
             this.length=this.pages.length;
 
             addListener(this.container,STARTEVENT+" click"+(this.mousewheel?" mousewheel DOMMouseScroll":""),handler);
-            addListener(document,MOVEEVENT,handler);
+            addListener(document,MOVEEVENT+(this.arrawkey?" keyup":""),handler);
 
             this.setEase(config.ease);
             this.setTransition(config.transition);
@@ -440,7 +445,8 @@
                 case 'pointercancel':
                     var self=this,
                         cpage=this.pages[this.current],
-                        index=this.current;
+                        index=this.current,
+                        recover=this._offset||this.timer;
                     if(this.drag==true){
                         if(+new Date-this.time<250 && Math.abs(this._offset)>30){
                             index+=this._offset>0?-1:1;
@@ -453,7 +459,9 @@
                         each("rect drag time timer percnet _offset".split(" "),function(prop){
                             delete self[prop];
                         });
-                        this.slide(index);
+                        if(recover){
+                            this.slide(index);
+                        }
                     }
                     break;
 
@@ -468,6 +476,17 @@
                     if(!this.timer && !this.drag){
                         var wd=ev.wheelDelta||-ev.detail;
                         this[wd>0?'prev':'next']();
+                    }
+                    break;
+
+                case 'keyup':
+                    if(!this.timer && !this.drag){
+                        var keycode=ev.keyCode||ev.which;
+                        if(keycode==37||keycode==38){
+                            this.prev();
+                        }else if(keycode==39||keycode==40){
+                            this.next();
+                        }
                     }
                     break;
             }
