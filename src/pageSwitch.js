@@ -476,16 +476,18 @@
                 case 'mousewheel':
                 case 'dommousescroll':
                     var self=this;
-                    clearTimeout(this.fireMouse);
 
                     if(!this.fireMouse && !this.timer && !this.drag){
                         var wd=ev.wheelDelta||-ev.detail;
                         this[wd>0?'prev':'next']();
                     }
 
-                    this.fireMouse=setTimeout(function(){
-                        delete self.fireMouse;
-                    },200);
+                    if(this.timer){
+                        clearTimeout(this.fireMouse);
+                        this.fireMouse=setTimeout(function(){
+                            delete self.fireMouse;
+                        },200);
+                    }
 
                     break;
 
