@@ -485,7 +485,7 @@
 
                     this.fireMouse=setTimeout(function(){
                         delete self.fireMouse;
-                    },100);
+                    },200);
 
                     break;
 
