@@ -25,7 +25,7 @@ pw.next();				//下一张
 pw.slide(n);			//第n张
 pw.setEase();			//重新设定过渡曲线
 pw.setTransition();		//重新设定转场方式
-pw.freeze(able);		//冻结页面转换，冻结后不可响应用户操作（调用slide prev next方法还可以进行）
+pw.freeze(true|false);	//冻结页面转换，冻结后不可响应用户操作（调用slide prev next方法还可以进行）
 
 //事件绑定
 pw.on(event,callback);	//event可选值 before（页面切换前） after（页面切换后） update（页面切换中）
