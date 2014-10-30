@@ -269,6 +269,7 @@
     
     struct.prototype={
         constructor:struct,
+        latestTime:0,
         init:function(config){
             var self=this,
                 handler=function(ev){
@@ -285,7 +286,7 @@
             this.length=this.pages.length;
 
             addListener(this.container,STARTEVENT+" click"+(this.mousewheel?" mousewheel DOMMouseScroll":""),handler);
-            addListener(document,MOVEEVENT+(this.arrawkey?" keyup":""),handler);
+            addListener(document,MOVEEVENT+(this.arrawkey?" keydown":""),handler);
 
             this.setEase(config.ease);
             this.setTransition(config.transition);
@@ -363,6 +364,8 @@
             this.current=fixIndex;
             
             cancelFrame(this.timer);
+
+            this.latestTime=stime;
 
             ani();
 
@@ -450,7 +453,7 @@
                         index=this.current,
                         recover=this._offset||this.timer;
                     if(this.drag==true){
-                        if(+new Date-this.time<250 && Math.abs(this._offset)>30){
+                        if(+new Date-this.time<500 && Math.abs(this._offset)>30){
                             index+=this._offset>0?-1:1;
                         }else if(Math.abs(cpage.percent)>.5){
                             index+=cpage.percent>0?-1:1;
@@ -475,29 +478,34 @@
 
                 case 'mousewheel':
                 case 'dommousescroll':
-                    var self=this;
-
-                    if(!this.fireMouse && !this.timer && !this.drag){
+                    if(!this.timer && !this.drag && +new Date-this.latestTime>this.duration+500){
                         var wd=ev.wheelDelta||-ev.detail;
                         this[wd>0?'prev':'next']();
                     }
 
-                    if(this.timer){
-                        clearTimeout(this.fireMouse);
-                        this.fireMouse=setTimeout(function(){
-                            delete self.fireMouse;
-                        },200);
-                    }
-
                     break;
 
-                case 'keyup':
-                    if(!this.timer && !this.drag){
-                        var keycode=ev.keyCode||ev.which;
-                        if(keycode==37||keycode==38){
-                            this.prev();
-                        }else if(keycode==39||keycode==40){
-                            this.next();
+                case 'keydown':
+                    var nn=ev.target.nodeName.toLowerCase();
+                    if(!this.timer && !this.drag && nn!='input' && nn!='textarea'){
+                        switch(ev.keyCode||ev.which){
+                            case 33:
+                            case 37:
+                            case 38:
+                                this.prev();
+                                break;
+                            case 32:
+                            case 34:
+                            case 39:
+                            case 40:
+                                this.next();
+                                break;
+                            case 35:
+                                this.slide(this.length-1);
+                                break;
+                            case 36:
+                                this.slide(0);
+                                break;
                         }
                     }
                     break;
