@@ -392,7 +392,7 @@
             return this.slide(this.current+1);
         },
         fixIndex:function(index){
-            return this.length!=1&&this.loop?(this.length+index)%this.length:index;
+            return this.length>1&&this.loop?(this.length+index)%this.length:index;
         },
         handleEvent:function(oldEvent){
             var ev=filterEvent(oldEvent);
