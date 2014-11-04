@@ -425,7 +425,7 @@
                             this.drag=Math.abs(offset)>=Math.abs(rect[1-dir]-this.rect[1-dir]);
                         }
                         if(this.drag){
-                            percent=this.percent+total&&offset/total;
+                            percent=this.percent+(total&&offset/total);
                             tpage=this.pages[tpageIndex=this.fixIndex(this.current+(percent>0?-1:1))];
                             _tpage=this.pages[this.fixIndex(this.current+(percent>0?1:-1))];
                             if(tpage){
