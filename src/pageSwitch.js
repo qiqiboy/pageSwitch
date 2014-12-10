@@ -52,6 +52,9 @@
                 _prop=camelCase(cssVendor+prop);
             return (prop in divstyle) && prop || (_prop in divstyle) && _prop || '';
         },
+        isFunction=function(func){
+            typeof func=='function';
+        },
         opacity=cssTest('opacity'),
         transform=cssTest('transform'),
         perspective=cssTest('perspective'),
@@ -286,12 +289,7 @@
 
             this.setEase(config.ease);
             this.setTransition(config.transition);
-        },
-        setEase:function(ease){
-            this.ease=typeof(ease)=='function'?ease:EASE[ease]||EASE.ease;
-        },
-        setTransition:function(transition){
-            this.transite=typeof(transition)=='function'?transition:TRANSITION[transition]||TRANSITION.slide;
+
             each(this.pages,function(page){
                 var style=page.style;
                 each("position:absolute;top:0;left:0;width:100%;height:100%;display:none".split(";"),function(css){
@@ -300,7 +298,19 @@
                 });
                 page.percent=0;
             });
-            this.pages[this.current].style.display='block'; 
+            this.pages[this.current].style.display='block';
+        },
+        setEase:function(ease){
+            this.ease=isFunction(ease)?ease:EASE[ease]||EASE.ease;
+        },
+        addEase:function(name,func){
+            isFunction(func) && (EASE[name]=func);
+        },
+        setTransition:function(transition){
+            this.transite=isFunction(transition)?transition:TRANSITION[transition]||TRANSITION.slide; 
+        },
+        addTransition:function(name,func){
+            isFunction(func) && (TRANSITION[name]=func);
         },
         on:function(ev,callback){
             if(!this.events[ev]){
