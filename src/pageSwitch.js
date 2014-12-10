@@ -53,7 +53,7 @@
             return (prop in divstyle) && prop || (_prop in divstyle) && _prop || '';
         },
         isFunction=function(func){
-            typeof func=='function';
+            type(func)=='function';
         },
         opacity=cssTest('opacity'),
         transform=cssTest('transform'),
