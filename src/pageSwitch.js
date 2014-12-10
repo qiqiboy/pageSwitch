@@ -7,12 +7,16 @@
 (function(ROOT, struct, undefined){
     "use strict";
 	
-    var nextFrame=ROOT.requestAnimationFrame            ||
+    var lastTime=0,
+        nextFrame=ROOT.requestAnimationFrame            ||
                 ROOT.webkitRequestAnimationFrame        ||
                 ROOT.mozRequestAnimationFrame           ||
                 ROOT.msRequestAnimationFrame            ||
                 function(callback){
-                    return setTimeout(callback,30);
+                    var currTime=+new Date,
+                        delay=Math.max(1000/60,1000/60-(currTime-lastTime));
+                    lastTime=currTime+delay;
+                    return setTimeout(callback,delay);
                 },
         cancelFrame=ROOT.cancelAnimationFrame           ||
                 ROOT.webkitCancelAnimationFrame         ||
