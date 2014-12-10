@@ -302,21 +302,33 @@
         },
         setEase:function(ease){
             this.ease=isFunction(ease)?ease:EASE[ease]||EASE.ease;
+            return this;
         },
         addEase:function(name,func){
             isFunction(func) && (EASE[name]=func);
+            return this;
         },
         setTransition:function(transition){
             this.transite=isFunction(transition)?transition:TRANSITION[transition]||TRANSITION.slide; 
+            return this;
         },
         addTransition:function(name,func){
             isFunction(func) && (TRANSITION[name]=func);
+            return this;
         },
         on:function(ev,callback){
-            if(!this.events[ev]){
-                this.events[ev]=[];
+            var self=this;
+            if(type(ev)=='object'){
+                each(ev,function(ev,callback){
+                    self.on(ev,callback);
+                });
+            }else{
+                if(!this.events[ev]){
+                    this.events[ev]=[];
+                }
+                this.events[ev].push(callback);
             }
-            this.events[ev].push(callback);
+            return this;
         },
         fire:function(ev,percent,tpageIndex){
             var self=this,
@@ -329,13 +341,15 @@
                 this.transite.apply(this,args);
             }
             each(this.events[ev]||[],function(func){
-                if(type(func)=='function'){
+                if(isFunction(func)){
                     func.apply(self,args);
                 }
             });
+            return this;
         },
         freeze:function(able){
             this.frozen=type(able)=='undefined'?true:!!able;
+            return this;
         },
         slide:function(index){
             var self=this,
@@ -390,6 +404,8 @@
                     self.timer=nextFrame(ani);
                 }
             }
+
+            return this;
         },
         prev:function(){
             return this.slide(this.current-1);
