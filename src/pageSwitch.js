@@ -535,6 +535,10 @@
             }
         }
     }
+    
+    each("Ease Transition".split(" "),function(name){
+        struct['add'+name]=struct.prototype['add'+name];
+    });
 
     ROOT.pageSwitch=struct;
 	
