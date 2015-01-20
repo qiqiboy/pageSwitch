@@ -445,6 +445,7 @@
                             tpage,tpageIndex,_tpage,percent;
                         if(this.drag==null && this.rect.toString()!=rect.toString()){
                             this.drag=Math.abs(offset)>=Math.abs(rect[1-dir]-this.rect[1-dir]);
+                            this.drag && this.fire('dragStart');
                         }
                         if(this.drag){
                             percent=this.percent+(total&&offset/total);
@@ -480,6 +481,7 @@
                         }else if(Math.abs(cpage.percent)>.5){
                             index+=cpage.percent>0?-1:1;
                         }
+                        this.fire('dragEnd');
                         ev.preventDefault();
                     }
                     if(this.time){
