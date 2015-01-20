@@ -138,7 +138,7 @@
                 tpage=this.pages[tpageIndex],
                 dir=this.direction,
                 fire3D=perspective?' translateZ(0)':'',
-                fix=percent>0?-1:1,
+                fix=percent>0?dir?-1:1:dir?1:-1,
                 prop=name||['X','Y'][1-dir];
             if(perspective){
                 cpage.style[backfaceVisibility]='hidden';
