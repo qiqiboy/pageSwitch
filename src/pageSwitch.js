@@ -456,7 +456,7 @@
                             }else{
                                 percent/=3;
                             }
-                            if(_tpage){
+                            if(_tpage&&_tpage!=tpage){
                                 _tpage.style.display='none';
                             }
                             this.fire('update',percent,tpageIndex);
