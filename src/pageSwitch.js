@@ -59,6 +59,8 @@
         transform=cssTest('transform'),
         perspective=cssTest('perspective'),
         backfaceVisibility=cssTest('backface-visibility'),
+        toString=Object.prototype.toString,
+        class2type={},
         EASE={
             linear:function(t,b,c,d){ return c*t/d + b; },
             ease:function(t,b,c,d){ return -c * ((t=t/d-1)*t*t*t - 1) + b; }
@@ -84,6 +86,10 @@
                 }
             }
         }
+
+    each("Boolean Number String Function Array Date RegExp Object Error".split(" "),function(name){
+        class2type["[object "+name+"]"]=name.toLowerCase();
+    });
     
     each("X Y ".split(" "),function(name){
         var XY={X:'left',Y:'top'};
@@ -182,16 +188,16 @@
 
     function type(obj){
         if(obj==null){
-            return String(obj);
+            return obj+"";
         }
         
-        return typeof obj=='object'? Object.prototype.toString.call(obj).match(/\[object (\w+)\]/)[1].toLowerCase():
+        return typeof obj=='object'||typeof obj=='function' ? class2type[toString.call(obj)]||"object" :
             typeof obj;
     }
 	
     function isArrayLike(elem){
         var tp=type(elem);
-        return !!elem && tp!='function' && tp!='string' && (elem.length===0 || elem.length && (elem.length-1) in elem);
+        return !!elem && tp!='function' && tp!='string' && (elem.length===0 || elem.length && (elem.nodeType==1 || (elem.length-1) in elem));
     }
     
     function each(arr, iterate){
