@@ -38,7 +38,7 @@
             });
         },
         cssVendor=function(){
-            var tests="-webkit- -moz -o- -ms-".split(" "),
+            var tests="-webkit- -moz- -o- -ms-".split(" "),
                 prop;
             while(prop=tests.shift()){
                 if(camelCase(prop+'transform') in divstyle){
