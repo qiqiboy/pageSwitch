@@ -16,7 +16,9 @@ var pw=new pageSwitch('container id',{
     ease:'ease',		//string|function 过渡曲线动画，支持linear, ease 或tween函数
     transition:'slide',	//string|function转场方式，支持slide fade scale skew rotate等，也可以自定义转场函数
     mousewheel:false,	//bool 是否启用鼠标滚轮切换
-	arrowkey:false		//bool 是否启用键盘方向切换
+	arrowkey:false,		//bool 是否启用键盘方向切换
+    autoplay:false,	    //bool 是否自动播放幻灯 新增
+	interval:int		//bool 幻灯播放时间间隔 新增
 });
 
 //调用方法
@@ -26,6 +28,9 @@ pw.slide(n);			//第n张
 pw.setEase();			//重新设定过渡曲线
 pw.setTransition();		//重新设定转场方式
 pw.freeze(true|false);	//冻结页面转换，冻结后不可响应用户操作（调用slide prev next方法还可以进行）
+
+pw.play();			    //重新设定过渡曲线
+pw.pause();		        //重新设定转场方式
 
 //事件绑定
 pw.on(event,callback);	//event可选值 before（页面切换前） after（页面切换后） update（页面切换中）

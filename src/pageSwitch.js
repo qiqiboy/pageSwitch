@@ -286,6 +286,8 @@
             this.current=parseInt(config.start)||0;
             this.loop=!!config.loop;
             this.mousewheel=!!config.mousewheel;
+            this.interval=parseInt(config.interval)||5000;
+            this.playing=!!config.autoplay;
             this.arrawkey=!!config.arrowkey;
             this.pages=children(this.container);
             this.length=this.pages.length;
@@ -305,6 +307,18 @@
                 page.percent=0;
             });
             this.pages[this.current].style.display='block';
+
+            this.on({
+                before:function(){clearTimeout(self.playTimer)},
+                dragStart:function(){clearTimeout(self.playTimer)},
+                after:function(){
+                    if(self.playing){
+                        self.playTimer=setTimeout(function(){
+                            self.next();
+                        },self.interval);
+                    }
+                }
+            }).fire('after');
         },
         setEase:function(ease){
             this.ease=isFunction(ease)?ease:EASE[ease]||EASE.ease;
@@ -418,6 +432,15 @@
         },
         next:function(){
             return this.slide(this.current+1);
+        },
+        play:function(){
+            this.playing=true;
+            return this.slide(this.current);
+        },
+        pause:function(){
+            this.playing=false;
+            clearTimeout(this.playTimer);
+            return this;
         },
         fixIndex:function(index){
             return this.length>1&&this.loop?(this.length+index)%this.length:index;
