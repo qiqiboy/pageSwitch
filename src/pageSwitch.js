@@ -288,12 +288,12 @@
             this.mousewheel=!!config.mousewheel;
             this.interval=parseInt(config.interval)||5000;
             this.playing=!!config.autoplay;
-            this.arrawkey=!!config.arrowkey;
+            this.arrowkey=!!config.arrowkey;
             this.pages=children(this.container);
             this.length=this.pages.length;
 
             addListener(this.container,STARTEVENT+" click"+(this.mousewheel?" mousewheel DOMMouseScroll":""),handler);
-            addListener(document,MOVEEVENT+(this.arrawkey?" keydown":""),handler);
+            addListener(document,MOVEEVENT+(this.arrowkey?" keydown":""),handler);
 
             this.setEase(config.ease);
             this.setTransition(config.transition);
