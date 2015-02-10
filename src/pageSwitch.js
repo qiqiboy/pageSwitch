@@ -264,10 +264,12 @@
             ev.returnValue=oldEvent.returnValue=false;
         }
 
-        if(oldEvent.changedTouches && oldEvent.changedTouches.length==1){
-            ev.clientX=oldEvent.changedTouches.item(0).clientX;
-            ev.clientY=oldEvent.changedTouches.item(0).clientY;
+        if(oldEvent.touches && oldEvent.touches.length){
+            ev.clientX=oldEvent.touches.item(0).clientX;
+            ev.clientY=oldEvent.touches.item(0).clientY;
         }
+
+        ev.touchNum=oldEvent.touches&&oldEvent.touches.length||0;
 
         return ev;
     }
@@ -449,23 +451,10 @@
             var ev=filterEvent(oldEvent);
 
             switch(ev.type.toLowerCase()){
-                case 'mousedown':
-                case 'touchstart':
-                case 'pointerdown':
-                    var nn=ev.target.nodeName.toLowerCase();
-                    cancelFrame(this.timer);
-                    this.rect=[ev.clientX,ev.clientY];
-                    this.percent=this.pages[this.current].percent;
-                    this.time=+new Date;
-                    if(!isTouch && (nn=='a' || nn=='img')){
-                        ev.preventDefault();
-                    }
-                    break;
-
                 case 'mousemove':
                 case 'touchmove':
                 case 'pointermove':
-                    if(this.rect){
+                    if(this.rect&&ev.touchNum<2){
                         var rect=[ev.clientX,ev.clientY],
                             dir=this.direction,
                             offset=rect[dir]-this.rect[dir],
@@ -495,6 +484,9 @@
                     }
                     break;
 
+                case 'mousedown':
+                case 'touchstart':
+                case 'pointerdown':
                 case 'mouseup':
                 case 'touchend':
                 case 'touchcancel':
@@ -503,25 +495,38 @@
                     var self=this,
                         cpage=this.pages[this.current],
                         index=this.current,
-                        recover=this._offset||this.timer;
-                    if(this.drag==true){
-                        if(+new Date-this.time<500 && Math.abs(this._offset)>30){
-                            index+=this._offset>0?-1:1;
-                        }else if(Math.abs(cpage.percent)>.5){
-                            index+=cpage.percent>0?-1:1;
+                        recover=this._offset||this.timer,
+                        nn;
+                    if(!this.time||ev.touchNum){
+                        nn=ev.target.nodeName.toLowerCase();
+                        cancelFrame(this.timer);
+                        this.rect=[ev.clientX,ev.clientY];
+                        this.percent=this.pages[this.current].percent;
+                        this.time=+new Date;
+                        if(!isTouch && (nn=='a' || nn=='img')){
+                            ev.preventDefault();
                         }
-                        this.fire('dragEnd');
-                        ev.preventDefault();
-                    }
-                    if(this.time){
-                        each("rect drag time timer percnet _offset".split(" "),function(prop){
-                            delete self[prop];
-                        });
-                        if(recover){
-                            this.slide(index);
+                    }else{
+                        if(this.drag==true){
+                            if(+new Date-this.time<500 && Math.abs(this._offset)>30){
+                                index+=this._offset>0?-1:1;
+                            }else if(Math.abs(cpage.percent)>.5){
+                                index+=cpage.percent>0?-1:1;
+                            }
+                            this.fire('dragEnd');
+                            ev.preventDefault();
                         }
+                        if(this.time){
+                            each("rect drag time timer percnet _offset".split(" "),function(prop){
+                                delete self[prop];
+                            });
+                            if(recover){
+                                this.slide(index);
+                            }
+                        }
+                        break;
                     }
-                    break;
+                    
 
                 case 'click':
                     if(this.timer){
