@@ -487,6 +487,7 @@
                 case 'mousedown':
                 case 'touchstart':
                 case 'pointerdown':
+                        var startEv=true;
                 case 'mouseup':
                 case 'touchend':
                 case 'touchcancel':
@@ -497,7 +498,7 @@
                         index=this.current,
                         recover=this._offset||this.timer,
                         nn;
-                    if(!this.time||ev.touchNum){
+                    if(!this.time&&startEv||ev.touchNum){
                         nn=ev.target.nodeName.toLowerCase();
                         cancelFrame(this.timer);
                         this.rect=[ev.clientX,ev.clientY];

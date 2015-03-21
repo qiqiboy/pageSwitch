@@ -29,8 +29,8 @@ pw.setEase();			//重新设定过渡曲线
 pw.setTransition();		//重新设定转场方式
 pw.freeze(true|false);	//冻结页面转换，冻结后不可响应用户操作（调用slide prev next方法还可以进行）
 
-pw.play();			    //重新设定过渡曲线
-pw.pause();		        //重新设定转场方式
+pw.play();			    //播放幻灯
+pw.pause();		        //暂停幻灯
 
 //事件绑定
 pw.on(event,callback);	//event可选值 before（页面切换前） after（页面切换后） update（页面切换中）
@@ -39,6 +39,7 @@ pw.on(event,callback);	//event可选值 before（页面切换前） after（页�
 ## setEase 示例
 
 ```javascript
+该转场函数也可直接在new pageSwitch对象时经ease参数传入
 pw.setEase(function(t,b,c,d){
 	return c*t/d + b;
 });
@@ -48,7 +49,7 @@ pw.setEase(function(t,b,c,d){
 
 ```javascript
 pw.setTransition(function(percent,tpageIndex){
-	/*
+	/* 该转场函数也可直接在new pageSwitch对象时经transition参数传入
 	 * @param Float percent 目标页面过渡比率 0-1
 	 * @param Int tpageIndex 前一页面次序，该数值可能非法（所以需要测试是否存在该次序页面）
 	 */
