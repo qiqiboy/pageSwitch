@@ -14,7 +14,7 @@ var pw=new pageSwitch('container id',{
     start:0,			//int 默认显示页面
     loop:false,			//bool 是否循环切换
     ease:'ease',		//string|function 过渡曲线动画，支持linear, ease 或tween函数
-    transition:'slide',	//string|function转场方式，支持slide fade scale skew rotate等，也可以自定义转场函数
+    transition:'slide',	//string|function转场方式，支持scroll[X,Y] slide[X,Y] slideCover[X,Y] fade scale[X,Y] skew[X,Y] rotate[X,Y]等，也可以自定义转场函数
     mousewheel:false,	//bool 是否启用鼠标滚轮切换
 	arrowkey:false,		//bool 是否启用键盘方向切换
     autoplay:false,	    //bool 是否自动播放幻灯 新增
