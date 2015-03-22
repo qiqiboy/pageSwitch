@@ -413,10 +413,12 @@
                 percent=this.pageData[current].percent,
                 tIndex=this.fixIndex(fixIndex==current?current+(percent>0?-1:1):fixIndex),
                 tpage=this.pages[tIndex],
-                target=index>current?-1:1;
+                target=index>current?-1:1,
+                _tpage=cpage;
             
             if(fixIndex==current){
                 target=0;
+                _tpage=tpage;
             }else if(tpage.style.display=='none'){
                 percent=0;
             }
@@ -436,8 +438,8 @@
                     cp=(target-percent)*s+percent;
                 self.fixUpdate(cp,current,tIndex);
                 if(offset==duration){
-                    if(fixIndex!=current){
-                        cpage.style.display='none';
+                    if(_tpage){
+                        _tpage.style.display='none';
                     }
                     self.fire('after',fixIndex,current);
                     delete self.timer;
