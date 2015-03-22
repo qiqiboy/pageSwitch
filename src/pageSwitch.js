@@ -277,6 +277,10 @@
             range=getSelection();
             if('empty' in range)range.empty();
             else if('removeAllRanges' in range)range.removeAllRanges();
+        }else{
+            range=document.selection.createRange();
+            range.moveEnd("character",-range.text.length);
+            range.select();
         }
     }
 
@@ -552,7 +556,10 @@
                         recover,isDrag,offset,tm,nn;
                     if(!this.time&&startEv||ev.touchNum){
                         nn=ev.target.nodeName.toLowerCase();
-                        cancelFrame(this.timer);
+                        if(this.timer){
+                            cancelFrame(this.timer);
+                            delete this.timer;
+                        }
                         this.rect=[ev.clientX,ev.clientY];
                         this.percent=percent;
                         this.time=+new Date;
@@ -565,7 +572,7 @@
                         isDrag=this.drag;
 
                         if(tm=this.time){
-                            each("rect drag time timer percent _offset".split(" "),function(prop){
+                            each("rect drag time percent _offset".split(" "),function(prop){
                                 delete self[prop];
                             });
                         }
