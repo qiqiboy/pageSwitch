@@ -553,7 +553,7 @@
                     var self=this,
                         index=this.current,
                         percent=this.pageData[index].percent,
-                        recover,isDrag,offset,tm,nn;
+                        isDrag,offset,tm,nn;
                     if(!this.time&&startEv||ev.touchNum){
                         nn=ev.target.nodeName.toLowerCase();
                         if(this.timer){
@@ -568,7 +568,6 @@
                         }
                     }else{
                         offset=this._offset;
-                        recover=offset||this.timer;
                         isDrag=this.drag;
 
                         if(tm=this.time){
@@ -587,7 +586,7 @@
                             ev.preventDefault();
                         }
 
-                        if(recover){
+                        if(percent){
                             this.slide(index);
                         }
                         
