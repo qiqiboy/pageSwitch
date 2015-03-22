@@ -6,7 +6,8 @@
 ;
 (function(ROOT, struct, undefined){
     "use strict";
-	
+
+	var VERSION='2.0.0';
     var lastTime=0,
         nextFrame=ROOT.requestAnimationFrame            ||
                 ROOT.webkitRequestAnimationFrame        ||
@@ -67,21 +68,21 @@
         },
         TRANSITION={
             /* 更改切换效果
-             * @param Float percent 过度百分比
-             * @param int tpageIndex 上一个页面次序。注意，该值可能非法，所以需要测试是否存在该页面
+             * @param Element cpage 当前页面
+             * @param Float cp      当前页面过度百分比
+             * @param Element tpage 前序页面
+             * @param Float tp      前序页面过度百分比
              */
-            fade:function(percent,tpageIndex){
-                var cpage=this.pages[this.current],
-                    tpage=this.pages[tpageIndex];
+            fade:function(cpage,cp,tpage,tp){
                 if(opacity){
-                    cpage.style.opacity=1-Math.abs(percent);
+                    cpage.style.opacity=Math.abs(tp);
                     if(tpage){
-                        tpage.style.opacity=Math.abs(percent);
+                        tpage.style.opacity=Math.abs(cp);
                     }
                 }else{
-                    cpage.style.filter='alpha(opacity='+(1-Math.abs(percent))*100+')';
+                    cpage.style.filter='alpha(opacity='+(Math.abs(tp))*100+')';
                     if(tpage){
-                        tpage.style.filter='alpha(opacity='+Math.abs(percent)*100+')';
+                        tpage.style.filter='alpha(opacity='+Math.abs(cp)*100+')';
                     }
                 }
             }
@@ -92,94 +93,99 @@
     });
     
     each("X Y ".split(" "),function(name){
-        var XY={X:'left',Y:'top'};
-
-        TRANSITION['scroll'+name]=function(percent,tpageIndex){
-            var cpage=this.pages[this.current],
-                tpage=this.pages[tpageIndex],
-                dir=this.direction,
-                fire3D=perspective?' translateZ(0)':'',
+        var XY={X:'left',Y:'top'},
+            fire3D=perspective?' translateZ(0)':'';
+            
+        TRANSITION['scroll'+name]=function(cpage,cp,tpage,tp){
+            var dir=this.direction,
                 prop=name||['X','Y'][dir];
             if(transform){
-                cpage.style[transform]='translate'+prop+'('+percent*100+'%)'+fire3D;
+                cpage.style[transform]='translate'+prop+'('+cp*100+'%)'+fire3D;
                 if(tpage){
-                    tpage.style[transform]='translate'+prop+'('+tpage.percent*100+'%)'+fire3D;
+                    tpage.style[transform]='translate'+prop+'('+tp*100+'%)'+fire3D;
                 }
             }else{
                 prop=XY[prop];
-                cpage.style[prop]=percent*100+'%';
+                cpage.style[prop]=cp*100+'%';
                 if(tpage){
-                    tpage.style[prop]=tpage.percent*100+'%';
+                    tpage.style[prop]=tp*100+'%';
                 }
             }
         }
 
-        TRANSITION['slide'+name]=function(percent,tpageIndex){
-            var cpage=this.pages[this.current],
-                tpage=this.pages[tpageIndex],
-                dir=this.direction,
-                fire3D=perspective?' translateZ(0)':'',
+        TRANSITION['slide'+name]=function(cpage,cp,tpage,tp){
+            var dir=this.direction,
                 prop=name||['X','Y'][dir];
             if(transform){
-                if(percent<0){
-                    cpage.style[transform]='translate'+prop+'('+percent*100+'%)'+fire3D;
+                if(cp<0){
+                    cpage.style[transform]='translate'+prop+'('+cp*100+'%)'+fire3D;
                     cpage.style.zIndex=1;
                     if(tpage){
-                        tpage.style[transform]='scale('+((1-tpage.percent)*.2+.8)+')'+fire3D;
+                        tpage.style[transform]='scale('+(-cp*.2+.8)+')'+fire3D;
                         tpage.style.zIndex=0;
                     }
                 }else{
                     if(tpage){
-                        tpage.style[transform]='translate'+prop+'('+tpage.percent*100+'%)'+fire3D;
+                        tpage.style[transform]='translate'+prop+'('+tp*100+'%)'+fire3D;
                         tpage.style.zIndex=1;
                     }
-                    cpage.style[transform]='scale('+((1-percent)*.2+.8)+')'+fire3D;
+                    cpage.style[transform]='scale('+((1-cp)*.2+.8)+')'+fire3D;
                     cpage.style.zIndex=0;
                 }
             }else TRANSITION['scroll'+name].apply(this,arguments);
         }
 
-        TRANSITION['rotate'+name]=function(percent,tpageIndex){
-            var cpage=this.pages[this.current],
-                tpage=this.pages[tpageIndex],
-                dir=this.direction,
-                fire3D=perspective?' translateZ(0)':'',
-                fix=percent>0?dir?-1:1:dir?1:-1,
+        TRANSITION['slideCover'+name]=function(cpage,cp,tpage,tp){
+            var dir=this.direction,
+                prop=name||['X','Y'][dir];
+            cpage.style.zIndex=0;
+            if(transform){
+                cpage.style[transform]='translate'+prop+'(0)'+fire3D;
+                if(tpage){
+                    tpage.style[transform]='translate'+prop+'('+tp*100+'%)'+fire3D;
+                    tpage.style.zIndex=1;
+                }
+            }else{
+                cpage.style[prop]='0';
+                if(tpage){
+                    tpage.style[prop]=tp*100+'%';
+                    tpage.style.zIndex=1;
+                }
+            }
+        }
+
+        TRANSITION['rotate'+name]=function(cpage,cp,tpage,tp){
+            var dir=this.direction,
+                fix=cp>0?dir?-1:1:dir?1:-1,
                 prop=name||['X','Y'][1-dir];
             if(perspective){
                 cpage.style[backfaceVisibility]='hidden';
-                cpage.style[transform]='perspective(1000px) rotate'+prop+'('+Math.abs(percent)*180*fix+'deg)'+fire3D;
+                cpage.style[transform]='perspective(1000px) rotate'+prop+'('+Math.abs(cp)*180*fix+'deg)'+fire3D;
                 if(tpage){
                     tpage.style[backfaceVisibility]='hidden';
-                    tpage.style[transform]='perspective(1000px) rotate'+prop+'('+Math.abs(tpage.percent)*180*-fix+'deg)'+fire3D;
+                    tpage.style[transform]='perspective(1000px) rotate'+prop+'('+Math.abs(tp)*180*-fix+'deg)'+fire3D;
                 }
             }else TRANSITION['slide'+name].apply(this,arguments);
         }
 
-        TRANSITION['scale'+name]=function(percent,tpageIndex){
-            var cpage=this.pages[this.current],
-                tpage=this.pages[tpageIndex],
-                fire3D=perspective?' translateZ(0)':'',
-                prop=name;
+        TRANSITION['scale'+name]=function(cpage,cp,tpage,tp){
+            var prop=name;
             if(transform){
-                cpage.style[transform]='scale'+prop+'('+(1-Math.abs(percent))+')';+fire3D
-                cpage.style.zIndex=percent<0?1:0;
+                cpage.style[transform]='scale'+prop+'('+(1-Math.abs(cp))+')';+fire3D
+                cpage.style.zIndex=1;
                 if(tpage){
-                    tpage.style[transform]='scale'+prop+'('+Math.abs(percent)+')'+fire3D;
-                    tpage.style.zIndex=percent<0?0:1;
+                    tpage.style[transform]='scale'+prop+'('+Math.abs(cp)+')'+fire3D;
+                    tpage.style.zIndex=0;
                 }
             }else TRANSITION['scroll'+name].apply(this,arguments);
         }
 
-        TRANSITION['skew'+name]=function(percent,tpageIndex){
-            var cpage=this.pages[this.current],
-                tpage=this.pages[tpageIndex],
-                fire3D=perspective?' translateZ(0)':'',
-                prop=name;
+        TRANSITION['skew'+name]=function(cpage,cp,tpage,tp){
+            var prop=name;
             if(transform){
-                cpage.style[transform]='skew'+prop+'('+percent*180+'deg)'+fire3D;
+                cpage.style[transform]='skew'+prop+'('+cp*180+'deg)'+fire3D;
                 if(tpage){
-                    tpage.style[transform]='skew'+prop+'('+tpage.percent*180+'deg)'+fire3D;
+                    tpage.style[transform]='skew'+prop+'('+tp*180+'deg)'+fire3D;
                 }
                 TRANSITION.fade.apply(this,arguments);
             }else TRANSITION['scroll'+name].apply(this,arguments);
@@ -238,10 +244,25 @@
         }
         each(evstr.split(" "),function(ev){
             if(elem.addEventListener){
-                elem.addEventListener(ev, handler, false);
+                elem.addEventListener(ev,handler,false);
             }else if(elem.attachEvent){
                 elem.attachEvent('on'+ev,handler);
             }else elem['on'+ev]=handler;
+        });
+    }
+
+    function offListener(elem,evstr,handler){
+        if(type(evstr)=='object'){
+            return each(evstr,function(evstr,handler){
+                offListener(elem,evstr,handler);
+            });
+        }
+        each(evstr.split(" "),function(ev){
+            if(elem.removeEventListener){
+                elem.removeEventListener(ev,handler,false);
+            }else if(elem.detachEvent){
+                elem.detachEvent('on'+ev,handler);
+            }else elem['on'+ev]=null;
         });
     }
 
@@ -275,13 +296,15 @@
     }
     
     struct.prototype={
+        version:VERSION,
         constructor:struct,
         latestTime:0,
         init:function(config){
             var self=this,
-                handler=function(ev){
+                handler=this.handler=function(ev){
                     !self.frozen && self.handleEvent(ev);
                 }
+
             this.events={};
             this.duration=isNaN(parseInt(config.duration))?600:parseInt(config.duration);
             this.direction=parseInt(config.direction)==0?0:1;
@@ -294,19 +317,17 @@
             this.pages=children(this.container);
             this.length=this.pages.length;
 
+            this.pageData=[];
+
             addListener(this.container,STARTEVENT+" click"+(this.mousewheel?" mousewheel DOMMouseScroll":""),handler);
             addListener(document,MOVEEVENT+(this.arrowkey?" keydown":""),handler);
 
-            this.setEase(config.ease);
-            this.setTransition(config.transition);
-
             each(this.pages,function(page){
-                var style=page.style;
-                each("position:absolute;top:0;left:0;width:100%;height:100%;display:none".split(";"),function(css){
-                    var ret=css.split(":");
-                    style[ret[0]]=ret[1];
+                self.pageData.push({
+                    percent:0,
+                    cssText:page.style.cssText||''
                 });
-                page.percent=0;
+                self.initStyle(page);
             });
             this.pages[this.current].style.display='block';
 
@@ -319,8 +340,21 @@
                             self.next();
                         },self.interval);
                     }
-                }
+                },
+                update:null
             }).fire('after');
+
+            this.setEase(config.ease);
+            this.setTransition(config.transition);
+        },
+        initStyle:function(elem){
+            var style=elem.style,
+                ret;
+            each("position:absolute;top:0;left:0;width:100%;height:100%;display:none".split(";"),function(css){
+                ret=css.split(":");
+                style[ret[0]]=ret[1];
+            });
+            return elem;
         },
         setEase:function(ease){
             this.ease=isFunction(ease)?ease:EASE[ease]||EASE.ease;
@@ -331,7 +365,7 @@
             return this;
         },
         setTransition:function(transition){
-            this.transite=isFunction(transition)?transition:TRANSITION[transition]||TRANSITION.slide; 
+            this.events.update.splice(0,1,isFunction(transition)?transition:TRANSITION[transition]||TRANSITION.slide);
             return this;
         },
         addTransition:function(name,func){
@@ -355,13 +389,6 @@
         fire:function(ev,percent,tpageIndex){
             var self=this,
                 args=[].slice.call(arguments,1);
-            if(ev=='update'){
-                this.pages[this.current].percent=percent;
-                if(this.pages[tpageIndex]){
-                    this.pages[tpageIndex].percent=percent>0?percent-1:1+percent;
-                }
-                this.transite.apply(this,args);
-            }
             each(this.events[ev]||[],function(func){
                 if(isFunction(func)){
                     func.apply(self,args);
@@ -381,44 +408,35 @@
                 ease=this.ease,
                 current=this.current,
                 fixIndex=Math.min(this.length-1,Math.max(0,this.fixIndex(index))),
-                cpage,tpage,tpageIndex,percent;
-
-            cpage=this.pages[fixIndex];
-            tpage=this.pages[tpageIndex=this.fixIndex(fixIndex==current?fixIndex+(cpage.percent>0?-1:1):current)];
+                cpage=this.pages[current],
+                percent=this.pageData[current].percent,
+                tIndex=this.fixIndex(fixIndex==current?current+(percent>0?-1:1):fixIndex),
+                tpage=this.pages[tIndex],
+                target=index>current?-1:1;
             
-            each(this.pages,function(page,index){
-                if(index!=fixIndex&&index!=tpageIndex){
-                    page.style.display='none';
-                }
-            });
-
-            if(cpage.style.display=='none'){
-                cpage.style.display='block';
-                percent=index>current?1:-1;
-            }else{
-                percent=cpage.percent;
+            if(fixIndex==current){
+                target=0;
+            }else if(tpage.style.display=='none'){
+                percent=0;
             }
 
-            duration*=Math.abs(percent);
-
+            this.fixBlock(current,tIndex);
             this.fire('before',current,fixIndex);
-
             this.current=fixIndex;
-            
-            cancelFrame(this.timer);
-
             this.latestTime=stime;
+            cancelFrame(this.timer);
+            duration*=1-Math.abs(percent);
 
             ani();
 
             function ani(){
                 var offset=Math.min(duration,+new Date-stime),
                     s=duration?ease(offset,0,1,duration):1,
-                    cp=percent*(1-s);
-                self.fire('update',cp,tpageIndex);
+                    cp=(target-percent)*s+percent;
+                self.fixUpdate(cp,current,tIndex);
                 if(offset==duration){
-                    if(tpage){
-                        tpage.style.display='none';
+                    if(fixIndex!=current){
+                        cpage.style.display='none';
                     }
                     self.fire('after',fixIndex,current);
                     delete self.timer;
@@ -447,6 +465,27 @@
         fixIndex:function(index){
             return this.length>1&&this.loop?(this.length+index)%this.length:index;
         },
+        fixBlock:function(cIndex,tIndex){
+            each(this.pages,function(page,index){
+                if(cIndex!=index && tIndex!=index){
+                    page.style.display='none';
+                }else{
+                    page.style.display='block';
+                }
+            });
+            return this;
+        },
+        fixUpdate:function(cPer,cIndex,tIndex){
+            var pageData=this.pageData,
+                cpage=this.pages[cIndex],
+                tpage=this.pages[tIndex],
+                tPer;
+            pageData[cIndex].percent=cPer;
+            if(tpage){
+                tPer=pageData[tIndex].percent=cPer>0?cPer-1:1+cPer;
+            }
+            return this.fire('update',cpage,cPer,tpage,tPer);
+        },
         handleEvent:function(oldEvent){
             var ev=filterEvent(oldEvent);
 
@@ -455,29 +494,25 @@
                 case 'touchmove':
                 case 'pointermove':
                     if(this.rect&&ev.touchNum<2){
-                        var rect=[ev.clientX,ev.clientY],
+                        var cIndex=this.current,
                             dir=this.direction,
-                            offset=rect[dir]-this.rect[dir],
-                            cpage=this.pages[this.current],
+                            rect=[ev.clientX,ev.clientY],
+                            _rect=this.rect,
+                            offset=rect[dir]-_rect[dir],
+                            cpage=this.pages[cIndex],
                             total=cpage['offset'+['Width','Height'][dir]],
-                            tpage,tpageIndex,_tpage,percent;
-                        if(this.drag==null && this.rect.toString()!=rect.toString()){
-                            this.drag=Math.abs(offset)>=Math.abs(rect[1-dir]-this.rect[1-dir]);
+                            tIndex,percent;
+                        if(this.drag==null && _rect.toString()!=rect.toString()){
+                            this.drag=Math.abs(offset)>=Math.abs(rect[1-dir]-_rect[1-dir]);
                             this.drag && this.fire('dragStart');
                         }
                         if(this.drag){
                             percent=this.percent+(total&&offset/total);
-                            tpage=this.pages[tpageIndex=this.fixIndex(this.current+(percent>0?-1:1))];
-                            _tpage=this.pages[this.fixIndex(this.current+(percent>0?1:-1))];
-                            if(tpage){
-                                tpage.style.display='block';
-                            }else{
-                                percent/=3;
+                            if(!this.pages[tIndex=this.fixIndex(cIndex+(percent>0?-1:1))]){
+                                percent/=Math.abs(offset)/total+1;
                             }
-                            if(_tpage&&_tpage!=tpage){
-                                _tpage.style.display='none';
-                            }
-                            this.fire('update',percent,tpageIndex);
+                            this.fixBlock(cIndex,tIndex);
+                            this.fixUpdate(percent,cIndex,tIndex);
                             this._offset=offset;
                             ev.preventDefault();
                         }
@@ -487,38 +522,38 @@
                 case 'mousedown':
                 case 'touchstart':
                 case 'pointerdown':
-                        var startEv=true;
+                    var startEv=true;
                 case 'mouseup':
                 case 'touchend':
                 case 'touchcancel':
                 case 'pointerup':
                 case 'pointercancel':
                     var self=this,
-                        cpage=this.pages[this.current],
                         index=this.current,
+                        percent=this.pageData[index].percent,
                         recover=this._offset||this.timer,
                         nn;
                     if(!this.time&&startEv||ev.touchNum){
                         nn=ev.target.nodeName.toLowerCase();
                         cancelFrame(this.timer);
                         this.rect=[ev.clientX,ev.clientY];
-                        this.percent=this.pages[this.current].percent;
+                        this.percent=percent;
                         this.time=+new Date;
                         if(!isTouch && (nn=='a' || nn=='img')){
                             ev.preventDefault();
                         }
                     }else{
                         if(this.drag==true){
-                            if(+new Date-this.time<500 && Math.abs(this._offset)>30){
+                            if(+new Date-this.time<500 && Math.abs(this._offset)>20){
                                 index+=this._offset>0?-1:1;
-                            }else if(Math.abs(cpage.percent)>.5){
-                                index+=cpage.percent>0?-1:1;
+                            }else if(Math.abs(percent)>.5){
+                                index+=percent>0?-1:1;
                             }
                             this.fire('dragEnd');
                             ev.preventDefault();
                         }
                         if(this.time){
-                            each("rect drag time timer percnet _offset".split(" "),function(prop){
+                            each("rect drag time timer percent _offset".split(" "),function(prop){
                                 delete self[prop];
                             });
                             if(recover){
@@ -570,6 +605,59 @@
                     }
                     break;
             }
+        },
+        destroy:function(){
+            var pageData=this.pageData;
+
+            offListener(this.container,STARTEVENT+" click"+(this.mousewheel?" mousewheel DOMMouseScroll":""),this.handler);
+            offListener(document,MOVEEVENT+(this.arrowkey?" keydown":""),this.handler);
+
+            each(this.pages,function(page,index){
+                page.style.cssText=pageData[index].cssText;
+            });
+            
+            return this.pause();
+        },
+        append:function(elem,index){
+            if(null==index){
+                index=this.pages.length;
+            }
+            this.pageData.splice(index,0,{
+                percent:0,
+                cssText:elem.style.cssText
+            });
+            this.pages.splice(index,0,elem);
+            this.container.appendChild(this.initStyle(elem));
+            
+            this.length=this.pages.length;
+
+            if(index<=this.current){
+                this.slide(this.current+1);
+            }
+
+            return this;
+        },
+        prepend:function(elem){
+            return this.append(elem,0);
+        },
+        insertBefore:function(elem,index){
+            return this.append(elem,index-1);
+        },
+        insertAfter:function(elem,index){
+            return this.append(elem,index+1);
+        },
+        remove:function(index){
+            this.container.removeChild(this.pages[index]);
+            this.pages.splice(index,1);
+            this.pageData.splice(index,1);
+
+            this.length=this.pages.length;
+
+            if(index<=this.current){
+                this.slide(this.current-1);
+            }
+
+            return this;
         }
     }
     

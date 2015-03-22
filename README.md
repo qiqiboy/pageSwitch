@@ -32,14 +32,32 @@ pw.freeze(true|false);	//冻结页面转换，冻结后不可响应用户操作�
 pw.play();			    //播放幻灯
 pw.pause();		        //暂停幻灯
 
+/* 2015.03.22 新增方法 */
+pw.prepend(DOM_NODE);	//前增页面
+pw.append(DOM_NODE);	//后增页面
+pw.insertBefore(DOM_NODE,index);	//在index前添加
+pw.insertAfter(DOM_NODE,index);	//在index后添加
+pw.remove(index);		//删除第index页面
+
+pw.destroy();			//销毁pageSwitch效果对象
+
 //事件绑定
-pw.on(event,callback);	//event可选值 before（页面切换前） after（页面切换后） update（页面切换中）
+
+/* event可选值:
+ * 
+ * before 页面切换前
+ * after 页面切换后
+ * update 页面切换中
+ * dragStart 开始拖拽
+ * dragEnd 结束拖拽
+ */
+pw.on(event,callback);
 ````
 
 ## setEase 示例
 
 ```javascript
-该转场函数也可直接在new pageSwitch对象时经ease参数传入
+//注：该转场函数也可直接在new pageSwitch对象时经ease参数传入
 pw.setEase(function(t,b,c,d){
 	return c*t/d + b;
 });
@@ -48,23 +66,26 @@ pw.setEase(function(t,b,c,d){
 ## setTransition 示例
 
 ```javascript
-pw.setTransition(function(percent,tpageIndex){
-	/* 该转场函数也可直接在new pageSwitch对象时经transition参数传入
-	 * @param Float percent 目标页面过渡比率 0-1
-	 * @param Int tpageIndex 前一页面次序，该数值可能非法（所以需要测试是否存在该次序页面）
+pw.setTransition(function(cpage,cp,tpage,tp){
+	/* 过渡效果处理函数
+	 * 注：该转场函数也可直接在new pageSwitch对象时经transition参数传入
+	 *
+	 * @param Element cpage 当前页面
+	 * @param Float cp      当前页面过度百分比。cp<0说明向上切换，反之向下
+	 * @param Element tpage 前序页面
+	 * @param Float tp      前序页面过度百分比 。tp<0说明向下切换，反之向上
+	 * 注意：后两个参数 tpage和tp可能为空（页面切换边缘时，第一张、最后一张的情况）
 	 */
 	 
-	var cpage=this.pages[this.current],				//目标页面
-		tpage=this.pages[tpageIndex];				//前一张页面
-	if('opacity' in cpage.style){					//检测透明度css支持
-		cpage.style.opacity=1-Math.abs(percent);	//目标页面根据切换比率设置其渐显
-		if(tpage){									//这里检测下是否存在前一张页面
-			tpage.style.opacity=Math.abs(percent);	//设置前一张页面渐隐
+	if(opacity){
+		cpage.style.opacity=Math.abs(tp);
+		if(tpage){
+			tpage.style.opacity=Math.abs(cp);
 		}
 	}else{
-		cpage.style.filter='alpha(opacity='+(1-Math.abs(percent))*100+')';
+		cpage.style.filter='alpha(opacity='+(Math.abs(tp))*100+')';
 		if(tpage){
-			tpage.style.filter='alpha(opacity='+Math.abs(percent)*100+')';
+			tpage.style.filter='alpha(opacity='+Math.abs(cp)*100+')';
 		}
 	}
 });

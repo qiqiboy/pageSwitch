@@ -42,10 +42,14 @@
             <button onclick="a.setTransition('fade')">渐隐(fade)</button>
             <button onclick="a.setTransition('scroll')">滚动(scroll)</button>
             <button onclick="a.setTransition('slide')">下拉(slide)</button>
+			<button onclick="a.setTransition('slideCover')">上拉(slideCover)</button>
             <button onclick="a.setTransition('scale')">缩放(scale)</button>
             <button onclick="a.setTransition('skew')">扭曲(skew)</button>
             <button onclick="a.setTransition('rotate')">翻转(rotate)</button>
             <button style="color:red;" onclick="a.loop=!a.loop;if(a.loop){this.textContent='取消循环'}else{this.textContent='循环'}">循环</button>
+			<button onclick="a.prepend(createPage())">前增加一页</button>
+			<button onclick="a.append(createPage())">后增加一页</button>
+			<button onclick="a.remove(1)">删除第2页</button>
         </div>
     </div>
 	<script type="text/javascript" src="src/pageSwitch.js"></script>
@@ -60,6 +64,16 @@
         mousewheel:true,
         arrowkey:true
     });
+	
+	function colorRand(){
+		return parseInt(Math.random()*255);
+	}
+	
+	function createPage(){
+		var div=document.createElement('div');
+		div.style.backgroundColor='rgb('+colorRand()+','+colorRand()+','+colorRand()+')';
+		return div;
+	}
     </script>
 </body>
 </html>
