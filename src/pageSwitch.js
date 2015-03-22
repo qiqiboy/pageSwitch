@@ -271,6 +271,15 @@
         });
     }
 
+    function removeRange(){
+        var range;
+        if(ROOT.getSelection){
+            range=getSelection();
+            if('empty' in range)range.empty();
+            else if('removeAllRanges' in range)range.removeAllRanges();
+        }
+    }
+
     function filterEvent(oldEvent){
         var ev={};
 
@@ -339,6 +348,7 @@
             this.on({
                 before:function(){clearTimeout(self.playTimer)},
                 dragStart:function(){clearTimeout(self.playTimer)},
+                dragMove:function(){removeRange();},
                 after:function(){
                     if(self.playing){
                         self.playTimer=setTimeout(function(){
@@ -445,8 +455,8 @@
                     if(_tpage){
                         _tpage.style.display='none';
                     }
-                    self.fire('after',fixIndex,current);
                     delete self.timer;
+                    self.fire('after',fixIndex,current);
                 }else{
                     self.timer=nextFrame(ani);
                 }
@@ -511,7 +521,7 @@
                             tIndex,percent;
                         if(this.drag==null && _rect.toString()!=rect.toString()){
                             this.drag=Math.abs(offset)>=Math.abs(rect[1-dir]-_rect[1-dir]);
-                            this.drag && this.fire('dragStart');
+                            this.drag && this.fire('dragStart',ev);
                         }
                         if(this.drag){
                             percent=this.percent+(total&&offset/total);
@@ -519,6 +529,7 @@
                                 percent/=Math.abs(offset)/total+1;
                             }
                             this.fixBlock(cIndex,tIndex);
+                            this.fire('dragMove',ev);
                             this.fixUpdate(percent,cIndex,tIndex);
                             this._offset=offset;
                             ev.preventDefault();
@@ -538,8 +549,7 @@
                     var self=this,
                         index=this.current,
                         percent=this.pageData[index].percent,
-                        recover=this._offset||this.timer,
-                        nn;
+                        recover,isDrag,offset,tm,nn;
                     if(!this.time&&startEv||ev.touchNum){
                         nn=ev.target.nodeName.toLowerCase();
                         cancelFrame(this.timer);
@@ -550,23 +560,30 @@
                             ev.preventDefault();
                         }
                     }else{
-                        if(this.drag==true){
-                            if(+new Date-this.time<500 && Math.abs(this._offset)>20){
-                                index+=this._offset>0?-1:1;
-                            }else if(Math.abs(percent)>.5){
-                                index+=percent>0?-1:1;
-                            }
-                            this.fire('dragEnd');
-                            ev.preventDefault();
-                        }
-                        if(this.time){
+                        offset=this._offset;
+                        recover=offset||this.timer;
+                        isDrag=this.drag;
+
+                        if(tm=this.time){
                             each("rect drag time timer percent _offset".split(" "),function(prop){
                                 delete self[prop];
                             });
-                            if(recover){
-                                this.slide(index);
-                            }
                         }
+
+                        if(isDrag){
+                            if(+new Date-tm<500 && Math.abs(offset)>20){
+                                index+=offset>0?-1:1;
+                            }else if(Math.abs(percent)>.5){
+                                index+=percent>0?-1:1;
+                            }
+                            this.fire('dragEnd',ev);
+                            ev.preventDefault();
+                        }
+
+                        if(recover){
+                            this.slide(index);
+                        }
+                        
                         break;
                     }
                     
