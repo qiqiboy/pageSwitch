@@ -77,7 +77,7 @@ pw.setTransition(function(cpage,cp,tpage,tp){
 	 * 注意：后两个参数 tpage和tp可能为空（页面切换边缘时，第一张、最后一张的情况）
 	 */
 	 
-	if(opacity){
+	if('opacity' in cpage.style){
 		cpage.style.opacity=Math.abs(tp);
 		if(tpage){
 			tpage.style.opacity=Math.abs(cp);
