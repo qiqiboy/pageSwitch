@@ -6,8 +6,8 @@
 ;
 (function(ROOT, struct, undefined){
     "use strict";
-
-	var VERSION='2.0.0';
+    
+    var VERSION='2.0.0';
     var lastTime=0,
         nextFrame=ROOT.requestAnimationFrame            ||
                 ROOT.webkitRequestAnimationFrame        ||
@@ -132,7 +132,7 @@
                     cpage.style[transform]='scale('+((1-cp)*.2+.8)+')'+fire3D;
                     cpage.style.zIndex=0;
                 }
-            }else TRANSITION['scroll'+name].apply(this,arguments);
+            }else TRANSITION['slideCover'+name].apply(this,arguments);
         }
 
         TRANSITION['slideCover'+name]=function(cpage,cp,tpage,tp){
@@ -146,6 +146,7 @@
                     tpage.style.zIndex=1;
                 }
             }else{
+                prop=XY[prop];
                 cpage.style[prop]='0';
                 if(tpage){
                     tpage.style[prop]=tp*100+'%';
