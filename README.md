@@ -9,41 +9,40 @@ Just a page Switch Javascript Library
 // 调用 pageSwitch 方法
 
 var pw=new pageSwitch('container id',{
-	duration:600,		//int 页面过渡时间
-	direction:1,		//int 页面切换方向，0横向，1纵向
-    start:0,			//int 默认显示页面
-    loop:false,			//bool 是否循环切换
-    ease:'ease',		//string|function 过渡曲线动画，支持linear, ease, ease-in, ease-out或tween函数
-    transition:'slide',	//string|function转场方式，支持scroll[X,Y] slide[X,Y] slideCover[X,Y] slideZoom[X,Y] fade zoomIn[X,Y] zoomOut[X,Y] skew[X,Y] rotate[X,Y]等，也可以自定义转场函数
-    mousewheel:false,	//bool 是否启用鼠标滚轮切换
-	arrowkey:false,		//bool 是否启用键盘方向切换
-    autoplay:false,	    //bool 是否自动播放幻灯 新增
-	interval:int		//bool 幻灯播放时间间隔 新增
+	duration:600,			//int 页面过渡时间
+	direction:1,			//int 页面切换方向，0横向，1纵向
+    start:0,				//int 默认显示页面
+    loop:false,				//bool 是否循环切换
+    ease:'ease',			//string|function 过渡曲线动画，支持linear, ease, ease-in, ease-out或tween函数
+    transition:'slideZoom',	//string|function转场方式，支持scroll[X,Y] slide[X,Y] slideCover[X,Y] slideZoom[X,Y] fade zoomIn[X,Y] zoomOut[X,Y] skew[X,Y] rotate[X,Y]等，也可以自定义转场函数
+    mousewheel:false,		//bool 是否启用鼠标滚轮切换
+	arrowkey:false,			//bool 是否启用键盘方向切换
+    autoplay:false,	    	//bool 是否自动播放幻灯 新增
+	interval:int			//bool 幻灯播放时间间隔 新增
 });
 
 //调用方法
-pw.prev(); 				//上一张
-pw.next();				//下一张
-pw.slide(n);			//第n张
-pw.setEase();			//重新设定过渡曲线
-pw.setTransition();		//重新设定转场方式
-pw.freeze(true|false);	//冻结页面转换，冻结后不可响应用户操作（调用slide prev next方法还可以进行）
+pw.prev(); 					//上一张
+pw.next();					//下一张
+pw.slide(n);				//第n张
+pw.setEase();				//重新设定过渡曲线
+pw.setTransition();			//重新设定转场方式
+pw.freeze(true|false);		//冻结页面转换，冻结后不可响应用户操作（调用slide prev next方法还可以进行）
 
-pw.play();			    //播放幻灯
-pw.pause();		        //暂停幻灯
+pw.play();			    	//播放幻灯
+pw.pause();		        	//暂停幻灯
 
 /* 2015.03.22 新增方法 */
-pw.prepend(DOM_NODE);	//前增页面
-pw.append(DOM_NODE);	//后增页面
+pw.prepend(DOM_NODE);		//前增页面
+pw.append(DOM_NODE);		//后增页面
 pw.insertBefore(DOM_NODE,index);	//在index前添加
 pw.insertAfter(DOM_NODE,index);		//在index后添加
-pw.remove(index);		//删除第index页面
+pw.remove(index);			//删除第index页面
 
-pw.destroy();			//销毁pageSwitch效果对象
+pw.destroy();				//销毁pageSwitch效果对象
 
-//事件绑定
-
-/* event可选值:
+/* 事件绑定
+ * event可选值:
  * 
  * before 页面切换前
  * after 页面切换后
