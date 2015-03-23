@@ -691,7 +691,7 @@
             this.length=this.pages.length;
 
             if(index<=this.current){
-                this.slide(this.current+1);
+                this.current++;
             }
 
             return this;
@@ -713,7 +713,9 @@
             this.length=this.pages.length;
 
             if(index<=this.current){
-                this.slide(this.current-1);
+                if(index==this.current--){
+                    this.slide(this.current);
+                }
             }
 
             return this;
