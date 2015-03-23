@@ -513,7 +513,7 @@
             return this;
         },
         fixIndex:function(index){
-            return this.length>1&&this.loop?(this.length+index)%this.length:index;
+            return this.length>1&&(this.loop||this.playing)?(this.length+index%this.length)%this.length:index;
         },
         fixBlock:function(cIndex,tIndex){
             each(this.pages,function(page,index){
