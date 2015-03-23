@@ -72,7 +72,8 @@ pw.setEase(function(t,b,c,d){
 
 ## setTransition 示例
 
-支持以下转场效果：
+支持以下转场效果：  
+  
 `fade`				渐隐渐显  
   
 `scroll`			页面滚动  
