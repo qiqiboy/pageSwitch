@@ -13,8 +13,8 @@ var pw=new pageSwitch('container id',{
 	direction:1,			//int 页面切换方向，0横向，1纵向
     start:0,				//int 默认显示页面
     loop:false,				//bool 是否循环切换
-    ease:'ease',			//string|function 过渡曲线动画，支持linear, ease, ease-in, ease-out或tween函数
-    transition:'slideZoom',	//string|function转场方式，支持scroll[X,Y] slide[X,Y] slideCover[X,Y] slideZoom[X,Y] fade zoomIn[X,Y] zoomOut[X,Y] skew[X,Y] rotate[X,Y]等，也可以自定义转场函数
+    ease:'ease',			//string|function 过渡曲线动画，详见下方说明
+    transition:'slide',		//string|function转场方式，详见下方说明
     mousewheel:false,		//bool 是否启用鼠标滚轮切换
 	arrowkey:false,			//bool 是否启用键盘方向切换
     autoplay:false,	    	//bool 是否自动播放幻灯 新增
@@ -56,8 +56,13 @@ pw.on(event,callback);
 
 ## setEase 示例
 
+内置支持 `linear` `ease` `eas-in` `ease-out` `ease-in-out`等
+
 ```javascript
-//注：该转场函数也可直接在new pageSwitch对象时经ease参数传入
+//注：此处传值也可直接在new pageSwitch对象时经ease参数传入
+pw.setEase('ease-in'); 
+
+//使用其他过渡曲线函数
 pw.setEase(function(t,b,c,d){
 	return c*t/d + b;
 });
@@ -65,10 +70,45 @@ pw.setEase(function(t,b,c,d){
 
 ## setTransition 示例
 
+支持以下转场效果：
+`fade`			渐隐渐显
+
+`scroll`		页面滚动
+
+`slide`			滑动切换，后者页面有缩放效果
+`slideCover`	页面滑入滑出
+`slideCoverIn`  总是下一张页面滑入
+`slideCoverOut` 总是当前页面滑出
+
+`zoom`			缩放切换
+`zoomCover`		页面缩进缩出
+`zoomCoverIn`  	总是下一张页面缩入
+`zoomCoverOut` 	总是当前页面缩出
+
+`skew`			扭曲切换
+`skewCover`		页面扭进扭出
+`skewCoverIn`  	总是下一张页面扭入
+`skewCoverOut` 	总是当前页面扭出
+
+`flip`			翻转切换
+`flipCover`		页面翻入翻出
+`flipCoverIn`  	总是下一张页面翻入
+`flipCoverOut` 	总是当前页面翻出
+
+`bomb`			放大切换
+`bombCover`		页面大入大出
+`bombCoverIn`  	总是下一张页面大入
+`bombCoverOut` 	总是当前页面大出
+
+注意：除了`fade`，所有效果都支持指定X或Y轴方向效果，只要在名字后面加上`X`或`Y`即可。
+例如：`scrollY` `flipX` `flipCoverX` `flipCoverInX` 等类似。
+ 
 ```javascript
-pw.setTransition(function(cpage,cp,tpage,tp){
+pw.setTransition('fade');
+
+pw.setTransition(function(cpage,cp,tpage,tp){ 
 	/* 过渡效果处理函数
-	 * 注：该转场函数也可直接在new pageSwitch对象时经transition参数传入
+	 * 注：此处传值也可直接在new pageSwitch对象时经transition参数传入
 	 *
 	 * @param Element cpage 当前页面
 	 * @param Float cp      当前页面过度百分比。cp<0说明向上切换，反之向下

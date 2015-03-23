@@ -39,15 +39,28 @@
             <div class="page page5">page5</div>
         </div>
         <div id="ctl">
-            <button onclick="a.setTransition('fade')">渐隐(fade)</button>
-            <button onclick="a.setTransition('scroll')">滚动(scroll)</button>
-            <button onclick="a.setTransition('slide')">滑动(slide)</button>
-			<button onclick="a.setTransition('slideCover')">滑动覆盖(slideCover)</button>
-			<button onclick="a.setTransition('slideZoom')">滑动缩显(slideZoom)</button>
-            <button onclick="a.setTransition('zoomIn')">缩小(zoomIn)</button>
-			<button onclick="a.setTransition('zoomOut')">放大(zoomOut)</button>
-            <button onclick="a.setTransition('skew')">扭曲(skew)</button>
-            <button onclick="a.setTransition('rotate')">翻转(rotate)</button>
+            <button onclick="a.setTransition('fade')">fade</button>
+            <button onclick="a.setTransition('scroll')">scroll</button>
+            <button onclick="a.setTransition('slide')">slide</button>
+			<button onclick="a.setTransition('slideCover')">slideCover</button>
+			<button onclick="a.setTransition('slideCoverIn')">slideCoverIn</button>
+			<button onclick="a.setTransition('slideCoverOut')">slideCoverOut</button>
+            <button onclick="a.setTransition('zoom')">zoom</button>
+			<button onclick="a.setTransition('zoomCover')">zoomCover</button>
+			<button onclick="a.setTransition('zoomCoverIn')">zoomCoverIn</button>
+			<button onclick="a.setTransition('zoomCoverOut')">zoomCoverOut</button>
+            <button onclick="a.setTransition('skew')">skew</button>
+			<button onclick="a.setTransition('skewCover')">skewCover</button>
+			<button onclick="a.setTransition('skewCoverIn')">skewCoverIn</button>
+			<button onclick="a.setTransition('skewCoverOut')">skewCoverOut</button>
+			<button onclick="a.setTransition('flip')">flip</button>
+			<button onclick="a.setTransition('flipCover')">flipCover</button>
+			<button onclick="a.setTransition('flipCoverIn')">flipCoverIn</button>
+			<button onclick="a.setTransition('flipCoverOut')">flipCoverOut</button>
+            <button onclick="a.setTransition('bomb')">bomb</button>
+			<button onclick="a.setTransition('bombCover')">bombCover</button>
+			<button onclick="a.setTransition('bombCoverIn')">bombCoverIn</button>
+			<button onclick="a.setTransition('bombCoverOut')">bombCoverOut</button>
             <button style="color:red;" onclick="a.loop=!a.loop;if(a.loop){this.textContent='取消循环'}else{this.textContent='循环'}">循环</button>
 			<button onclick="a.prepend(createPage())">前增加一页</button>
 			<button onclick="a.append(createPage())">后增加一页</button>
@@ -63,7 +76,7 @@
         direction:1,
         loop:false,
         ease:'ease',
-        transition:'slideZoom',
+        transition:'slide',
         mousewheel:true,
         arrowkey:true
     });
