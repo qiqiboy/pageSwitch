@@ -60,9 +60,10 @@ pw.on(event,callback);
 
 ```javascript
 //注：此处传值也可直接在new pageSwitch对象时经ease参数传入
-pw.setEase('ease-in'); 
+//设置匀速linear过渡示例：
+pw.setEase('linear'); //由于内置了linear支持，所以可以直接使用
 
-//使用其他过渡曲线函数
+//假如没有内置linear，则使用自定义过渡曲线函数如下
 pw.setEase(function(t,b,c,d){
 	return c*t/d + b;
 });
@@ -104,11 +105,13 @@ pw.setEase(function(t,b,c,d){
 例如：`scrollY` `flipX` `flipCoverX` `flipCoverInX` 等类似。
  
 ```javascript
-pw.setTransition('fade');
+//注：此处传值也可直接在new pageSwitch对象时经transition参数传入
+//设置fade效果示例：
+pw.setTransition('fade'); //由于内置了fade效果，所以可以直接调用。
 
-pw.setTransition(function(cpage,cp,tpage,tp){ 
+//假定没有内置fade，自定义转场函数如下
+pw.setTransition(function(cpage,cp,tpage,tp){
 	/* 过渡效果处理函数
-	 * 注：此处传值也可直接在new pageSwitch对象时经transition参数传入
 	 *
 	 * @param Element cpage 当前页面
 	 * @param Float cp      当前页面过度百分比。cp<0说明向上切换，反之向下
