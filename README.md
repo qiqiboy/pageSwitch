@@ -56,7 +56,8 @@ pw.on(event,callback);
 
 ## setEase 示例
 
-内置支持 `linear` `ease` `eas-in` `ease-out` `ease-in-out`等
+内置支持 `linear` `ease` `eas-in` `ease-out` `ease-in-out` `bounce`等  
+`bounce` 弹跳过渡，很有意思，可以试试
 
 ```javascript
 //注：此处传值也可直接在new pageSwitch对象时经ease参数传入
