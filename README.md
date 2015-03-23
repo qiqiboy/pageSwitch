@@ -13,8 +13,8 @@ var pw=new pageSwitch('container id',{
 	direction:1,		//int 页面切换方向，0横向，1纵向
     start:0,			//int 默认显示页面
     loop:false,			//bool 是否循环切换
-    ease:'ease',		//string|function 过渡曲线动画，支持linear, ease 或tween函数
-    transition:'slide',	//string|function转场方式，支持scroll[X,Y] slide[X,Y] slideCover[X,Y] fade scale[X,Y] skew[X,Y] rotate[X,Y]等，也可以自定义转场函数
+    ease:'ease',		//string|function 过渡曲线动画，支持linear, ease, ease-in, ease-out或tween函数
+    transition:'slide',	//string|function转场方式，支持scroll[X,Y] slide[X,Y] slideCover[X,Y] slideZoom[X,Y] fade zoomIn[X,Y] zoomOut[X,Y] skew[X,Y] rotate[X,Y]等，也可以自定义转场函数
     mousewheel:false,	//bool 是否启用鼠标滚轮切换
 	arrowkey:false,		//bool 是否启用键盘方向切换
     autoplay:false,	    //bool 是否自动播放幻灯 新增
@@ -36,7 +36,7 @@ pw.pause();		        //暂停幻灯
 pw.prepend(DOM_NODE);	//前增页面
 pw.append(DOM_NODE);	//后增页面
 pw.insertBefore(DOM_NODE,index);	//在index前添加
-pw.insertAfter(DOM_NODE,index);	//在index后添加
+pw.insertAfter(DOM_NODE,index);		//在index后添加
 pw.remove(index);		//删除第index页面
 
 pw.destroy();			//销毁pageSwitch效果对象
@@ -49,6 +49,7 @@ pw.destroy();			//销毁pageSwitch效果对象
  * after 页面切换后
  * update 页面切换中
  * dragStart 开始拖拽
+ * dragMove 拖拽中
  * dragEnd 结束拖拽
  */
 pw.on(event,callback);

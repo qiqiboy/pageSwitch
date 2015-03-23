@@ -41,9 +41,11 @@
         <div id="ctl">
             <button onclick="a.setTransition('fade')">渐隐(fade)</button>
             <button onclick="a.setTransition('scroll')">滚动(scroll)</button>
-            <button onclick="a.setTransition('slide')">下拉(slide)</button>
-			<button onclick="a.setTransition('slideCover')">上拉(slideCover)</button>
-            <button onclick="a.setTransition('scale')">缩放(scale)</button>
+            <button onclick="a.setTransition('slide')">滑动(slide)</button>
+			<button onclick="a.setTransition('slideCover')">滑动覆盖(slideCover)</button>
+			<button onclick="a.setTransition('slideZoom')">滑动缩显(slideZoom)</button>
+            <button onclick="a.setTransition('zoomIn')">缩小(zoomIn)</button>
+			<button onclick="a.setTransition('zoomOut')">放大(zoomOut)</button>
             <button onclick="a.setTransition('skew')">扭曲(skew)</button>
             <button onclick="a.setTransition('rotate')">翻转(rotate)</button>
             <button style="color:red;" onclick="a.loop=!a.loop;if(a.loop){this.textContent='取消循环'}else{this.textContent='循环'}">循环</button>
@@ -61,7 +63,7 @@
         direction:1,
         loop:false,
         ease:'ease',
-        transition:'slide',
+        transition:'slideZoom',
         mousewheel:true,
         arrowkey:true
     });
