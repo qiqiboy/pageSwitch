@@ -126,7 +126,7 @@
                     cpage.style[transform]='scale('+((1-cp)*.2+.8)+')'+fire3D;
                     cpage.style.zIndex=0;
                 }
-            }else TRANSITION['slide'+name].apply(this,arguments);
+            }else TRANSITION['slideCover'+name].apply(this,arguments);
         }
 
         TRANSITION['flip'+name]=function(cpage,cp,tpage,tp){
