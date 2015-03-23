@@ -71,34 +71,34 @@ pw.setEase(function(t,b,c,d){
 ## setTransition 示例
 
 支持以下转场效果：
-`fade`			渐隐渐显
+* `fade`			渐隐渐显
 
-`scroll`		页面滚动
+* `scroll`		页面滚动
 
-`slide`			滑动切换，后者页面有缩放效果
-`slideCover`	页面滑入滑出
-`slideCoverIn`  总是下一张页面滑入
-`slideCoverOut` 总是当前页面滑出
+* `slide`			滑动切换，后者页面有缩放效果
+* `slideCover`	页面滑入滑出
+* `slideCoverIn`  总是下一张页面滑入
+* `slideCoverOut` 总是当前页面滑出
 
-`zoom`			缩放切换
-`zoomCover`		页面缩进缩出
-`zoomCoverIn`  	总是下一张页面缩入
-`zoomCoverOut` 	总是当前页面缩出
+* `zoom`			缩放切换
+* `zoomCover`		页面缩进缩出
+* `zoomCoverIn`  	总是下一张页面缩入
+* `zoomCoverOut` 	总是当前页面缩出
 
-`skew`			扭曲切换
-`skewCover`		页面扭进扭出
-`skewCoverIn`  	总是下一张页面扭入
-`skewCoverOut` 	总是当前页面扭出
+* `skew`			扭曲切换
+* `skewCover`		页面扭进扭出
+* `skewCoverIn`  	总是下一张页面扭入
+* `skewCoverOut` 	总是当前页面扭出
 
-`flip`			翻转切换
-`flipCover`		页面翻入翻出
-`flipCoverIn`  	总是下一张页面翻入
-`flipCoverOut` 	总是当前页面翻出
+* `flip`			翻转切换
+* `flipCover`		页面翻入翻出
+* `flipCoverIn`  	总是下一张页面翻入
+* `flipCoverOut` 	总是当前页面翻出
 
-`bomb`			放大切换
-`bombCover`		页面大入大出
-`bombCoverIn`  	总是下一张页面大入
-`bombCoverOut` 	总是当前页面大出
+* `bomb`			放大切换
+* `bombCover`		页面大入大出
+* `bombCoverIn`  	总是下一张页面大入
+* `bombCoverOut` 	总是当前页面大出
 
 注意：除了`fade`，所有效果都支持指定X或Y轴方向效果，只要在名字后面加上`X`或`Y`即可。
 例如：`scrollY` `flipX` `flipCoverX` `flipCoverInX` 等类似。
