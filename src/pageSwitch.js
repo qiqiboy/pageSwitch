@@ -110,25 +110,6 @@
 
         TRANSITION['slide'+name]=function(cpage,cp,tpage,tp){
             var prop=name||['X','Y'][this.direction];
-            if(cp<0){
-                transform?cpage.style[transform]='translate'+prop+'('+cp*100+'%)'+fire3D:cpage.style[XY[prop]]=cp*100+'%';
-                cpage.style.zIndex=1;
-                if(tpage){
-                    transform?tpage.style[transform]='translate'+prop+'(0)'+fire3D:tpage.style[XY[prop]]='0';
-                    tpage.style.zIndex=0;
-                }
-            }else{
-                transform?cpage.style[transform]='translate'+prop+'(0)'+fire3D:tpage.style[XY[prop]]='0';
-                cpage.style.zIndex=0;
-                if(tpage){
-                    transform?tpage.style[transform]='translate'+prop+'('+tp*100+'%)'+fire3D:tpage.style[XY[prop]]=tp*100+'%';
-                    tpage.style.zIndex=1;
-                }
-            }
-        }
-
-        TRANSITION['slide'+name]=function(cpage,cp,tpage,tp){
-            var prop=name||['X','Y'][this.direction];
             if(transform){
                 if(cp<0){
                     cpage.style[transform]='translate'+prop+'('+cp*100+'%)'+fire3D;
