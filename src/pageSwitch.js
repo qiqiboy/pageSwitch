@@ -7,7 +7,7 @@
 (function(ROOT, struct, undefined){
     "use strict";
     
-    var VERSION='2.0.0';
+    var VERSION='2.1.0';
     var lastTime=0,
         nextFrame=ROOT.requestAnimationFrame            ||
                 ROOT.webkitRequestAnimationFrame        ||
@@ -197,6 +197,19 @@
         }
 
         each(" In Out".split(" "),function(type){
+            
+            TRANSITION['scrollCover'+type+name]=function(cpage,cp,tpage,tp){
+                var prop=name||['X','Y'][this.direction],
+                    zIndex=Number(type=='In'||!type&&cp<0),
+                    cr=100,tr=100;
+                zIndex?cr=20:tr=20;
+                transform?cpage.style[transform]='translate'+prop+'('+cp*cr+'%)'+fire3D:cpage.style[XY[prop]]=cp*100+'%';
+                cpage.style.zIndex=1-zIndex;
+                if(tpage){
+                    transform?tpage.style[transform]='translate'+prop+'('+tp*tr+'%)'+fire3D:tpage.style[XY[prop]]=tp*100+'%';
+                    tpage.style.zIndex=zIndex;
+                }
+            }
             
             TRANSITION['slideCover'+type+name]=function(cpage,cp,tpage,tp){
                 var prop=name||['X','Y'][this.direction],
