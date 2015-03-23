@@ -39,29 +39,28 @@
             <div class="page page5">page5</div>
         </div>
         <div id="ctl">
-			<p>刷新页面，先点按效果按钮，然后滑动页面查看效果。请避免不刷新多次切换效果。</p>
-            <button onclick="a.setTransition('fade')">fade</button>
-            <button onclick="a.setTransition('scroll')">scroll</button>
-            <button onclick="a.setTransition('slide')">slide</button>
-			<button onclick="a.setTransition('slideCover')">slideCover</button>
-			<button onclick="a.setTransition('slideCoverIn')">slideCoverIn</button>
-			<button onclick="a.setTransition('slideCoverOut')">slideCoverOut</button>
-            <button onclick="a.setTransition('zoom')">zoom</button>
-			<button onclick="a.setTransition('zoomCover')">zoomCover</button>
-			<button onclick="a.setTransition('zoomCoverIn')">zoomCoverIn</button>
-			<button onclick="a.setTransition('zoomCoverOut')">zoomCoverOut</button>
-            <button onclick="a.setTransition('skew')">skew</button>
-			<button onclick="a.setTransition('skewCover')">skewCover</button>
-			<button onclick="a.setTransition('skewCoverIn')">skewCoverIn</button>
-			<button onclick="a.setTransition('skewCoverOut')">skewCoverOut</button>
-			<button onclick="a.setTransition('flip')">flip</button>
-			<button onclick="a.setTransition('flipCover')">flipCover</button>
-			<button onclick="a.setTransition('flipCoverIn')">flipCoverIn</button>
-			<button onclick="a.setTransition('flipCoverOut')">flipCoverOut</button>
-            <button onclick="a.setTransition('bomb')">bomb</button>
-			<button onclick="a.setTransition('bombCover')">bombCover</button>
-			<button onclick="a.setTransition('bombCoverIn')">bombCoverIn</button>
-			<button onclick="a.setTransition('bombCoverOut')">bombCoverOut</button>
+            <button onclick="setTransition('fade')">fade</button>
+            <button onclick="setTransition('scroll')">scroll</button>
+            <button onclick="setTransition('slide')">slide</button>
+			<button onclick="setTransition('slideCover')">slideCover</button>
+			<button onclick="setTransition('slideCoverIn')">slideCoverIn</button>
+			<button onclick="setTransition('slideCoverOut')">slideCoverOut</button>
+            <button onclick="setTransition('zoom')">zoom</button>
+			<button onclick="setTransition('zoomCover')">zoomCover</button>
+			<button onclick="setTransition('zoomCoverIn')">zoomCoverIn</button>
+			<button onclick="setTransition('zoomCoverOut')">zoomCoverOut</button>
+            <button onclick="setTransition('skew')">skew</button>
+			<button onclick="setTransition('skewCover')">skewCover</button>
+			<button onclick="setTransition('skewCoverIn')">skewCoverIn</button>
+			<button onclick="setTransition('skewCoverOut')">skewCoverOut</button>
+			<button onclick="setTransition('flip')">flip</button>
+			<button onclick="setTransition('flipCover')">flipCover</button>
+			<button onclick="setTransition('flipCoverIn')">flipCoverIn</button>
+			<button onclick="setTransition('flipCoverOut')">flipCoverOut</button>
+            <button onclick="setTransition('bomb')">bomb</button>
+			<button onclick="setTransition('bombCover')">bombCover</button>
+			<button onclick="setTransition('bombCoverIn')">bombCoverIn</button>
+			<button onclick="setTransition('bombCoverOut')">bombCoverOut</button>
             <button style="color:red;" onclick="a.loop=!a.loop;if(a.loop){this.textContent='取消循环'}else{this.textContent='循环'}">循环</button>
 			<button onclick="a.prepend(createPage())">前增加一页</button>
 			<button onclick="a.append(createPage())">后增加一页</button>
@@ -71,16 +70,21 @@
     </div>
 	<script type="text/javascript" src="src/pageSwitch.js"></script>
     <script>
-    var a=new pageSwitch('pages',{
+    var ts=location.search.match(/ts=([^&]*)/),
+		a=new pageSwitch('pages',{
         duration:600,
         start:0,
         direction:1,
         loop:false,
         ease:'ease',
-        transition:'slide',
+        transition:ts&&ts[1]||'slide',
         mousewheel:true,
         arrowkey:true
     });
+	
+	function setTransition(name){
+		location.href='?ts='+name;
+	}
 	
 	function colorRand(){
 		return parseInt(Math.random()*255);
