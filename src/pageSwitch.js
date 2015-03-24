@@ -186,13 +186,15 @@
         }
 
         TRANSITION['skew'+name]=function(cpage,cp,tpage,tp){
-            var prop=name;
+            var prop=name,
+                zIndex=Number(Math.abs(cp)<.5);
             if(transform){
                 cpage.style[transform]='skew'+prop+'('+cp*180+'deg)'+fire3D;
+                cpage.style.zIndex=zIndex;
                 if(tpage){
                     tpage.style[transform]='skew'+prop+'('+tp*180+'deg)'+fire3D;
+                    tpage.style.zIndex=1-zIndex;
                 }
-                TRANSITION.fade.apply(this,arguments);
             }else TRANSITION['scroll'+name].apply(this,arguments);
         }
 
