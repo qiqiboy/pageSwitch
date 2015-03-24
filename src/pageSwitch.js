@@ -771,9 +771,7 @@
             this.length=this.pages.length;
 
             if(index<=this.current){
-                if(index==this.current--){
-                    this.slide(this.current);
-                }
+                this.slide(this.current=Math.max(0,this.current-1));
             }
 
             return this;
