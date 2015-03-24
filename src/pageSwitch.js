@@ -533,7 +533,7 @@
             this.current=fixIndex;
             this.latestTime=stime;
             cancelFrame(this.timer);
-            duration*=1-Math.abs(percent);
+            duration*=Math.abs(target-percent);
 
             ani();
 
