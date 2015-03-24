@@ -56,7 +56,7 @@ pw.on(event,callback);
 
 ## setEase 示例
 
-内置支持 `linear` `ease` `eas-in` `ease-out` `ease-in-out` `bounce`等  
+内置支持 `linear` `ease` `ease-in` `ease-out` `ease-in-out` `bounce`等  
 `bounce` 弹跳过渡，很有意思，可以试试
 
 ```javascript
