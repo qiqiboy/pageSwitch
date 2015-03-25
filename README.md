@@ -67,7 +67,7 @@ pw.on(event,callback);
 pw.setEase('linear'); //由于内置了linear支持，所以可以直接使用
 
 //假如没有内置linear，则使用自定义过渡曲线函数如下
-pw.setEase(function(t,b,c,d){
+pw.setEase(function(t,b,c,d){ //更多曲线函数参见：https://github.com/zhangxinxu/Tween/blob/master/tween.js
 	return c*t/d + b;
 });
 ````
