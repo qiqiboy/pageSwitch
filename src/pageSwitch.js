@@ -679,9 +679,8 @@
                         if(percent){
                             this.slide(index);
                         }
-                        
-                        break;
                     }
+                    break;
                     
 
                 case 'click':
