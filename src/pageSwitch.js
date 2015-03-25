@@ -521,6 +521,8 @@
                 target=index>current?-1:1,
                 _tpage=cpage;
             
+            cancelFrame(this.timer);
+
             if(fixIndex==current){
                 target=0;
                 _tpage=tpage;
@@ -531,9 +533,10 @@
             this.fixBlock(current,tIndex);
             this.fire('before',current,fixIndex);
             this.current=fixIndex;
-            this.latestTime=stime;
-            cancelFrame(this.timer);
+
             duration*=Math.abs(target-percent);
+
+            this.latestTime=stime+duration;
 
             ani();
 
@@ -690,7 +693,7 @@
                 case 'mousewheel':
                 case 'dommousescroll':
                     ev.preventDefault();
-                    if(!this.timer && !this.drag && +new Date-this.latestTime>this.duration+500){
+                    if(!this.timer && !this.drag && +new Date-this.latestTime>500){
                         var wd=ev.wheelDelta||-ev.detail;
                         this[wd>0?'prev':'next']();
                     }
