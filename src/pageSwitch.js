@@ -681,7 +681,6 @@
                         }
                     }
                     break;
-                    
 
                 case 'click':
                     if(this.timer){
