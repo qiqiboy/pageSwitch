@@ -1,7 +1,9 @@
 pageSwitch
 =========
 
-Just a page Switch Javascript Library
+Just a page Switch Javascript Library.
+
+支持多达73种切页效果，更可支持自定义切页效果， 尽情发挥想象力！
 
 ## 如何使用
 ```javascript
