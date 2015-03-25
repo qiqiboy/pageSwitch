@@ -13,7 +13,7 @@
     <div id="wrap" class="wrapper">
         <div id="pages">
             <div class="page page1">
-                <h1>图片</h1>
+                <h1>可以用用鼠标或者手指拖动页面，亦可使用鼠标滚轮、键盘方向键等</h1>
                 <div class="box">
                     <img src="https://www.baidu.com/img/bd_logo1.png" />
                 </div>
@@ -39,31 +39,94 @@
             <div class="page page5">page5</div>
         </div>
         <div id="ctl">
-            <button onclick="setTransition('fade')">fade</button>
-            <button onclick="setTransition('scroll')">scroll</button>
-			<button onclick="setTransition('scrollCover')">scrollCover</button>
-			<button onclick="setTransition('scrollCoverIn')">scrollCoverIn</button>
-			<button onclick="setTransition('scrollCoverOut')">scrollCoverOut</button>
-            <button onclick="setTransition('slide')">slide</button>
-			<button onclick="setTransition('slideCover')">slideCover</button>
-			<button onclick="setTransition('slideCoverIn')">slideCoverIn</button>
-			<button onclick="setTransition('slideCoverOut')">slideCoverOut</button>
-            <button onclick="setTransition('zoom')">zoom</button>
-			<button onclick="setTransition('zoomCover')">zoomCover</button>
-			<button onclick="setTransition('zoomCoverIn')">zoomCoverIn</button>
-			<button onclick="setTransition('zoomCoverOut')">zoomCoverOut</button>
-            <button onclick="setTransition('skew')">skew</button>
-			<button onclick="setTransition('skewCover')">skewCover</button>
-			<button onclick="setTransition('skewCoverIn')">skewCoverIn</button>
-			<button onclick="setTransition('skewCoverOut')">skewCoverOut</button>
-			<button onclick="setTransition('flip')">flip</button>
-			<button onclick="setTransition('flipCover')">flipCover</button>
-			<button onclick="setTransition('flipCoverIn')">flipCoverIn</button>
-			<button onclick="setTransition('flipCoverOut')">flipCoverOut</button>
-            <button onclick="setTransition('bomb')">bomb</button>
-			<button onclick="setTransition('bombCover')">bombCover</button>
-			<button onclick="setTransition('bombCoverIn')">bombCoverIn</button>
-			<button onclick="setTransition('bombCoverOut')">bombCoverOut</button>
+			<select id="tssel">
+				<option value="">选择切页效果</option>
+				<option value="fade">fade</option>
+				<optgroup label="滚动效果">
+					<option value="scroll">scroll</option>
+					<option value="scrollCover">scrollCover</option>
+					<option value="scrollCoverIn">scrollCoverIn</option>
+					<option value="scrollCoverOut">scrollCoverOut</option>
+					<option value="scrollX">scrollX</option>
+					<option value="scrollCoverX">scrollCoverX</option>
+					<option value="scrollCoverInX">scrollCoverInX</option>
+					<option value="scrollCoverOutX">scrollCoverOutX</option>
+					<option value="scrollY">scrollY</option>
+					<option value="scrollCoverY">scrollCoverY</option>
+					<option value="scrollCoverInY">scrollCoverInY</option>
+					<option value="scrollCoverOutY">scrollCoverOutY</option>
+				</optgroup>
+				<optgroup label="滑动效果">
+					<option value="slide">slide</option>
+					<option value="slideCover">slideCover</option>
+					<option value="slideCoverIn">slideCoverIn</option>
+					<option value="slideCoverOut">slideCoverOut</option>
+					<option value="slideXX">slidexX</option>
+					<option value="slideCoverX">slideCoverX</option>
+					<option value="slideCoverInX">slideCoverInX</option>
+					<option value="slideCoverOutX">slideCoverOutX</option>
+					<option value="slideY">slideY</option>
+					<option value="slideCoverY">slideCoverY</option>
+					<option value="slideCoverInY">slideCoverInY</option>
+					<option value="slideCoverOutY">slideCoverOutY</option>
+				</optgroup>
+				<optgroup label="缩放效果">
+					<option value="zoom">zoom</option>
+					<option value="zoomCover">zoomCover</option>
+					<option value="zoomCoverIn">zoomCoverIn</option>
+					<option value="zoomCoverOut">zoomCoverOut</option>
+					<option value="zoomX">zoomX</option>
+					<option value="zoomCoverX">zoomCoverX</option>
+					<option value="zoomCoverInX">zoomCoverInX</option>
+					<option value="zoomCoverOutX">zoomCoverOutX</option>
+					<option value="zoom">zoomY</option>
+					<option value="zoomCoverY">zoomCoverY</option>
+					<option value="zoomCoverInY">zoomCoverInY</option>
+					<option value="zoomCoverOutY">zoomCoverOutY</option>
+				</optgroup>
+				<optgroup label="扭曲效果">
+					<option value="skew">skew</option>
+					<option value="skewCover">skewCover</option>
+					<option value="skewCoverIn">skewCoverIn</option>
+					<option value="skewCoverOut">skewCoverOut</option>
+					<option value="skew">skewX</option>
+					<option value="skewCoverX">skewCoverX</option>
+					<option value="skewCoverInX">skewCoverInX</option>
+					<option value="skewCoverOutX">skewCoverOutX</option>
+					<option value="skew"Y>skewY</option>
+					<option value="skewCoverY">skewCoverY</option>
+					<option value="skewCoverInY">skewCoverInY</option>
+					<option value="skewCoverOutY">skewCoverOutY</option>
+				</optgroup>
+				<optgroup label="翻转效果">
+					<option value="flip">flip</option>
+					<option value="flipCover">flipCover</option>
+					<option value="flipCoverIn">flipCoverIn</option>
+					<option value="flipCoverOut">flipCoverOut</option>
+					<option value="flipX">flipX</option>
+					<option value="flipCoverX">flipCoverX</option>
+					<option value="flipCoverInX">flipCoverInX</option>
+					<option value="flipCoverOutX">flipCoverOutX</option>
+					<option value="flipY">flipY</option>
+					<option value="flipCoverY">flipCoverY</option>
+					<option value="flipCoverInY">flipCoverInY</option>
+					<option value="flipCoverOutY">flipCoverOutY</option>
+				</optgroup>
+				<optgroup label="爆炸效果">
+					<option value="bomb">bomb</option>
+					<option value="bombCover">bombCover</option>
+					<option value="bombCoverIn">bombCoverIn</option>
+					<option value="bombCoverOut">bombCoverOut</option>
+					<option value="bombX">bombX</option>
+					<option value="bombCoverX">bombCoverX</option>
+					<option value="bombCoverInX">bombCoverInX</option>
+					<option value="bombCoverOutX">bombCoverOutX</option>
+					<option value="bombY">bombY</option>
+					<option value="bombCoverY">bombCoverY</option>
+					<option value="bombCoverInY">bombCoverInY</option>
+					<option value="bombCoverOutY">bombCoverOutY</option>
+				</optgroup>
+			</select>
             <button style="color:red;" onclick="a.loop=!a.loop;if(a.loop){this.textContent='取消循环'}else{this.textContent='循环'}">循环</button>
 			<button onclick="a.prepend(createPage())">前增加一页</button>
 			<button onclick="a.append(createPage())">后增加一页</button>
@@ -85,8 +148,8 @@
         arrowkey:true
     });
 	
-	function setTransition(name){
-		location.href='?ts='+name;
+	document.getElementById('tssel').onchange=function(){
+		location.href='?ts='+this.value;
 	}
 	
 	function colorRand(){
