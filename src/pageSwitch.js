@@ -695,7 +695,6 @@
                         var wd=ev.wheelDelta||-ev.detail;
                         this[wd>0?'prev':'next']();
                     }
-
                     break;
 
                 case 'keydown':
