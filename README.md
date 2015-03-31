@@ -82,31 +82,37 @@ pw.setEase(function(t,b,c,d){
   
 `scroll`			页面滚动  
 `scrollCover`		页面视差滚入滚出（前后页面速度不一致）  
+`scrollCoverReverse`同上反向   
 `scrollCoverIn`  	总是下一张页面视差滚入  
 `scrollCoverOut` 	总是当前页面视差滚出    
   
 `slide`				滑动切换，后者页面有缩放效果  
 `slideCover`		页面滑入滑出  
+`slideCoverReverse`	同上反向  
 `slideCoverIn`  	总是下一张页面滑入  
 `slideCoverOut` 	总是当前页面滑出    
   
 `zoom`				缩放切换  
 `zoomCover`			页面缩进缩出  
+`zoomCoverReverse`	同上反向   
 `zoomCoverIn`  		总是下一张页面缩入  
 `zoomCoverOut` 		总是当前页面缩出    
   
 `skew`				扭曲切换  
 `skewCover`			页面扭进扭出  
+`skewCoverReverse`	同上反向  
 `skewCoverIn`  		总是下一张页面扭入  
 `skewCoverOut` 		总是当前页面扭出   
   
 `flip`				翻转切换  
 `flipCover`			页面翻入翻出  
+`flipCoverReverse`	同上反向   
 `flipCoverIn`  		总是下一张页面翻入  
 `flipCoverOut` 		总是当前页面翻出   
   
 `bomb`				放大切换  
 `bombCover`			页面大入大出  
+`bombCoverReverse`	同上反向  
 `bombCoverIn`  		总是下一张页面大入  
 `bombCoverOut` 		总是当前页面大出  
 

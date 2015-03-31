@@ -198,11 +198,11 @@
             }else TRANSITION['scroll'+name].apply(this,arguments);
         }
 
-        each(" In Out".split(" "),function(type){
+        each(" Reverse In Out".split(" "),function(type){
             
             TRANSITION['scrollCover'+type+name]=function(cpage,cp,tpage,tp){
                 var prop=name||['X','Y'][this.direction],
-                    zIndex=Number(type=='In'||!type&&cp<0),
+                    zIndex=Number(type=='In'||!type&&cp<0||type=='Reverse'&&cp>0),
                     cr=100,tr=100;
                 zIndex?cr=20:tr=20;
                 transform?cpage.style[transform]='translate'+prop+'('+cp*cr+'%)'+fire3D:cpage.style[XY[prop]]=cp*100+'%';
@@ -215,7 +215,7 @@
             
             TRANSITION['slideCover'+type+name]=function(cpage,cp,tpage,tp){
                 var prop=name||['X','Y'][this.direction],
-                    zIndex=Number(type=='In'||!type&&cp<0);
+                    zIndex=Number(type=='In'||!type&&cp<0||type=='Reverse'&&cp>0);
                 zIndex?cp=0:tp=0;
                 transform?cpage.style[transform]='translate'+prop+'('+cp*100+'%)'+fire3D:cpage.style[XY[prop]]=cp*100+'%';
                 cpage.style.zIndex=1-zIndex;
@@ -227,7 +227,7 @@
 
             TRANSITION['flipCover'+type+name]=function(cpage,cp,tpage,tp){
                 var prop=name||['X','Y'][1-this.direction],
-                    zIndex=Number(type=='In'||!type&&cp<0);
+                    zIndex=Number(type=='In'||!type&&cp<0||type=='Reverse'&&cp>0);
                 if(perspective){
                     zIndex?cp=0:tp=0;
                     cpage.style[transform]='perspective(1000px) rotate'+prop+'('+cp*-90+'deg)'+fire3D;
@@ -241,7 +241,7 @@
 
             TRANSITION['skewCover'+type+name]=function(cpage,cp,tpage,tp){
                 var prop=name,
-                    zIndex=Number(type=='In'||!type&&cp<0);
+                    zIndex=Number(type=='In'||!type&&cp<0||type=='Reverse'&&cp>0);
                 if(transform){
                     zIndex?cp=0:tp=0;
                     cpage.style[transform]='skew'+prop+'('+cp*90+'deg)'+fire3D;
@@ -255,7 +255,7 @@
 
             TRANSITION['zoomCover'+type+name]=function(cpage,cp,tpage,tp){
                 var prop=name,
-                    zIndex=Number(type=='In'||!type&&cp<0);
+                    zIndex=Number(type=='In'||!type&&cp<0||type=='Reverse'&&cp>0);
                 if(transform){
                     zIndex?cp=0:tp=0;
                     cpage.style[transform]='scale'+prop+'('+(1-Math.abs(cp))+')'+fire3D;
@@ -269,7 +269,7 @@
 
             TRANSITION['bombCover'+type+name]=function(cpage,cp,tpage,tp){
                 var prop=name,
-                    zIndex=Number(type=='In'||!type&&cp<0);
+                    zIndex=Number(type=='In'||!type&&cp<0||type=='Reverse'&&cp>0);
                 if(transform){
                     zIndex?tp=1:cp=1;
                     cpage.style[transform]='scale'+prop+'('+(2-Math.abs(tp))+')'+fire3D;
