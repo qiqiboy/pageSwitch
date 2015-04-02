@@ -112,16 +112,19 @@
 				</optgroup>
 				<optgroup label="翻转效果">
 					<option value="flip">flip</option>
+					<option value="flip3d">flip3d</option>
 					<option value="flipCover">flipCover</option>
 					<option value="flipCoverReverse">flipCoverReverse</option>
 					<option value="flipCoverIn">flipCoverIn</option>
 					<option value="flipCoverOut">flipCoverOut</option>
 					<option value="flipX">flipX</option>
+					<option value="flip3dX">flip3dX</option>
 					<option value="flipCoverX">flipCoverX</option>
 					<option value="flipCoverReverseX">flipCoverReverseX</option>
 					<option value="flipCoverInX">flipCoverInX</option>
 					<option value="flipCoverOutX">flipCoverOutX</option>
 					<option value="flipY">flipY</option>
+					<option value="flip3dY">flip3dY</option>
 					<option value="flipCoverY">flipCoverY</option>
 					<option value="flipCoverReverseY">flipCoverReverseY</option>
 					<option value="flipCoverInY">flipCoverInY</option>
@@ -159,7 +162,7 @@
 		a=new pageSwitch('pages',{
         duration:1000,
         start:0,
-        direction:1,
+        direction:0,
         loop:false,
         ease:'ease',
         transition:ts&&ts[1]||'slide',

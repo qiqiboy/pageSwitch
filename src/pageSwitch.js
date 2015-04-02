@@ -131,8 +131,8 @@
 
         TRANSITION['flip'+name]=function(cpage,cp,tpage,tp){
             var dir=this.direction,
-                fix=cp>0?dir?-1:1:dir?1:-1,
-                prop=name||['X','Y'][1-dir];
+                prop=name||['X','Y'][1-dir],
+                fix=cp>0?dir?-1:1:dir?1:-1;
             if(perspective){
                 cpage.style[backfaceVisibility]='hidden';
                 cpage.style[transform]='perspective(1000px) rotate'+prop+'('+Math.abs(cp)*180*fix+'deg)'+fire3D;
@@ -146,8 +146,9 @@
         TRANSITION['flip3d'+name]=function(){
             var inited;
             return function(cpage,cp,tpage,tp){
-                var fix=cp<0?-1:1,
-                    prop=name||['X','Y'][1-this.direction],
+                var prop=name||['X','Y'][1-this.direction],
+                    fe=prop=='X'?-1:1,
+                    fix=fe<0?cp<0?-1:1:cp<0?1:-1,
                     zh=cpage['offset'+(prop=='X'?'Height':'Width')]/2;
                 if(perspective){
                     if(!inited){
@@ -155,7 +156,7 @@
                         cpage.parentNode.parentNode.style[perspective]='1000px';
                         cpage.parentNode.style[cssTest('transform-style')]='preserve-3d';
                     }
-                    cpage.parentNode.style[transform]='translateZ(-'+zh+'px) rotate'+prop+'('+cp*-90+'deg)';
+                    cpage.parentNode.style[transform]='translateZ(-'+zh+'px) rotate'+prop+'('+cp*90*fe+'deg)';
                     cpage.style[transform]='rotate'+prop+'(0) translateZ('+zh+'px)';
                     if(tpage){
                         tpage.style[transform]='rotate'+prop+'('+(fix*90)+'deg) translateZ('+zh+'px)';
