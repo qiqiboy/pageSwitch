@@ -141,7 +141,28 @@
                     tpage.style[transform]='perspective(1000px) rotate'+prop+'('+Math.abs(tp)*180*-fix+'deg)'+fire3D;
                 }
             }else TRANSITION['scroll'+name].apply(this,arguments);
-        }        
+        }
+
+        TRANSITION['flip3d'+name]=function(){
+            var inited;
+            return function(cpage,cp,tpage,tp){
+                var fix=cp<0?-1:1,
+                    prop=name||['X','Y'][1-this.direction],
+                    zh=cpage['offset'+(prop=='X'?'Height':'Width')]/2;
+                if(perspective){
+                    if(!inited){
+                        inited=true;
+                        cpage.parentNode.parentNode.style[perspective]='1000px';
+                        cpage.parentNode.style[cssTest('transform-style')]='preserve-3d';
+                    }
+                    cpage.parentNode.style[transform]='translateZ(-'+zh+'px) rotate'+prop+'('+cp*-90+'deg)';
+                    cpage.style[transform]='rotate'+prop+'(0) translateZ('+zh+'px)';
+                    if(tpage){
+                        tpage.style[transform]='rotate'+prop+'('+(fix*90)+'deg) translateZ('+zh+'px)';
+                    }
+                }else TRANSITION['scroll'+name].apply(this,arguments);
+            }
+        }();
 
         TRANSITION['zoom'+name]=function(cpage,cp,tpage,tp){
             var prop=name;
