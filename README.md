@@ -3,7 +3,7 @@ pageSwitch
 
 Just a page Switch Javascript Library, and it has supported 73 switching animations.
 
-页面切换器，支持多达91种切页效果，更可支持自定义切页动画， 尽情发挥想象力！
+页面切换器，支持多达94种切页效果，更可支持自定义切页动画， 尽情发挥想象力！
 
 ## 如何使用
 ```javascript
@@ -105,6 +105,7 @@ pw.setEase(function(t,b,c,d){
 `skewCoverOut` 		总是当前页面扭出   
   
 `flip`				翻转切换  
+`flip3d`			3d翻转切换   
 `flipCover`			页面翻入翻出  
 `flipCoverReverse`	同上反向   
 `flipCoverIn`  		总是下一张页面翻入  
