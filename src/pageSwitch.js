@@ -515,7 +515,7 @@
                 current=this.current,
                 fixIndex=Math.min(this.length-1,Math.max(0,this.fixIndex(index))),
                 cpage=this.pages[current],
-                percent=this.pageData[current].percent,
+                percent=this.getPercent(),
                 tIndex=this.fixIndex(fixIndex==current?current+(percent>0?-1:1):fixIndex),
                 tpage=this.pages[tIndex],
                 target=index>current?-1:1,
@@ -597,6 +597,10 @@
             }
             return this.fire('update',cpage,cPer,tpage,tPer);
         },
+        getPercent:function(index){
+            var pdata=this.pageData[index==null?this.current:index];
+            return pdata.percent||0;
+        },
         handleEvent:function(oldEvent){
             var ev=filterEvent(oldEvent);
 
@@ -642,7 +646,7 @@
                 case 'pointercancel':
                     var self=this,
                         index=this.current,
-                        percent=this.pageData[index].percent,
+                        percent=this.getPercent(),
                         isDrag,offset,tm,nn;
                     if(!this.time&&startEv||ev.touchNum){
                         nn=ev.target.nodeName.toLowerCase();
