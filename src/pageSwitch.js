@@ -32,7 +32,7 @@
             "mousedown mousemove mouseup",
         STARTEVENT=EVENT.split(" ")[0],
         MOVEEVENT=EVENT.split(" ").slice(1).join(" "),
-        divstyle=document.documentElement.style,
+        divstyle=document.createElement('div').style,
         camelCase=function(str){
             return (str+'').replace(/^-ms-/, 'ms-').replace(/-([a-z]|[0-9])/ig, function(all, letter){
                 return (letter+'').toUpperCase();
@@ -58,8 +58,13 @@
         },
         opacity=cssTest('opacity'),
         transform=cssTest('transform'),
+        transformStyle=cssTest('transform-style'),
         perspective=cssTest('perspective'),
         backfaceVisibility=cssTest('backface-visibility'),
+        perspective3d=function(){
+            divstyle[transformStyle]='preserve-3d';
+            return divstyle[transformStyle]=='preserve-3d';
+        }(),
         toString=Object.prototype.toString,
         class2type={},
         EASE={
@@ -130,9 +135,8 @@
         }
 
         TRANSITION['flip'+name]=function(cpage,cp,tpage,tp){
-            var dir=this.direction,
-                prop=name||['X','Y'][1-dir],
-                fix=cp>0?dir?-1:1:dir?1:-1;
+            var prop=name||['X','Y'][1-this.direction],
+                fix=prop=='X'?cp>0?-1:1:cp>0?1:-1;
             if(perspective){
                 cpage.style[backfaceVisibility]='hidden';
                 cpage.style[transform]='perspective(1000px) rotate'+prop+'('+Math.abs(cp)*180*fix+'deg)'+fire3D;
@@ -150,11 +154,11 @@
                     fe=prop=='X'?-1:1,
                     fix=fe<0?cp<0?-1:1:cp<0?1:-1,
                     zh=cpage['offset'+(prop=='X'?'Height':'Width')]/2;
-                if(perspective){
+                if(perspective3d){
                     if(!inited){
                         inited=true;
                         cpage.parentNode.parentNode.style[perspective]='1000px';
-                        cpage.parentNode.style[cssTest('transform-style')]='preserve-3d';
+                        cpage.parentNode.style[transformStyle]='preserve-3d';
                     }
                     cpage.parentNode.style[transform]='translateZ(-'+zh+'px) rotate'+prop+'('+cp*90*fe+'deg)';
                     cpage.style[transform]='rotate'+prop+'(0) translateZ('+zh+'px)';
