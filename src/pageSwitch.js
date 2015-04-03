@@ -113,39 +113,30 @@
             }
         }
 
-        TRANSITION['scroll3d'+name]=function(){
-            var inited;
-            return function(cpage,cp,tpage,tp){
-                var prop=name||['X','Y'][this.direction],
-                    zh=cpage['offset'+(prop=='X'?'Width':'Height')]/2,
-                    fix=cp<0?-1:1,
-                    abscp=Math.abs(cp),
-                    deg;
-                if(preserve3d){
-                    if(!inited){
-                        inited=true;
-                        cpage.parentNode.parentNode.style[perspective]='1000px';
-                        cpage.parentNode.style[transformStyle]='preserve-3d';
-                    }
-                    if(abscp<.05){
-                        deg=abscp*1200;
-                        cp=0;tp=fix*-1;
-                    }else if(abscp<.95){
-                        deg=60;
-                        cp=(cp-.05*fix)/.9;
-                        tp=(tp+.05*fix)/.9;
-                    }else{
-                        deg=(1-abscp)*1200;
-                        cp=fix;tp=0;
-                    }
-                    cpage.parentNode.style[transform]='translateZ(-'+zh+'px) rotateX('+deg+'deg)';
-                    cpage.style[transform]='translate'+prop+'('+cp*100+'%) translateZ('+zh+'px)';
-                    if(tpage){
-                        tpage.style[transform]='translate'+prop+'('+tp*100+'%) translateZ('+zh+'px)';
-                    }
-                }else TRANSITION['scroll'+name].apply(this,arguments);
-            }
-        }();
+        TRANSITION['scroll3d'+name]=function(cpage,cp,tpage,tp){
+            var prop=name||['X','Y'][this.direction],
+                fix=cp<0?-1:1,
+                abscp=Math.abs(cp),
+                deg;
+            if(perspective){
+                if(abscp<.05){
+                    deg=abscp*1200;
+                    cp=0;tp=fix*-1;
+                }else if(abscp<.95){
+                    deg=60;
+                    cp=(cp-.05*fix)/.9;
+                    tp=(tp+.05*fix)/.9;
+                }else{
+                    deg=(1-abscp)*1200;
+                    cp=fix;tp=0;
+                }
+                cpage.parentNode.style[transform]='perspective(1000px) rotateX('+deg+'deg)';
+                cpage.style[transform]='translate'+prop+'('+cp*100+'%)';
+                if(tpage){
+                    tpage.style[transform]='translate'+prop+'('+tp*100+'%)';
+                }
+            }else TRANSITION['scroll'+name].apply(this,arguments);
+        }
 
         TRANSITION['slide'+name]=function(cpage,cp,tpage,tp){
             var prop=name||['X','Y'][this.direction];
