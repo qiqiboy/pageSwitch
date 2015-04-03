@@ -7,7 +7,7 @@
 (function(ROOT, struct, undefined){
     "use strict";
     
-    var VERSION='2.1.0';
+    var VERSION='2.2.0';
     var lastTime=0,
         nextFrame=ROOT.requestAnimationFrame            ||
                 ROOT.webkitRequestAnimationFrame        ||
@@ -61,7 +61,7 @@
         transformStyle=cssTest('transform-style'),
         perspective=cssTest('perspective'),
         backfaceVisibility=cssTest('backface-visibility'),
-        perspective3d=function(){
+        preserve3d=function(){
             divstyle[transformStyle]='preserve-3d';
             return divstyle[transformStyle]=='preserve-3d';
         }(),
@@ -154,7 +154,7 @@
                     fe=prop=='X'?-1:1,
                     fix=fe<0?cp<0?-1:1:cp<0?1:-1,
                     zh=cpage['offset'+(prop=='X'?'Height':'Width')]/2;
-                if(perspective3d){
+                if(preserve3d){
                     if(!inited){
                         inited=true;
                         cpage.parentNode.parentNode.style[perspective]='1000px';
