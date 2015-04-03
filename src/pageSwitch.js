@@ -61,7 +61,7 @@
         transformStyle=cssTest('transform-style'),
         perspective=cssTest('perspective'),
         backfaceVisibility=cssTest('backface-visibility'),
-        preserve3d=function(){
+        preserve3d=transformStyle&&function(){
             divstyle[transformStyle]='preserve-3d';
             return divstyle[transformStyle]=='preserve-3d';
         }(),
@@ -100,7 +100,7 @@
     each("Boolean Number String Function Array Date RegExp Object Error".split(" "),function(name){
         class2type["[object "+name+"]"]=name.toLowerCase();
     });
-    
+
     each("X Y ".split(" "),function(name){
         var XY={X:'left',Y:'top'},
             fire3D=perspective?' translateZ(0)':'';
