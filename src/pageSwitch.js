@@ -215,13 +215,13 @@
         }
 
         TRANSITION['bomb'+name]=function(cpage,cp,tpage,tp){
-            var prop=name;
+            var zIndex=Number(cp<0);
             if(transform){
-                cpage.style[transform]='scale'+prop+'('+(2-Math.abs(tp))+')'+fire3D;
-                cpage.style.zIndex=1;
+                cpage.style[transform]='scale'+name+'('+(2-Math.abs(tp))+')'+fire3D;
+                cpage.style.zIndex=zIndex;
                 if(tpage){
-                    tpage.style[transform]='scale'+prop+'('+(2-Math.abs(cp))+')'+fire3D;
-                    tpage.style.zIndex=0;
+                    tpage.style[transform]='scale'+name+'('+(2-Math.abs(cp))+')'+fire3D;
+                    tpage.style.zIndex=1-zIndex;
                 }
                 TRANSITION.fade.apply(this,arguments);
             }else TRANSITION['scroll'+name].apply(this,arguments);
@@ -241,7 +241,6 @@
         }
 
         each(" Reverse In Out".split(" "),function(type){
-            
             TRANSITION['scrollCover'+type+name]=function(cpage,cp,tpage,tp){
                 var prop=name||['X','Y'][this.direction],
                     zIndex=Number(type=='In'||!type&&cp<0||type=='Reverse'&&cp>0),
