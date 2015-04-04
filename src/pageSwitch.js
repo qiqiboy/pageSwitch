@@ -7,7 +7,7 @@
 (function(ROOT, struct, undefined){
     "use strict";
     
-    var VERSION='2.2.0';
+    var VERSION='2.2.1';
     var lastTime=0,
         nextFrame=ROOT.requestAnimationFrame            ||
                 ROOT.webkitRequestAnimationFrame        ||
@@ -217,20 +217,11 @@
         TRANSITION['bomb'+name]=function(cpage,cp,tpage,tp){
             var prop=name;
             if(transform){
-                if(cp<0){
-                    cpage.style[transform]='scale'+prop+'('+(1+Math.abs(cp))+')'+fire3D;
-                    cpage.style.zIndex=1;
-                    if(tpage){
-                        tpage.style[transform]='scale'+prop+'(1)'+fire3D;
-                        tpage.style.zIndex=0;
-                    }
-                }else{
-                    cpage.style[transform]='scale'+prop+'(1)'+fire3D;
-                    cpage.style.zIndex=0;
-                    if(tpage){
-                        tpage.style[transform]='scale'+prop+'('+(2-Math.abs(cp))+')'+fire3D;
-                        tpage.style.zIndex=1;
-                    }
+                cpage.style[transform]='scale'+prop+'('+(2-Math.abs(tp))+')'+fire3D;
+                cpage.style.zIndex=1;
+                if(tpage){
+                    tpage.style[transform]='scale'+prop+'('+(2-Math.abs(cp))+')'+fire3D;
+                    tpage.style.zIndex=0;
                 }
                 TRANSITION.fade.apply(this,arguments);
             }else TRANSITION['scroll'+name].apply(this,arguments);
