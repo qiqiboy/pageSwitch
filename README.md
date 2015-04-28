@@ -151,6 +151,29 @@ pw.setTransition(function(cpage,cp,tpage,tp){
 });
 ````
 
+## jQuery/Zepto适配器
+```javascript
+
+$.fn.extend({
+	pageSwitch:function(cfg){
+		this[0].ps=new pageSwitch(this[0],cfg);
+		return this;
+	},
+	ps:function(){
+		return this[0].ps;
+	}
+});
+
+//使用
+$(container_id).pageSwitch({
+	duration:1000,
+	transition:'slide'
+});
+
+$(container_id).ps().next(); //由于链式调用返回依然是jq对象自身，所以如果需要使用pageSwitch对象方法，需要通过 `.ps()` 方法获取对pageSwitch对象的引用。
+
+````
+
 ## 兼容性
 兼容全平台，包括IE6+
 
