@@ -739,7 +739,7 @@
                 case 'mousewheel':
                 case 'dommousescroll':
                     ev.preventDefault();
-                    if(!this.timer && !this.drag && +new Date-this.latestTime>Math.max(this.duration-1000,0)){
+                    if(!this.timer && !this.drag && +new Date-this.latestTime>Math.max(1000-this.duration,0)){
                         var wd=ev.wheelDelta||-ev.detail;
                         this[wd>0?'prev':'next']();
                     }
