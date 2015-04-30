@@ -413,7 +413,9 @@
     }
 
     function filterEvent(oldEvent){
-        var ev={};
+        var ev={},
+            which=oldEvent.which,
+            button=oldEvent.button;
 
         each("clientX clientY type wheelDelta detail which keyCode".split(" "),function(prop){
             ev[prop]=oldEvent[prop];
@@ -436,7 +438,7 @@
             ev.clientY=oldEvent.touches.item(0).clientY;
         }
         
-        ev.button=oldEvent.which?oldEvent.which-1:oldEvent.button&4?1:oldEvent.button||0;
+        ev.button=which<4?which-1:button&4&&1||button&2; // left:0 middle:1 right:2
         ev.touchNum=oldEvent.touches&&oldEvent.touches.length||0;
 
         return ev;
