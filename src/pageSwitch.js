@@ -435,7 +435,8 @@
             ev.clientX=oldEvent.touches.item(0).clientX;
             ev.clientY=oldEvent.touches.item(0).clientY;
         }
-
+        
+        ev.button=oldEvent.which?oldEvent.which-1:oldEvent.button&4?1:oldEvent.button||0;
         ev.touchNum=oldEvent.touches&&oldEvent.touches.length||0;
 
         return ev;
@@ -679,7 +680,7 @@
                 case 'mousedown':
                 case 'touchstart':
                 case 'pointerdown':
-                    var startEv=true;
+                    var startEv=!ev.button;
                 case 'mouseup':
                 case 'touchend':
                 case 'touchcancel':
@@ -736,7 +737,7 @@
                 case 'mousewheel':
                 case 'dommousescroll':
                     ev.preventDefault();
-                    if(!this.timer && !this.drag && +new Date-this.latestTime>500){
+                    if(!this.timer && !this.drag && +new Date-this.latestTime>Math.max(this.duration-1000,0)){
                         var wd=ev.wheelDelta||-ev.detail;
                         this[wd>0?'prev':'next']();
                     }
