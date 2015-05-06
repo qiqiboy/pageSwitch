@@ -17,6 +17,7 @@ var pw=new pageSwitch('container id',{
     loop:false,				//bool 是否循环切换
     ease:'ease',			//string|function 过渡曲线动画，详见下方说明
     transition:'slide',		//string|function转场方式，详见下方说明
+	mouse:true,				//bool 是否启用鼠标拖拽
     mousewheel:false,		//bool 是否启用鼠标滚轮切换
 	arrowkey:false,			//bool 是否启用键盘方向切换
     autoplay:false,	    	//bool 是否自动播放幻灯 新增

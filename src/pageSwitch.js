@@ -7,7 +7,7 @@
 (function(ROOT, struct, undefined){
     "use strict";
     
-    var VERSION='2.2.1';
+    var VERSION='2.2.2';
     var lastTime=0,
         nextFrame=ROOT.requestAnimationFrame            ||
                 ROOT.webkitRequestAnimationFrame        ||
@@ -26,18 +26,14 @@
                 ROOT.msCancelRequestAnimationFrame      ||
                 clearTimeout,
         isTouch=("createTouch" in document) || ('ontouchstart' in window),
-        EVENT='PointerEvent' in ROOT ?
-            "pointerdown pointermove pointerup pointercancel" :
-            isTouch ? "touchstart touchmove touchend touchcancel" :
-            "mousedown mousemove mouseup",
-        STARTEVENT=EVENT.split(" ")[0],
-        MOVEEVENT=EVENT.split(" ").slice(1).join(" "),
+        eventType=isTouch&&'touch'                      ||
+                ('PointerEvent' in ROOT)&&'pointer'     ||
+                ('MSPointerEvent' in ROOT)&&'MSPointer-'||
+                'mouse',
+        EVENT=camelCase("down start move up end cancel".replace(/(^|\s)/g,'$1'+eventType)),
+        STARTEVENT=EVENT.split(" ").slice(0,2).join(" "),
+        MOVEEVENT=EVENT.split(" ").slice(2).join(" "),
         divstyle=document.createElement('div').style,
-        camelCase=function(str){
-            return (str+'').replace(/^-ms-/, 'ms-').replace(/-([a-z]|[0-9])/ig, function(all, letter){
-                return (letter+'').toUpperCase();
-            });
-        },
         cssVendor=function(){
             var tests="-webkit- -moz- -o- -ms-".split(" "),
                 prop;
@@ -48,14 +44,6 @@
             }
             return '';
         }(),
-        cssTest=function(name){
-            var prop=camelCase(name),
-                _prop=camelCase(cssVendor+prop);
-            return (prop in divstyle) && prop || (_prop in divstyle) && _prop || '';
-        },
-        isFunction=function(func){
-            return type(func)=='function';
-        },
         opacity=cssTest('opacity'),
         transform=cssTest('transform'),
         transformStyle=cssTest('transform-style'),
@@ -338,6 +326,23 @@
         var tp=type(elem);
         return !!elem && tp!='function' && tp!='string' && (elem.length===0 || elem.length && (elem.nodeType==1 || (elem.length-1) in elem));
     }
+
+    
+    function camelCase(str){
+        return (str+'').replace(/^-ms-/, 'ms-').replace(/-([a-z]|[0-9])/ig, function(all, letter){
+            return (letter+'').toUpperCase();
+        });
+    }
+
+    function cssTest(name){
+        var prop=camelCase(name),
+            _prop=camelCase(cssVendor+prop);
+        return (prop in divstyle) && prop || (_prop in divstyle) && _prop || '';
+    }
+
+    function isFunction(func){
+        return type(func)=='function';
+    }
     
     function each(arr, iterate){
         if(isArrayLike(arr)){
@@ -423,6 +428,8 @@
 
         ev.oldEvent=oldEvent;
 
+        ev.pointerType=oldEvent.pointerType||eventType;
+
         ev.target=oldEvent.target||oldEvent.srcElement||document.documentElement;
         if(ev.target.nodeType===3){
             ev.target=ev.target.parentNode;
@@ -459,6 +466,7 @@
             this.direction=parseInt(config.direction)==0?0:1;
             this.current=parseInt(config.start)||0;
             this.loop=!!config.loop;
+            this.mouse=config.mouse==null?true:!!config.mouse;
             this.mousewheel=!!config.mousewheel;
             this.interval=parseInt(config.interval)||5000;
             this.playing=!!config.autoplay;
@@ -547,7 +555,7 @@
             return this;
         },
         freeze:function(able){
-            this.frozen=type(able)=='undefined'?true:!!able;
+            this.frozen=able==null?true:!!able;
             return this;
         },
         slide:function(index){
@@ -646,13 +654,15 @@
             return pdata.percent||0;
         },
         handleEvent:function(oldEvent){
-            var ev=filterEvent(oldEvent);
+            var ev=filterEvent(oldEvent),
+                canDrag=this.mouse||ev.pointerType!='mouse';
 
             switch(ev.type.toLowerCase()){
                 case 'mousemove':
                 case 'touchmove':
                 case 'pointermove':
-                    if(this.rect&&ev.touchNum<2){
+                case 'mspointermove':
+                    if(canDrag && this.rect&&ev.touchNum<2){
                         var cIndex=this.current,
                             dir=this.direction,
                             rect=[ev.clientX,ev.clientY],
@@ -682,50 +692,55 @@
                 case 'mousedown':
                 case 'touchstart':
                 case 'pointerdown':
+                case 'mspointerdown':
                     var startEv=!ev.button;
                 case 'mouseup':
                 case 'touchend':
                 case 'touchcancel':
                 case 'pointerup':
+                case 'mspointerup':
                 case 'pointercancel':
-                    var self=this,
-                        index=this.current,
-                        percent=this.getPercent(),
-                        isDrag,offset,tm,nn;
-                    if(!this.time&&startEv||ev.touchNum){
-                        nn=ev.target.nodeName.toLowerCase();
-                        if(this.timer){
-                            cancelFrame(this.timer);
-                            delete this.timer;
-                        }
-                        this.rect=[ev.clientX,ev.clientY];
-                        this.percent=percent;
-                        this.time=+new Date;
-                        if(!isTouch && (nn=='a' || nn=='img')){
-                            ev.preventDefault();
-                        }
-                    }else{
-                        offset=this._offset;
-                        isDrag=this.drag;
-
-                        if(tm=this.time){
-                            each("rect drag time percent _offset".split(" "),function(prop){
-                                delete self[prop];
-                            });
-                        }
-
-                        if(isDrag){
-                            if(+new Date-tm<500 && Math.abs(offset)>20){
-                                index+=offset>0?-1:1;
-                            }else if(Math.abs(percent)>.5){
-                                index+=percent>0?-1:1;
+                case 'mspointercancel':
+                    if(canDrag){
+                        var self=this,
+                            index=this.current,
+                            percent=this.getPercent(),
+                            isDrag,offset,tm,nn;
+                        if(!this.time&&startEv||ev.touchNum){
+                            nn=ev.target.nodeName.toLowerCase();
+                            if(this.timer){
+                                cancelFrame(this.timer);
+                                delete this.timer;
                             }
-                            this.fire('dragEnd',ev);
-                            ev.preventDefault();
-                        }
+                            this.rect=[ev.clientX,ev.clientY];
+                            this.percent=percent;
+                            this.time=+new Date;
+                            if(!isTouch && (nn=='a' || nn=='img')){
+                                ev.preventDefault();
+                            }
+                        }else{
+                            offset=this._offset;
+                            isDrag=this.drag;
 
-                        if(percent){
-                            this.slide(index);
+                            if(tm=this.time){
+                                each("rect drag time percent _offset".split(" "),function(prop){
+                                    delete self[prop];
+                                });
+                            }
+
+                            if(isDrag){
+                                if(+new Date-tm<500 && Math.abs(offset)>20){
+                                    index+=offset>0?-1:1;
+                                }else if(Math.abs(percent)>.5){
+                                    index+=percent>0?-1:1;
+                                }
+                                this.fire('dragEnd',ev);
+                                ev.preventDefault();
+                            }
+
+                            if(percent){
+                                this.slide(index);
+                            }
                         }
                     }
                     break;
