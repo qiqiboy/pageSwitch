@@ -83,7 +83,9 @@
                     }
                 }
             }
-        }
+        };
+
+    /pointer/i.test(eventType) && (eventType='pointer');
 
     each("Boolean Number String Function Array Date RegExp Object Error".split(" "),function(name){
         class2type["[object "+name+"]"]=name.toLowerCase();
@@ -327,7 +329,6 @@
         return !!elem && tp!='function' && tp!='string' && (elem.length===0 || elem.length && (elem.nodeType==1 || (elem.length-1) in elem));
     }
 
-    
     function camelCase(str){
         return (str+'').replace(/^-ms-/, 'ms-').replace(/-([a-z]|[0-9])/ig, function(all, letter){
             return (letter+'').toUpperCase();
