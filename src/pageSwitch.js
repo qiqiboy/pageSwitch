@@ -719,7 +719,7 @@
                             if(!isTouch && (nn=='a' || nn=='img')){
                                 ev.preventDefault();
                             }
-                        }else{
+                        }else if(this.time){
                             offset=this._offset;
                             isDrag=this.drag;
 
