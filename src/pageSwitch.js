@@ -7,7 +7,7 @@
 (function(ROOT, struct, undefined){
     "use strict";
     
-    var VERSION='2.2.2';
+    var VERSION='2.2.3';
     var lastTime=0,
         nextFrame=ROOT.requestAnimationFrame            ||
                 ROOT.webkitRequestAnimationFrame        ||
@@ -652,7 +652,7 @@
         },
         getPercent:function(index){
             var pdata=this.pageData[index==null?this.current:index];
-            return pdata.percent||0;
+            return pdata&&(pdata.percent||0);
         },
         handleEvent:function(oldEvent){
             var ev=filterEvent(oldEvent),
