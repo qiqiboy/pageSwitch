@@ -7,6 +7,8 @@ Just a page Switch Javascript Library, and it has supported 97 switching animati
 
 http://u.boy.im/pageswitch/pic.html  
 
+手机扫描下面二维码查看例子：  
+
 ![demo qrcode](https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/qrcode/pageswitch.png)
 
 ## 如何使用
