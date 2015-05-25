@@ -1,0 +1,158 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>壁纸浏览</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,minimal-ui"/>
+<meta name="format-detection" content="email=no" />
+<meta name="format-detection" content="address=no" />
+<meta name="format-detection" content="telephone=no" />
+<style type="text/css">
+body,div{margin:0;padding:0;}
+html,body{height:100%;}
+#imgs{position:relative;min-height:100%;_height:100%;overflow:hidden;}
+#imgs div{background:no-repeat center center;background-size:cover;}
+#tssel{position:absolute;bottom:5px;left:50%;z-index:10;width:160px;margin-left:-50px;}
+</style>
+</head>
+<body>
+    <div id="imgs">
+        <div style="background-image:url(https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/backgrounds/1.jpg)"></div>
+        <div style="background-image:url(https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/backgrounds/2.jpg)"></div>
+        <div style="background-image:url(https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/backgrounds/3.jpg)"></div>
+        <div style="background-image:url(https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/backgrounds/4.jpg)"></div>
+        <div style="background-image:url(https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/backgrounds/5.jpg)"></div>
+        <div style="background-image:url(https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/backgrounds/6.jpg)"></div>
+    </div>
+    <select id="tssel">
+        <option value="">选择切页效果</option>
+        <option value="fade">fade</option>
+        <optgroup label="滚动效果">
+            <option value="scroll">scroll</option>
+            <option value="scroll3d">scroll3d</option>
+            <option value="scrollCover">scrollCover</option>
+            <option value="scrollCoverReverse">scrollCoverReverse</option>
+            <option value="scrollCoverIn">scrollCoverIn</option>
+            <option value="scrollCoverOut">scrollCoverOut</option>
+            <option value="scrollX">scrollX</option>
+            <option value="scroll3dX">scroll3dX</option>
+            <option value="scrollCoverX">scrollCoverX</option>
+            <option value="scrollCoverReverseX">scrollCoverReverseX</option>
+            <option value="scrollCoverInX">scrollCoverInX</option>
+            <option value="scrollCoverOutX">scrollCoverOutX</option>
+            <option value="scrollY">scrollY</option>
+            <option value="scroll3dY">scroll3dY</option>
+            <option value="scrollCoverY">scrollCoverY</option>
+            <option value="scrollCoverReverseY">scrollCoverReverseY</option>
+            <option value="scrollCoverInY">scrollCoverInY</option>
+            <option value="scrollCoverOutY">scrollCoverOutY</option>
+        </optgroup>
+        <optgroup label="滑动效果">
+            <option value="slide">slide</option>
+            <option value="slideCover">slideCover</option>
+            <option value="slideCoverReverse">slideCoverReverse</option>
+            <option value="slideCoverIn">slideCoverIn</option>
+            <option value="slideCoverOut">slideCoverOut</option>
+            <option value="slideX">slideX</option>
+            <option value="slideCoverX">slideCoverX</option>
+            <option value="slideCoverReverseX">slideCoverReverseX</option>
+            <option value="slideCoverInX">slideCoverInX</option>
+            <option value="slideCoverOutX">slideCoverOutX</option>
+            <option value="slideY">slideY</option>
+            <option value="slideCoverY">slideCoverY</option>
+            <option value="slideCoverReverseY">slideCoverReverseY</option>
+            <option value="slideCoverInY">slideCoverInY</option>
+            <option value="slideCoverOutY">slideCoverOutY</option>
+        </optgroup>
+        <optgroup label="缩放效果">
+            <option value="zoom">zoom</option>
+            <option value="zoomCover">zoomCover</option>
+            <option value="zoomCoverReverse">zoomCoverReverse</option>
+            <option value="zoomCoverIn">zoomCoverIn</option>
+            <option value="zoomCoverOut">zoomCoverOut</option>
+            <option value="zoomX">zoomX</option>
+            <option value="zoomCoverX">zoomCoverX</option>
+            <option value="zoomCoverReverseX">zoomCoverReverseX</option>
+            <option value="zoomCoverInX">zoomCoverInX</option>
+            <option value="zoomCoverOutX">zoomCoverOutX</option>
+            <option value="zoomY">zoomY</option>
+            <option value="zoomCoverY">zoomCoverY</option>
+            <option value="zoomCoverReverseY">zoomCoverReverseY</option>
+            <option value="zoomCoverInY">zoomCoverInY</option>
+            <option value="zoomCoverOutY">zoomCoverOutY</option>
+        </optgroup>
+        <optgroup label="扭曲效果">
+            <option value="skew">skew</option>
+            <option value="skewCover">skewCover</option>
+            <option value="skewCoverReverse">skewCoverReverse</option>
+            <option value="skewCoverIn">skewCoverIn</option>
+            <option value="skewCoverOut">skewCoverOut</option>
+            <option value="skew">skewX</option>
+            <option value="skewCoverX">skewCoverX</option>
+            <option value="skewCoverReverseX">skewCoverReverseX</option>
+            <option value="skewCoverInX">skewCoverInX</option>
+            <option value="skewCoverOutX">skewCoverOutX</option>
+            <option value="skewY">skewY</option>
+            <option value="skewCoverY">skewCoverY</option>
+            <option value="skewCoverReverseY">skewCoverReverseY</option>
+            <option value="skewCoverInY">skewCoverInY</option>
+            <option value="skewCoverOutY">skewCoverOutY</option>
+        </optgroup>
+        <optgroup label="翻转效果">
+            <option value="flip">flip</option>
+            <option value="flip3d">flip3d</option>
+            <option value="flipCover">flipCover</option>
+            <option value="flipCoverReverse">flipCoverReverse</option>
+            <option value="flipCoverIn">flipCoverIn</option>
+            <option value="flipCoverOut">flipCoverOut</option>
+            <option value="flipX">flipX</option>
+            <option value="flip3dX">flip3dX</option>
+            <option value="flipCoverX">flipCoverX</option>
+            <option value="flipCoverReverseX">flipCoverReverseX</option>
+            <option value="flipCoverInX">flipCoverInX</option>
+            <option value="flipCoverOutX">flipCoverOutX</option>
+            <option value="flipY">flipY</option>
+            <option value="flip3dY">flip3dY</option>
+            <option value="flipCoverY">flipCoverY</option>
+            <option value="flipCoverReverseY">flipCoverReverseY</option>
+            <option value="flipCoverInY">flipCoverInY</option>
+            <option value="flipCoverOutY">flipCoverOutY</option>
+        </optgroup>
+        <optgroup label="爆炸效果">
+            <option value="bomb">bomb</option>
+            <option value="bombCover">bombCover</option>
+            <option value="bombCoverReverse">bombCoverReverse</option>
+            <option value="bombCoverIn">bombCoverIn</option>
+            <option value="bombCoverOut">bombCoverOut</option>
+            <option value="bombX">bombX</option>
+            <option value="bombCoverX">bombCoverX</option>
+            <option value="bombCoverReverseX">bombCoverReverseX</option>
+            <option value="bombCoverInX">bombCoverInX</option>
+            <option value="bombCoverOutX">bombCoverOutX</option>
+            <option value="bombY">bombY</option>
+            <option value="bombCoverY">bombCoverY</option>
+            <option value="bombCoverReverseY">bombCoverReverseY</option>
+            <option value="bombCoverInY">bombCoverInY</option>
+            <option value="bombCoverOutY">bombCoverOutY</option>
+        </optgroup>
+    </select>
+	<script type="text/javascript" src="src/pageSwitch.js"></script>
+    <script>
+    var ts=location.search.match(/ts=([^&]*)/),
+		a=new pageSwitch('imgs',{
+        duration:1000,
+        start:0,
+        direction:1,
+        loop:true,
+        ease:'ease',
+        transition:ts&&ts[1]||'scrollCover',
+		mouse:true,
+        mousewheel:true,
+        arrowkey:true
+    });
+	document.getElementById('tssel').onchange=function(){
+		location.href='?ts='+this.value;
+	}
+    </script>
+</body>
+</html>
