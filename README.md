@@ -185,4 +185,6 @@ $(container_id).ps().next(); //由于链式调用返回依然是jq对象自身�
 兼容全平台，包括IE6+
 
 ## DEMO
-http://u.boy.im/pageswitch
+http://u.boy.im/pageswitch  
+
+http://u.boy.im/pageswitch/pic.html  
