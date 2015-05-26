@@ -161,14 +161,15 @@
     </div>
 	<script type="text/javascript" src="src/pageSwitch.js"></script>
     <script>
-    var ts=location.search.match(/ts=([^&]*)/),
+    var reg=location.search.match(/ts=([^&]*)/),
+		ts=reg&&reg[1]||'flip3d',
 		a=new pageSwitch('pages',{
         duration:1000,
         start:0,
         direction:1,
         loop:false,
         ease:'ease',
-        transition:ts&&ts[1]||'flip3d',
+        transition:ts,
 		freeze:false,
 		mouse:true,
         mousewheel:true,
@@ -177,6 +178,15 @@
 	
 	document.getElementById('tssel').onchange=function(){
 		location.href='?ts='+this.value;
+	}
+	
+	var options=document.getElementById('tssel').options,
+		i=0,op;
+	while(op=options[i++]){
+		if(op.value===ts){
+			op.selected=true;
+			break;
+		}
 	}
 	
 	function colorRand(){

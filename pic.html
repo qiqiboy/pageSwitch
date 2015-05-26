@@ -10,23 +10,37 @@
 <style type="text/css">
 body,div{margin:0;padding:0;}
 html,body{height:100%;}
+body{background:#379EB6;}
+#wrap{min-height:100%;_height:100%;min-width:320px;}
+#imgs{position:relative;width:320px;height:568px;margin:0 auto;overflow:hidden;top:50px;background:url(http://www.qiqiboy.com/wp-content/themes/qtheme/images/loading.gif) no-repeat center center;}
+#imgs.scroll3d{overflow:visible;}
+#imgs img{width:100%;height:100%;display:block;border-radius:15px;}
+#tssel{position:absolute;top:650px;left:50%;z-index:10;width:160px;margin-left:-80px;}
+#navs{z-index:10;position:absolute;left:50%;top:230px;margin-left:180px;width:4px;}
+#navs a{overflow:hidden;display:block;width:2px;height:20px;border:1px solid #fff;margin:0 0 4px;}
+#navs .active{background:#fff;}
+@media (max-width:540px) {
 body{overflow:hidden;}
-#imgs{position:relative;min-height:100%;_height:100%;}
-#imgs div{background:no-repeat center center;background-size:cover;}
-#tssel{position:absolute;bottom:5px;left:50%;z-index:10;width:160px;margin-left:-80px;}
+#navs{left:auto;right:10px;top:50%;margin-top:-104px;}
+#imgs{position:absolute;top:0;width:100%;height:100%;margin:0;}
+#imgs img{border-radius:0;}
+#tssel{top:auto;bottom:10px;}
+}
 </style>
 </head>
 <body>
+<div id="wrap">
     <div id="imgs">
-        <div style="background-image:url(https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/backgrounds/1.jpg)"></div>
-        <div style="background-image:url(https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/backgrounds/2.jpg)"></div>
-        <div style="background-image:url(https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/backgrounds/3.jpg)"></div>
-        <div style="background-image:url(https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/backgrounds/4.jpg)"></div>
-        <div style="background-image:url(https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/backgrounds/5.jpg)"></div>
-        <div style="background-image:url(https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/backgrounds/6.jpg)"></div>
-        <div style="background-image:url(https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/backgrounds/7.jpg)"></div>
-        <div style="background-image:url(https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/backgrounds/8.jpg)"></div>
+        <img src="https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/backgrounds/1.jpg" />
+		<img src="https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/backgrounds/2.jpg" />
+		<img src="https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/backgrounds/3.jpg" />
+		<img src="https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/backgrounds/4.jpg" />
+		<img src="https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/backgrounds/5.jpg" />
+		<img src="https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/backgrounds/6.jpg" />
+		<img src="https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/backgrounds/7.jpg" />
+		<img src="https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/backgrounds/8.jpg" />
     </div>
+	<div id="navs"><a href="javascript:;" class="active"></a><a href="javascript:;"></a><a href="javascript:;"></a><a href="javascript:;"></a><a href="javascript:;"></a><a href="javascript:;"></a><a href="javascript:;"></a><a href="javascript:;"></a></div>
     <select id="tssel">
         <option value="">选择切页效果</option>
         <option value="fade">fade</option>
@@ -139,23 +153,39 @@ body{overflow:hidden;}
             <option value="bombCoverOutY">bombCoverOutY</option>
         </optgroup>
     </select>
-	<script type="text/javascript" src="src/pageSwitch.js"></script>
-    <script>
-    var ts=location.search.match(/ts=([^&]*)/),
-		a=new pageSwitch('imgs',{
-        duration:1000,
-        start:0,
-        direction:1,
-        loop:true,
-        ease:'ease',
-        transition:ts&&ts[1]||'scrollCover',
-		mouse:true,
-        mousewheel:true,
-        arrowkey:true
-    });
-	document.getElementById('tssel').onchange=function(){
-		location.href='?ts='+this.value;
+</div>
+<script type="text/javascript" src="src/pageSwitch.js"></script>
+<script>
+var reg=location.search.match(/ts=([^&]*)/),
+	ts=reg&&reg[1]||'scrollCover',
+	a=new pageSwitch('imgs',{
+	duration:1000,
+	start:0,
+	direction:1,
+	loop:true,
+	ease:'ease',
+	transition:ts,
+	mouse:true,
+	mousewheel:true,
+	arrowkey:true
+}),navs=document.getElementById('navs').getElementsByTagName('a');
+a.on('before',function(m,n){
+	navs[m].className='';
+	navs[n].className='active';
+});
+document.getElementById('imgs').className=ts;
+document.getElementById('tssel').onchange=function(){
+	location.href='?ts='+this.value;
+}
+
+var options=document.getElementById('tssel').options,
+	i=0,op;
+while(op=options[i++]){
+	if(op.value===ts){
+		op.selected=true;
+		break;
 	}
-    </script>
+}
+</script>
 </body>
 </html>
