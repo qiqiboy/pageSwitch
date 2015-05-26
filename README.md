@@ -86,45 +86,45 @@ pw.setEase(function(t,b,c,d){
 
 支持以下转场效果：  
   
-`fade`				渐隐渐显  
+`fade`				渐隐渐显 | [demo](http://u.boy.im/pageswitch/pic.html?ts=fade)  
   
-`scroll`			页面滚动  
-`scroll3d`			3d页面滚动  
-`scrollCover`		页面视差滚入滚出（前后页面速度不一致）  
-`scrollCoverReverse`同上反向   
-`scrollCoverIn`  	总是下一张页面视差滚入  
-`scrollCoverOut` 	总是当前页面视差滚出    
+`scroll`			页面滚动 | [demo](http://u.boy.im/pageswitch/pic.html?ts=scroll)  
+`scroll3d`			3d页面滚动 | [demo](http://u.boy.im/pageswitch/pic.html?ts=scroll3d)  
+`scrollCover`		页面视差滚入滚出（前后页面速度不一致） | [demo](http://u.boy.im/pageswitch/pic.html?ts=scrollCover)  
+`scrollCoverReverse`同上反向 | [demo](http://u.boy.im/pageswitch/pic.html?ts=scrollCoverReverse)    
+`scrollCoverIn`  	总是下一张页面视差滚入 | [demo](http://u.boy.im/pageswitch/pic.html?ts=scrollCoverIn)   
+`scrollCoverOut` 	总是当前页面视差滚出 | [demo](http://u.boy.im/pageswitch/pic.html?ts=scrollCoverOut)     
   
-`slide`				滑动切换，后者页面有缩放效果  
-`slideCover`		页面滑入滑出  
-`slideCoverReverse`	同上反向  
-`slideCoverIn`  	总是下一张页面滑入  
-`slideCoverOut` 	总是当前页面滑出    
+`slide`				滑动切换，后者页面有缩放效果 | [demo](http://u.boy.im/pageswitch/pic.html?ts=slide)   
+`slideCover`		页面滑入滑出 | [demo](http://u.boy.im/pageswitch/pic.html?ts=slideCover)   
+`slideCoverReverse`	同上反向 | [demo](http://u.boy.im/pageswitch/pic.html?ts=slideCoverReverse)   
+`slideCoverIn`  	总是下一张页面滑入 | [demo](http://u.boy.im/pageswitch/pic.html?ts=slideCoverIn)   
+`slideCoverOut` 	总是当前页面滑出 | [demo](http://u.boy.im/pageswitch/pic.html?ts=slideCoverOut)     
   
-`zoom`				缩放切换  
-`zoomCover`			页面缩进缩出  
-`zoomCoverReverse`	同上反向   
-`zoomCoverIn`  		总是下一张页面缩入  
-`zoomCoverOut` 		总是当前页面缩出    
+`zoom`				缩放切换 | [demo](http://u.boy.im/pageswitch/pic.html?ts=zoom)   
+`zoomCover`			页面缩进缩出 | [demo](http://u.boy.im/pageswitch/pic.html?ts=zoomCover)   
+`zoomCoverReverse`	同上反向 | [demo](http://u.boy.im/pageswitch/pic.html?ts=zoomCoverReverse)    
+`zoomCoverIn`  		总是下一张页面缩入 | [demo](http://u.boy.im/pageswitch/pic.html?ts=zoomCoverIn)   
+`zoomCoverOut` 		总是当前页面缩出 | [demo](http://u.boy.im/pageswitch/pic.html?ts=zoomCoverOut)     
   
-`skew`				扭曲切换  
-`skewCover`			页面扭进扭出  
-`skewCoverReverse`	同上反向  
-`skewCoverIn`  		总是下一张页面扭入  
-`skewCoverOut` 		总是当前页面扭出   
+`skew`				扭曲切换 | [demo](http://u.boy.im/pageswitch/pic.html?ts=skew)   
+`skewCover`			页面扭进扭出 | [demo](http://u.boy.im/pageswitch/pic.html?ts=skewCover)   
+`skewCoverReverse`	同上反向 | [demo](http://u.boy.im/pageswitch/pic.html?ts=skewCoverReverse)   
+`skewCoverIn`  		总是下一张页面扭入 | [demo](http://u.boy.im/pageswitch/pic.html?ts=skewCoverIn)   
+`skewCoverOut` 		总是当前页面扭出 | [demo](http://u.boy.im/pageswitch/pic.html?ts=skewCoverOut)    
   
-`flip`				翻转切换  
-`flip3d`			3d翻转切换   
-`flipCover`			页面翻入翻出  
-`flipCoverReverse`	同上反向   
-`flipCoverIn`  		总是下一张页面翻入  
-`flipCoverOut` 		总是当前页面翻出   
+`flip`				翻转切换 | [demo](http://u.boy.im/pageswitch/pic.html?ts=flip)   
+`flip3d`			3d翻转切换 | [demo](http://u.boy.im/pageswitch/pic.html?ts=flip3d)    
+`flipCover`			页面翻入翻出 | [demo](http://u.boy.im/pageswitch/pic.html?ts=flipCover)   
+`flipCoverReverse`	同上反向 | [demo](http://u.boy.im/pageswitch/pic.html?ts=flipCoverReverse)    
+`flipCoverIn`  		总是下一张页面翻入 | [demo](http://u.boy.im/pageswitch/pic.html?ts=flipCoverIn)   
+`flipCoverOut` 		总是当前页面翻出 | [demo](http://u.boy.im/pageswitch/pic.html?ts=flipCoverOut)    
   
-`bomb`				放大切换  
-`bombCover`			页面大入大出  
-`bombCoverReverse`	同上反向  
-`bombCoverIn`  		总是下一张页面大入  
-`bombCoverOut` 		总是当前页面大出  
+`bomb`				放大切换 | [demo](http://u.boy.im/pageswitch/pic.html?ts=bomb)   
+`bombCover`			页面大入大出 | [demo](http://u.boy.im/pageswitch/pic.html?ts=bombCover)   
+`bombCoverReverse`	同上反向 | [demo](http://u.boy.im/pageswitch/pic.html?ts=bombCoverReverse)   
+`bombCoverIn`  		总是下一张页面大入 | [demo](http://u.boy.im/pageswitch/pic.html?ts=bombCoverIn)   
+`bombCoverOut` 		总是当前页面大出 | [demo](http://u.boy.im/pageswitch/pic.html?ts=bombCoverOut)   
 
 注意：除了`fade`，所有效果都支持指定X或Y轴方向效果，只要在名字后面加上`X`或`Y`即可。
 例如：`scrollY` `flipX` `flipCoverX` `flipCoverInX` 等类似。
