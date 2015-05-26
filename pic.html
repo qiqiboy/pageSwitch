@@ -13,7 +13,7 @@ html,body{height:100%;}
 body{background:#379EB6;}
 #wrap{min-height:100%;_height:100%;min-width:320px;overflow:hidden;}
 #imgs{position:relative;width:320px;height:568px;margin:0 auto;overflow:hidden;border-radius:15px;top:50px;z-index:1;background:url(http://www.qiqiboy.com/wp-content/themes/qtheme/images/loading.gif) no-repeat center center;}
-#imgs.scroll3d,#imgs.scroll3dX,#imgs.scroll3dY,#imgs.flip3d,#imgs.flip3dX,#imgs.flip3dY{overflow:visible;}
+#imgs.visible{overflow:visible;}
 #imgs div{overflow:hidden;}
 #imgs img{width:100%;height:100%;display:block;}
 #tssel{position:absolute;top:650px;left:50%;z-index:10;width:160px;margin-left:-80px;}
@@ -169,12 +169,18 @@ var reg=location.search.match(/ts=([^&]*)/),
 	mouse:true,
 	mousewheel:true,
 	arrowkey:true
-}),navs=document.getElementById('navs').getElementsByTagName('a');
+}),
+navs=document.getElementById('navs').getElementsByTagName('a');
+
 a.on('before',function(m,n){
 	navs[m].className='';
 	navs[n].className='active';
 });
-document.getElementById('imgs').className=ts;
+
+if(/^(?:scroll3d|flip)/.test(ts)){
+	document.getElementById('imgs').className='visible';
+}
+
 document.getElementById('tssel').onchange=function(){
 	location.href='?ts='+this.value;
 }
