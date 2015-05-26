@@ -472,6 +472,7 @@
             this.interval=parseInt(config.interval)||5000;
             this.playing=!!config.autoplay;
             this.arrowkey=!!config.arrowkey;
+            this.frozen=!!config.freeze;
             this.pages=children(this.container);
             this.length=this.pages.length;
 
