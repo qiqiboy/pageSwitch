@@ -178,6 +178,7 @@ document.getElementById('tssel').onchange=function(){
 	location.href='?ts='+this.value;
 }
 
+
 var options=document.getElementById('tssel').options,
 	i=0,op;
 while(op=options[i++]){
@@ -185,6 +186,15 @@ while(op=options[i++]){
 		op.selected=true;
 		break;
 	}
+}
+
+i=0;
+for(;i<navs.length;i++){
+	!function(i){
+		navs[i].onclick=function(){
+			a.slide(i);
+		}
+	}(i);
 }
 </script>
 </body>
