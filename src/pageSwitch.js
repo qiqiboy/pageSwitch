@@ -7,7 +7,7 @@
 (function(ROOT, struct, undefined){
     "use strict";
     
-    var VERSION='2.2.3';
+    var VERSION='2.2.4';
     var lastTime=0,
         nextFrame=ROOT.requestAnimationFrame            ||
                 ROOT.webkitRequestAnimationFrame        ||
@@ -46,8 +46,9 @@
         }(),
         opacity=cssTest('opacity'),
         transform=cssTest('transform'),
-        transformStyle=cssTest('transform-style'),
         perspective=cssTest('perspective'),
+        transformStyle=cssTest('transform-style'),
+        transformOrigin=cssTest('transform-origin'),
         backfaceVisibility=cssTest('backface-visibility'),
         preserve3d=transformStyle&&function(){
             divstyle[transformStyle]='preserve-3d';
@@ -180,6 +181,69 @@
                     if(tpage){
                         tpage.style[transform]='rotate'+prop+'('+(fix*90)+'deg) translateZ('+zh+'px)';
                     }
+                }else TRANSITION['scroll'+name].apply(this,arguments);
+            }
+        }();
+
+        TRANSITION['flipClock'+name]=function(){
+            var createWrap=function(node,container,prop,off){
+                    var wrap=document.createElement('div'),
+                        len=prop=='X'?'height':'width',
+                        pos=prop=='X'?'top':'left',
+                        origin=['50%',(off?0:100)+'%'][prop=='X'?'slice':'reverse']().join(' ');
+                    wrap.style.cssText='position:absolute;top:0;left:0;height:100%;width:100%;overflow:hidden;display:none;';
+                    wrap.style[len]='50%';
+                    wrap.style[pos]=off*100+'%';
+                    wrap.style[transformOrigin]=origin;
+                    node.style[len]='200%';
+                    node.style[pos]=-off*200+'%';
+
+                    wrap.appendChild(node);
+                    container.appendChild(wrap);
+
+                    return wrap;
+                },
+                fixBlock=function(cpage,tpage,pages,container){
+                    each(pages,function(page){
+                        if(page.parentNode==container)return;
+                        if(cpage!=page && tpage!=page){
+                            page.parentNode.style.display=page._clone.parentNode.style.display='none';
+                        }else{
+                            page.parentNode.style.display=page._clone.parentNode.style.display='block';
+                        }
+                    });
+                };
+
+            return function(cpage,cp,tpage,tp){
+                var prop=name||['X','Y'][1-this.direction],
+                    isSelf=this.pages[this.current]==cpage,
+                    zIndex=cp<0&&Math.abs(cp)<.5||cp>=0&&Math.abs(cp)<.5?1:0,
+                    fix=prop=='X'?1:-1,
+                    m,n;
+                if(preserve3d){
+                    if(cpage.parentNode==this.container){
+                        createWrap(cpage,this.container,prop,0);
+                        createWrap(cpage._clone=cpage.cloneNode(true),this.container,prop,.5);
+                    }
+                    m=n=0;
+                    cp>0?m=-cp*180*fix:n=-cp*180*fix;
+                    cpage.parentNode.style.zIndex=cpage._clone.parentNode.style.zIndex=zIndex;
+                    cpage.parentNode.style[transform]='perspective(1000px) rotate'+prop+'('+m+'deg)';
+                    cpage._clone.parentNode.style[transform]='perspective(1000px) rotate'+prop+'('+n+'deg)';
+
+                    if(tpage){
+                        if(tpage.parentNode==this.container){
+                            createWrap(tpage,this.container,prop,0);
+                            createWrap(tpage._clone=tpage.cloneNode(true),this.container,prop,.5);
+                        }
+                        m=n=0;
+                        cp>0?n=-tp*180*fix:m=-tp*180*fix;
+                        tpage.parentNode.style.zIndex=tpage._clone.parentNode.style.zIndex=1-zIndex;
+                        tpage.parentNode.style[transform]='perspective(1000px) rotate'+prop+'('+m+'deg)';
+                        tpage._clone.parentNode.style[transform]='perspective(1000px) rotate'+prop+'('+n+'deg)';
+                    }
+
+                    fixBlock(cpage,tpage,this.pages,this.container);
                 }else TRANSITION['scroll'+name].apply(this,arguments);
             }
         }();
