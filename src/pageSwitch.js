@@ -195,6 +195,7 @@
                     wrap.style[len]='50%';
                     wrap.style[pos]=off*100+'%';
                     wrap.style[transformOrigin]=origin;
+                    wrap.style[backfaceVisibility]='hidden';
                     node.style[len]='200%';
                     node.style[pos]=-off*200+'%';
 
