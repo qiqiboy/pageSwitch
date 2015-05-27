@@ -220,7 +220,7 @@
                     zIndex=cp<0&&Math.abs(cp)<.5||cp>=0&&Math.abs(cp)<.5?1:0,
                     fix=prop=='X'?1:-1,
                     m,n;
-                if(preserve3d){
+                if(perspective){
                     if(cpage.parentNode==this.container){
                         createWrap(cpage,this.container,prop,0);
                         createWrap(cpage._clone=cpage.cloneNode(true),this.container,prop,.5);
