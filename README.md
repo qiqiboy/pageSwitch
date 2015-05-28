@@ -87,6 +87,8 @@ pw.setEase(function(t,b,c,d){
 支持以下转场效果：  
   
 `fade`				渐隐渐显 | [demo](http://u.boy.im/pageswitch/pic.html?ts=fade)  
+
+`slice`				裁切效果 | [demo](http://u.boy.im/pageswitch/pic.html?ts=slice)   
   
 `scroll`			页面滚动 | [demo](http://u.boy.im/pageswitch/pic.html?ts=scroll)  
 `scroll3d`			3d页面滚动 | [demo](http://u.boy.im/pageswitch/pic.html?ts=scroll3d)  
@@ -115,7 +117,8 @@ pw.setEase(function(t,b,c,d){
   
 `flip`				翻转切换 | [demo](http://u.boy.im/pageswitch/pic.html?ts=flip)   
 `flip3d`			3d翻转切换 | [demo](http://u.boy.im/pageswitch/pic.html?ts=flip3d)   
-`flipClock`			3d翻页钟效果 | [demo](http://u.boy.im/pageswitch/pic.html?ts=flipClock)   
+`flipClock`			翻页钟效果 | [demo](http://u.boy.im/pageswitch/pic.html?ts=flipClock)   
+`flipPaper`			翻书本效果 | [demo](http://u.boy.im/pageswitch/pic.html?ts=flipPaper)   
 `flipCover`			页面翻入翻出 | [demo](http://u.boy.im/pageswitch/pic.html?ts=flipCover)   
 `flipCoverReverse`	同上反向 | [demo](http://u.boy.im/pageswitch/pic.html?ts=flipCoverReverse)    
 `flipCoverIn`  		总是下一张页面翻入 | [demo](http://u.boy.im/pageswitch/pic.html?ts=flipCoverIn)   
