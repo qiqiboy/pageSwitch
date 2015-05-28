@@ -150,6 +150,51 @@
             }else TRANSITION['slideCover'+name].apply(this,arguments);
         }
 
+        TRANSITION['slice'+name]=function(){
+            var createWrap=function(node,container){
+                    var wrap=document.createElement('div');
+                    wrap.style.cssText='position:absolute;top:0;left:0;height:100%;width:100%;overflow:hidden;';
+                    wrap.appendChild(node);
+                    container.appendChild(wrap);
+                },
+                fixBlock=function(cpage,tpage,pages,container){
+                    each(pages,function(page){
+                        if(page.parentNode==container)return;
+                        if(cpage!=page && tpage!=page){
+                            page.parentNode.style.display='none';
+                        }else{
+                            page.parentNode.style.display='block';
+                        }
+                    });
+                };
+                    
+            return function(cpage,cp,tpage,tp){
+                var prop=name||['X','Y'][this.direction],
+                    len=prop=='X'?'width':'height',
+                    m=Math.abs(cp)*100,
+                    n=Math.abs(tp)*100,
+                    end=!m||m==100;
+
+                cpage.style[len]=end?'100%':this.container[camelCase('offset-'+len)]+'px';
+                if(cpage.parentNode==this.container){
+                    createWrap(cpage,this.container);
+                }
+                cpage.parentNode.style.zIndex=cp<0?1:0;
+                cpage.parentNode.style[len]=cp<0?(100-m)+'%':'100%';
+
+                if(tpage){
+                    tpage.style[len]=end?'100%':this.container[camelCase('offset-'+len)]+'px';
+                    if(tpage.parentNode==this.container){
+                        createWrap(tpage,this.container);
+                    }
+                    tpage.parentNode.style[len]=cp<0?'100%':m+'%';
+                    tpage.parentNode.style.zIndex=cp<0?0:1;
+                }
+
+                fixBlock(cpage,tpage,this.pages,this.container);
+            }
+        }();
+
         TRANSITION['flip'+name]=function(cpage,cp,tpage,tp){
             var prop=name||['X','Y'][1-this.direction],
                 fix=prop=='X'?cp>0?-1:1:cp>0?1:-1;
@@ -259,27 +304,10 @@
         }();
 
         TRANSITION['flipPaper'+name]=function(){
-            var createWrap=function(node,container){
-                    var wrap=document.createElement('div');
-                    wrap.style.cssText='position:absolute;top:0;left:0;height:100%;width:100%;overflow:hidden;';
-                    wrap.appendChild(node);
-                    container.appendChild(wrap);
-                },
-                fixBlock=function(cpage,tpage,pages,container){
-                    each(pages,function(page){
-                        if(page.parentNode==container)return;
-                        if(cpage!=page && tpage!=page){
-                            page.parentNode.style.display='none';
-                        }else{
-                            page.parentNode.style.display='block';
-                        }
-                    });
-                },
-                backDiv;
+            var backDiv;
 
             return function(cpage,cp,tpage,tp){
                 var prop=name||['X','Y'][this.direction],
-                    zIndex=cp<0&&Math.abs(cp)<.5||cp>=0&&Math.abs(cp)<.5?1:0,
                     len=prop=='X'?'width':'height',
                     m=Math.abs(cp)*100,
                     n=Math.abs(tp)*100,
@@ -287,32 +315,19 @@
                 if(!backDiv){
                     backDiv=document.createElement('div');
                     backDiv.style.cssText='position:absolute;z-index:2;top:0;left:0;height:0;width:0;background:no-repeat #fff;';
-                    backDiv.style.backgroundImage=cssVendor+'linear-gradient('+(prop=='X'?'right':'bottom')+', #aaa 0,#fff 20px)';
-                    this.container.appendChild(backDiv);
+                    try{
+                        backDiv.style.backgroundImage=cssVendor+'linear-gradient('+(prop=='X'?'right':'bottom')+', #aaa 0,#fff 20px)';
+                    }finally{
+                        this.container.appendChild(backDiv);
+                    }
                 }
+
+                TRANSITION['sliceCover'+name].apply(this,arguments);
 
                 backDiv.style.width=backDiv.style.height='100%';
                 backDiv.style[len]=(cp<0?m:100-m)+'%';
                 backDiv.style[XY[prop]]=(cp<0?100-2*m:2*m-100)+'%';
-                
-                cpage.style[len]=end?'100%':this.container[camelCase('offset-'+len)]+'px';
-                if(cpage.parentNode==this.container){
-                    createWrap(cpage,this.container);
-                }
-                cpage.parentNode.style.zIndex=cp<0?1:0;
-                cpage.parentNode.style[len]=cp<0?(100-m)+'%':'100%';
-
-                if(tpage){
-                    tpage.style[len]=end?'100%':this.container[camelCase('offset-'+len)]+'px';
-                    if(tpage.parentNode==this.container){
-                        createWrap(tpage,this.container);
-                    }
-                    tpage.parentNode.style[len]=cp<0?'100%':m+'%';
-                    tpage.parentNode.style.zIndex=cp<0?0:1;
-                }
-
                 backDiv.style.display=end?'none':'block';
-                fixBlock(cpage,tpage,this.pages,this.container);
             }
         }();
 
@@ -387,6 +402,62 @@
                     tpage.style.zIndex=zIndex;
                 }
             }
+
+            TRANSITION['sliceCover'+type+name]=function(){
+                var createWrap=function(node,container){
+                        var wrap=document.createElement('div');
+                        wrap.style.cssText='position:absolute;top:0;left:0;height:100%;width:100%;overflow:hidden;';
+                        wrap.appendChild(node);
+                        container.appendChild(wrap);
+                    },
+                    fixBlock=function(cpage,tpage,pages,container){
+                        each(pages,function(page){
+                            if(page.parentNode==container)return;
+                            if(cpage!=page && tpage!=page){
+                                page.parentNode.style.display='none';
+                            }else{
+                                page.parentNode.style.display='block';
+                            }
+                        });
+                    };
+                        
+                return function(cpage,cp,tpage,tp){
+                    var prop=name||['X','Y'][this.direction],
+                        zIndex=Number(type=='Out'||!type&&cp<0||type=='Reverse'&&cp>0),
+                        len=prop=='X'?'width':'height',
+                        pos=prop=='X'?'left':'top',
+                        total=this.container[camelCase('offset-'+len)],
+                        m=Math.abs(cp)*100,
+                        n=Math.abs(tp)*100,
+                        end=!m||m==100;
+
+                    zIndex?n=0:m=0;
+
+                    if(cpage.parentNode==this.container){
+                        createWrap(cpage,this.container);
+                    }
+                    cpage.style[len]=end?'100%':total+'px';
+                    cpage.parentNode.style.zIndex=zIndex;
+                    cpage.parentNode.style[len]=100-m+'%';
+                    cp<0&&(m=0);
+                    cpage.style[pos]=-m/100*total+'px';
+                    cpage.parentNode.style[pos]=m+'%';
+
+                    if(tpage){
+                        if(tpage.parentNode==this.container){
+                            createWrap(tpage,this.container);
+                        }
+                        tpage.style[len]=end?'100%':total+'px';
+                        tpage.parentNode.style.zIndex=1-zIndex;
+                        tpage.parentNode.style[len]=100-n+'%';
+                        cp>=0&&(n=0);
+                        tpage.style[pos]=-n/100*total+'px';
+                        tpage.parentNode.style[pos]=n+'%';
+                    }
+
+                    fixBlock(cpage,tpage,this.pages,this.container);
+                }
+            }();
 
             TRANSITION['flipCover'+type+name]=function(cpage,cp,tpage,tp){
                 var prop=name||['X','Y'][1-this.direction],
