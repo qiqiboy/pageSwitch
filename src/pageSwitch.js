@@ -411,7 +411,7 @@
                     cpage.style[transform]='perspective(1000px) rotate'+prop+'('+cp*-90+'deg)'+fire3D;
                     cpage.style.zIndex=1-zIndex;
                     if(tpage){
-                        tpage.style[transform]='perspective(1000px) rotate'+prop+'('+tp*-90+'deg)'+fire3D
+                        tpage.style[transform]='perspective(1000px) rotate'+prop+'('+tp*-90+'deg)'+fire3D;
                         tpage.style.zIndex=zIndex;
                     }
                 }else TRANSITION['scroll'+name].apply(this,arguments);
