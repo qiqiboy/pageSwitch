@@ -317,9 +317,8 @@
                     backDiv.style.cssText='position:absolute;z-index:2;top:0;left:0;height:0;width:0;background:no-repeat #fff;';
                     try{
                         backDiv.style.backgroundImage=cssVendor+'linear-gradient('+(prop=='X'?'right':'bottom')+', #aaa 0,#fff 20px)';
-                    }finally{
-                        this.container.appendChild(backDiv);
-                    }
+                    }catch(e){}
+                    this.container.appendChild(backDiv);
                 }
 
                 TRANSITION['slice'+name].apply(this,arguments);
