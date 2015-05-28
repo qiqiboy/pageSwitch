@@ -187,20 +187,24 @@
 
         TRANSITION['flipClock'+name]=function(){
             var createWrap=function(node,container,prop,off){
-                    var wrap=document.createElement('div'),
+                    var wrap=node.parentNode,
                         len=prop=='X'?'height':'width',
                         pos=prop=='X'?'top':'left',
                         origin=['50%',(off?0:100)+'%'][prop=='X'?'slice':'reverse']().join(' ');
-                    wrap.style.cssText='position:absolute;top:0;left:0;height:100%;width:100%;overflow:hidden;display:none;';
+
+                    if(!wrap||wrap==container){
+                        wrap=document.createElement('div');
+                        wrap.style.cssText='position:absolute;top:0;left:0;height:100%;width:100%;overflow:hidden;display:none;';
+                        wrap.style[transformOrigin]=origin;
+                        wrap.style[backfaceVisibility]='hidden';
+                        wrap.appendChild(node);
+                        container.appendChild(wrap);
+                    }
+
                     wrap.style[len]='50%';
                     wrap.style[pos]=off*100+'%';
-                    wrap.style[transformOrigin]=origin;
-                    wrap.style[backfaceVisibility]='hidden';
                     node.style[len]='200%';
                     node.style[pos]=-off*200+'%';
-
-                    wrap.appendChild(node);
-                    container.appendChild(wrap);
 
                     return wrap;
                 },
@@ -222,10 +226,9 @@
                     fix=prop=='X'?1:-1,
                     m,n;
                 if(perspective){
-                    if(cpage.parentNode==this.container){
-                        createWrap(cpage,this.container,prop,0);
-                        createWrap(cpage._clone=cpage.cloneNode(true),this.container,prop,.5);
-                    }
+                    createWrap(cpage,this.container,prop,0);
+                    createWrap(cpage._clone||(cpage._clone=cpage.cloneNode(true)),this.container,prop,.5);
+
                     m=n=0;
                     cp>0?m=-cp*180*fix:n=-cp*180*fix;
                     cpage.parentNode.style.zIndex=cpage._clone.parentNode.style.zIndex=zIndex;
@@ -233,10 +236,9 @@
                     cpage._clone.parentNode.style[transform]='perspective(1000px) rotate'+prop+'('+n+'deg)';
 
                     if(tpage){
-                        if(tpage.parentNode==this.container){
-                            createWrap(tpage,this.container,prop,0);
-                            createWrap(tpage._clone=tpage.cloneNode(true),this.container,prop,.5);
-                        }
+                        createWrap(tpage,this.container,prop,0);
+                        createWrap(tpage._clone||(tpage._clone=tpage.cloneNode(true)),this.container,prop,.5);
+
                         m=n=0;
                         cp>0?n=-tp*180*fix:m=-tp*180*fix;
                         tpage.parentNode.style.zIndex=tpage._clone.parentNode.style.zIndex=1-zIndex;
@@ -245,7 +247,72 @@
                     }
 
                     fixBlock(cpage,tpage,this.pages,this.container);
+
+                    if(!cp||Math.abs(cp)==1){
+                        cpage=this.pages[this.current];
+                        cpage.style.height=cpage.style.width=cpage.parentNode.style.height=cpage.parentNode.style.width='100%';
+                        cpage.style.top=cpage.style.left=cpage.parentNode.style.top=cpage.parentNode.style.left=0;
+                        cpage.parentNode.style.zIndex=2;
+                    }
                 }else TRANSITION['scroll'+name].apply(this,arguments);
+            }
+        }();
+
+        TRANSITION['flipPaper'+name]=function(){
+            var createWrap=function(node,container){
+                    var wrap=document.createElement('div');
+                    wrap.style.cssText='position:absolute;top:0;left:0;height:100%;width:100%;overflow:hidden;';
+                    wrap.appendChild(node);
+                    container.appendChild(wrap);
+                },
+                fixBlock=function(cpage,tpage,pages,container){
+                    each(pages,function(page){
+                        if(page.parentNode==container)return;
+                        if(cpage!=page && tpage!=page){
+                            page.parentNode.style.display='none';
+                        }else{
+                            page.parentNode.style.display='block';
+                        }
+                    });
+                },
+                backDiv;
+
+            return function(cpage,cp,tpage,tp){
+                var prop=name||['X','Y'][this.direction],
+                    zIndex=cp<0&&Math.abs(cp)<.5||cp>=0&&Math.abs(cp)<.5?1:0,
+                    len=prop=='X'?'width':'height',
+                    m=Math.abs(cp)*100,
+                    n=Math.abs(tp)*100,
+                    end=!m||m==100;
+                if(!backDiv){
+                    backDiv=document.createElement('div');
+                    backDiv.style.cssText='position:absolute;z-index:2;top:0;left:0;height:0;width:0;background:no-repeat #fff;';
+                    backDiv.style.backgroundImage=cssVendor+'linear-gradient('+(prop=='X'?'right':'bottom')+', #aaa 0,#fff 20px)';
+                    this.container.appendChild(backDiv);
+                }
+
+                backDiv.style.width=backDiv.style.height='100%';
+                backDiv.style[len]=(cp<0?m:100-m)+'%';
+                backDiv.style[XY[prop]]=(cp<0?100-2*m:2*m-100)+'%';
+                
+                cpage.style[len]=end?'100%':this.container[camelCase('offset-'+len)]+'px';
+                if(cpage.parentNode==this.container){
+                    createWrap(cpage,this.container);
+                }
+                cpage.parentNode.style.zIndex=cp<0?1:0;
+                cpage.parentNode.style[len]=cp<0?(100-m)+'%':'100%';
+
+                if(tpage){
+                    tpage.style[len]=end?'100%':this.container[camelCase('offset-'+len)]+'px';
+                    if(tpage.parentNode==this.container){
+                        createWrap(tpage,this.container);
+                    }
+                    tpage.parentNode.style[len]=cp<0?'100%':m+'%';
+                    tpage.parentNode.style.zIndex=cp<0?0:1;
+                }
+
+                backDiv.style.display=end?'none':'block';
+                fixBlock(cpage,tpage,this.pages,this.container);
             }
         }();
 
