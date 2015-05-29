@@ -171,23 +171,24 @@
             return function(cpage,cp,tpage,tp){
                 var prop=name||['X','Y'][this.direction],
                     len=prop=='X'?'width':'height',
+                    total=this.container[camelCase('offset-'+len)],
                     m=Math.abs(cp)*100,
                     n=Math.abs(tp)*100,
-                    end=!m||m==100;
+                    end=cp==0||tp==0;
 
-                cpage.style[len]=end?'100%':this.container[camelCase('offset-'+len)]+'px';
+                cpage.style[len]=end?'100%':total+'px';
                 if(cpage.parentNode==this.container){
                     createWrap(cpage,this.container);
                 }
                 cpage.parentNode.style.zIndex=cp<0?1:0;
-                cpage.parentNode.style[len]=cp<0?(100-m)+'%':'100%';
+                cpage.parentNode.style[len]=(Math.min(cp,0)+1)*100+'%';
 
                 if(tpage){
-                    tpage.style[len]=end?'100%':this.container[camelCase('offset-'+len)]+'px';
+                    tpage.style[len]=end?'100%':total+'px';
                     if(tpage.parentNode==this.container){
                         createWrap(tpage,this.container);
                     }
-                    tpage.parentNode.style[len]=cp<0?'100%':m+'%';
+                    tpage.parentNode.style[len]=(Math.min(tp,0)+1)*100+'%';
                     tpage.parentNode.style.zIndex=cp<0?0:1;
                 }
 
@@ -293,7 +294,7 @@
 
                     fixBlock(cpage,tpage,this.pages,this.container);
 
-                    if(!cp||Math.abs(cp)==1){
+                    if(0==cp||tp==0){
                         cpage=this.pages[this.current];
                         cpage.style.height=cpage.style.width=cpage.parentNode.style.height=cpage.parentNode.style.width='100%';
                         cpage.style.top=cpage.style.left=cpage.parentNode.style.top=cpage.parentNode.style.left=0;
