@@ -188,8 +188,8 @@
                     if(tpage.parentNode==this.container){
                         createWrap(tpage,this.container);
                     }
-                    tpage.parentNode.style[len]=(Math.min(tp,0)+1)*100+'%';
                     tpage.parentNode.style.zIndex=cp<0?0:1;
+                    tpage.parentNode.style[len]=(Math.min(tp,0)+1)*100+'%';
                 }
 
                 fixBlock(cpage,tpage,this.pages,this.container);
@@ -903,7 +903,7 @@
                     ev.preventDefault();
                     if(!this.timer && !this.drag && +new Date-this.latestTime>Math.max(1000-this.duration,0)){
                         var wd=ev.wheelDelta||-ev.detail;
-                        this[wd>0?'prev':'next']();
+                        Math.abs(wd)>=3 && this[wd>0?'prev':'next']();
                     }
                     break;
 
