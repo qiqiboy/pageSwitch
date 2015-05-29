@@ -181,7 +181,7 @@
                     createWrap(cpage,this.container);
                 }
                 cpage.parentNode.style.zIndex=cp<0?1:0;
-                cpage.parentNode.style[len]=(Math.min(cp,0)+1)*100+'%';
+                cpage.parentNode.style[len]=(Math.min(cp==1?-1:cp,0)+1)*100+'%';
 
                 if(tpage){
                     tpage.style[len]=end?'100%':total+'px';
@@ -189,7 +189,7 @@
                         createWrap(tpage,this.container);
                     }
                     tpage.parentNode.style.zIndex=cp<0?0:1;
-                    tpage.parentNode.style[len]=(Math.min(tp,0)+1)*100+'%';
+                    tpage.parentNode.style[len]=(Math.min(tp==1?-1:tp,0)+1)*100+'%';
                 }
 
                 fixBlock(cpage,tpage,this.pages,this.container);
