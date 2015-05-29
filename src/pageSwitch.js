@@ -310,8 +310,7 @@
             return function(cpage,cp,tpage,tp){
                 var prop=name||['X','Y'][this.direction],
                     len=prop=='X'?'width':'height',
-                    m=Math.abs(cp)*100,
-                    n=Math.abs(tp)*100;
+                    m=Math.abs(cp)*100;
                 if(!backDiv){
                     backDiv=document.createElement('div');
                     backDiv.style.cssText='position:absolute;z-index:2;top:0;left:0;height:0;width:0;background:no-repeat #fff;';
