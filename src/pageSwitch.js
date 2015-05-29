@@ -198,13 +198,13 @@
 
         TRANSITION['flip'+name]=function(cpage,cp,tpage,tp){
             var prop=name||['X','Y'][1-this.direction],
-                fix=prop=='X'?cp>0?-1:1:cp>0?1:-1;
+                fix=prop=='X'?-1:1;
             if(perspective){
                 cpage.style[backfaceVisibility]='hidden';
-                cpage.style[transform]='perspective(1000px) rotate'+prop+'('+Math.abs(cp)*180*fix+'deg)'+fire3D;
+                cpage.style[transform]='perspective(1000px) rotate'+prop+'('+cp*180*fix+'deg)'+fire3D;
                 if(tpage){
                     tpage.style[backfaceVisibility]='hidden';
-                    tpage.style[transform]='perspective(1000px) rotate'+prop+'('+Math.abs(tp)*180*-fix+'deg)'+fire3D;
+                    tpage.style[transform]='perspective(1000px) rotate'+prop+'('+tp*180*fix+'deg)'+fire3D;
                 }
             }else TRANSITION['scroll'+name].apply(this,arguments);
         }
@@ -214,7 +214,7 @@
             return function(cpage,cp,tpage,tp){
                 var prop=name||['X','Y'][1-this.direction],
                     fe=prop=='X'?-1:1,
-                    fix=fe<0?cp<0?-1:1:cp<0?1:-1,
+                    fix=fe*(cp<0?1:-1),
                     zh=cpage['offset'+(prop=='X'?'Height':'Width')]/2;
                 if(preserve3d){
                     if(!inited){
@@ -275,8 +275,8 @@
                     createWrap(cpage,this.container,prop,0);
                     createWrap(cpage._clone||(cpage._clone=cpage.cloneNode(true)),this.container,prop,.5);
 
-                    m=n=0;
-                    cp>0?m=-cp*180*fix:n=-cp*180*fix;
+                    m=n=-cp*180*fix;
+                    cp<0?m=0:n=0;
                     cpage.parentNode.style.zIndex=cpage._clone.parentNode.style.zIndex=zIndex;
                     cpage.parentNode.style[transform]='perspective(1000px) rotate'+prop+'('+m+'deg)';
                     cpage._clone.parentNode.style[transform]='perspective(1000px) rotate'+prop+'('+n+'deg)';
@@ -285,8 +285,8 @@
                         createWrap(tpage,this.container,prop,0);
                         createWrap(tpage._clone||(tpage._clone=tpage.cloneNode(true)),this.container,prop,.5);
 
-                        m=n=0;
-                        cp>0?n=-tp*180*fix:m=-tp*180*fix;
+                        m=n=-tp*180*fix;
+                        cp<0?n=0:m=0;
                         tpage.parentNode.style.zIndex=tpage._clone.parentNode.style.zIndex=1-zIndex;
                         tpage.parentNode.style[transform]='perspective(1000px) rotate'+prop+'('+m+'deg)';
                         tpage._clone.parentNode.style[transform]='perspective(1000px) rotate'+prop+'('+n+'deg)';
