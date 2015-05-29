@@ -311,8 +311,7 @@
                 var prop=name||['X','Y'][this.direction],
                     len=prop=='X'?'width':'height',
                     m=Math.abs(cp)*100,
-                    n=Math.abs(tp)*100,
-                    end=!m||m==100;
+                    n=Math.abs(tp)*100;
                 if(!backDiv){
                     backDiv=document.createElement('div');
                     backDiv.style.cssText='position:absolute;z-index:2;top:0;left:0;height:0;width:0;background:no-repeat #fff;';
@@ -323,11 +322,11 @@
                 }
 
                 TRANSITION['slice'+name].apply(this,arguments);
-
+                
+                backDiv.style.display=cp==0||tp==0?'none':'block';
                 backDiv.style.width=backDiv.style.height='100%';
                 backDiv.style[len]=(cp<0?m:100-m)+'%';
                 backDiv.style[XY[prop]]=(cp<0?100-2*m:2*m-100)+'%';
-                backDiv.style.display=end?'none':'block';
             }
         }();
 
