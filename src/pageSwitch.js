@@ -73,12 +73,12 @@
              */
             fade:function(cpage,cp,tpage,tp){
                 if(opacity){
-                    cpage.style.opacity=Math.abs(tp);
+                    cpage.style.opacity=1-Math.abs(cp);
                     if(tpage){
                         tpage.style.opacity=Math.abs(cp);
                     }
                 }else{
-                    cpage.style.filter='alpha(opacity='+(Math.abs(tp))*100+')';
+                    cpage.style.filter='alpha(opacity='+(1-Math.abs(cp))*100+')';
                     if(tpage){
                         tpage.style.filter='alpha(opacity='+Math.abs(cp)*100+')';
                     }
@@ -330,21 +330,13 @@
         }();
 
         TRANSITION['zoom'+name]=function(cpage,cp,tpage,tp){
-            var prop=name;
+            var zIndex=Number(Math.abs(cp)<.5);
             if(transform){
-                if(Math.abs(cp)<.5){
-                    cpage.style[transform]='scale'+prop+'('+(1-Math.abs(cp)*2)+')'+fire3D;
-                    cpage.style.zIndex=1;
-                    if(tpage){
-                        tpage.style[transform]='scale'+prop+'(0)'+fire3D;
-                        tpage.style.zIndex=0;
-                    }
-                }else{
-                    cpage.style.zIndex=0;
-                    if(tpage){
-                        tpage.style[transform]='scale'+prop+'('+(Math.abs(cp)-.5)*2+')'+fire3D;
-                        tpage.style.zIndex=1;
-                    }
+                cpage.style[transform]='scale'+name+'('+Math.abs((1-Math.abs(cp)*2))+')'+fire3D;
+                cpage.style.zIndex=zIndex;
+                if(tpage){
+                    tpage.style[transform]='scale'+name+'('+Math.abs((1-Math.abs(cp)*2))+')'+fire3D;
+                    tpage.style.zIndex=1-zIndex;
                 }
             }else TRANSITION['scroll'+name].apply(this,arguments);
         }
@@ -352,10 +344,10 @@
         TRANSITION['bomb'+name]=function(cpage,cp,tpage,tp){
             var zIndex=Number(cp<0);
             if(transform){
-                cpage.style[transform]='scale'+name+'('+(2-Math.abs(tp))+')'+fire3D;
+                cpage.style[transform]='scale'+name+'('+(1+Math.abs(cp))+')'+fire3D;
                 cpage.style.zIndex=zIndex;
                 if(tpage){
-                    tpage.style[transform]='scale'+name+'('+(2-Math.abs(cp))+')'+fire3D;
+                    tpage.style[transform]='scale'+name+'('+(1+Math.abs(tp))+')'+fire3D;
                     tpage.style.zIndex=1-zIndex;
                 }
                 TRANSITION.fade.apply(this,arguments);
@@ -363,13 +355,12 @@
         }
 
         TRANSITION['skew'+name]=function(cpage,cp,tpage,tp){
-            var prop=name,
-                zIndex=Number(Math.abs(cp)<.5);
+            var zIndex=Number(Math.abs(cp)<.5);
             if(transform){
-                cpage.style[transform]='skew'+prop+'('+cp*180+'deg)'+fire3D;
+                cpage.style[transform]='skew'+name+'('+cp*180+'deg)'+fire3D;
                 cpage.style.zIndex=zIndex;
                 if(tpage){
-                    tpage.style[transform]='skew'+prop+'('+tp*180+'deg)'+fire3D;
+                    tpage.style[transform]='skew'+name+'('+tp*180+'deg)'+fire3D;
                     tpage.style.zIndex=1-zIndex;
                 }
             }else TRANSITION['scroll'+name].apply(this,arguments);
@@ -416,42 +407,39 @@
             }
 
             TRANSITION['skewCover'+type+name]=function(cpage,cp,tpage,tp){
-                var prop=name,
-                    zIndex=Number(type=='In'||!type&&cp<0||type=='Reverse'&&cp>0);
+                var zIndex=Number(type=='In'||!type&&cp<0||type=='Reverse'&&cp>0);
                 if(transform){
                     zIndex?cp=0:tp=0;
-                    cpage.style[transform]='skew'+prop+'('+cp*90+'deg)'+fire3D;
+                    cpage.style[transform]='skew'+name+'('+cp*90+'deg)'+fire3D;
                     cpage.style.zIndex=1-zIndex;
                     if(tpage){
-                        tpage.style[transform]='skew'+prop+'('+tp*90+'deg)'+fire3D;
+                        tpage.style[transform]='skew'+name+'('+tp*90+'deg)'+fire3D;
                         tpage.style.zIndex=zIndex;
                     }
                 }else TRANSITION['scroll'+name].apply(this,arguments);
             }
 
             TRANSITION['zoomCover'+type+name]=function(cpage,cp,tpage,tp){
-                var prop=name,
-                    zIndex=Number(type=='In'||!type&&cp<0||type=='Reverse'&&cp>0);
+                var zIndex=Number(type=='In'||!type&&cp<0||type=='Reverse'&&cp>0);
                 if(transform){
                     zIndex?cp=0:tp=0;
-                    cpage.style[transform]='scale'+prop+'('+(1-Math.abs(cp))+')'+fire3D;
+                    cpage.style[transform]='scale'+name+'('+(1-Math.abs(cp))+')'+fire3D;
                     cpage.style.zIndex=1-zIndex;
                     if(tpage){
-                        tpage.style[transform]='scale'+prop+'('+(1-Math.abs(tp))+')'+fire3D;
+                        tpage.style[transform]='scale'+name+'('+(1-Math.abs(tp))+')'+fire3D;
                         tpage.style.zIndex=zIndex;
                     }
                 }else TRANSITION['scroll'+name].apply(this,arguments);
             }
 
             TRANSITION['bombCover'+type+name]=function(cpage,cp,tpage,tp){
-                var prop=name,
-                    zIndex=Number(type=='In'||!type&&cp<0||type=='Reverse'&&cp>0);
+                var zIndex=Number(type=='In'||!type&&cp<0||type=='Reverse'&&cp>0);
                 if(transform){
-                    zIndex?tp=1:cp=1;
-                    cpage.style[transform]='scale'+prop+'('+(2-Math.abs(tp))+')'+fire3D;
+                    zIndex?cp=0:tp=0;
+                    cpage.style[transform]='scale'+name+'('+(1+Math.abs(cp))+')'+fire3D;
                     cpage.style.zIndex=1-zIndex;
                     if(tpage){
-                        tpage.style[transform]='scale'+prop+'('+(2-Math.abs(cp))+')'+fire3D;
+                        tpage.style[transform]='scale'+name+'('+(1+Math.abs(tp))+')'+fire3D;
                         tpage.style.zIndex=zIndex;
                     }
                     TRANSITION.fade.apply(this,arguments);
