@@ -9,7 +9,9 @@ http://u.boy.im/pageswitch/pic.html
 
 手机扫描下面二维码查看例子：  
 
-![demo qrcode](https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/qrcode/pageswitch.png)   
+![demo qrcode](https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/qrcode/pageswitch.png)  
+
+## 预览效果
 ![slide](https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/gif/slide.gif) ![flipClock](https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/gif/flipClock.gif) ![flip](https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/gif/flip.gif) ![flip3d](https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/gif/flip3d.gif)
 
 ## 如何使用
