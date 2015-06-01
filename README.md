@@ -87,6 +87,7 @@ pw.setEase(function(t,b,c,d){
 支持以下转场效果：  
   
 `fade`				渐隐渐显 | [demo](http://u.boy.im/pageswitch/pic.html?ts=fade)  
+![fade](https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/gif/fade.gif)  
 
 `slice`				裁切效果 | [demo](http://u.boy.im/pageswitch/pic.html?ts=slice)   
   
