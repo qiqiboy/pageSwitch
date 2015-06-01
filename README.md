@@ -12,7 +12,10 @@ http://u.boy.im/pageswitch/pic.html
 ![demo qrcode](https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/qrcode/pageswitch.png)  
 
 ## 预览效果
-![slide](https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/gif/slide.gif) ![flipClock](https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/gif/flipClock.gif) ![flip](https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/gif/flip.gif) ![flip3d](https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/gif/flip3d.gif)
+[![slide](https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/gif/slide.gif)](http://u.boy.im/pageswitch/pic.html?ts=slide) 
+[![flipClock](https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/gif/flipClock.gif)](http://u.boy.im/pageswitch/pic.html?ts=flipClock)  
+[![flip](https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/gif/flip.gif)](http://u.boy.im/pageswitch/pic.html?ts=flip)  
+[![flip3d](https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/gif/flip3d.gif)](http://u.boy.im/pageswitch/pic.html?ts=flip3d) 
 
 ## 如何使用
 ```javascript
