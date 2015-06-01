@@ -86,45 +86,45 @@ pw.setEase(function(t,b,c,d){
 
 支持以下转场效果：  
   
-`fade`				渐隐渐显 | [![](https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/gif/fade.gif)](http://u.boy.im/pageswitch/pic.html?ts=fade)   
+`fade`				渐隐渐显 | [demo](http://u.boy.im/pageswitch/pic.html?ts=fade)  
 
-`slice`				裁切效果 | [![](https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/gif/slice.gif)](http://u.boy.im/pageswitch/pic.html?ts=slice)   
+`slice`				裁切效果 | [demo](http://u.boy.im/pageswitch/pic.html?ts=slice)   
   
-`scroll`			页面滚动 | [![](https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/gif/scroll.gif)](http://u.boy.im/pageswitch/pic.html?ts=scroll)  
-`scroll3d`			3d页面滚动 | [![](https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/gif/scroll3d.gif)](http://u.boy.im/pageswitch/pic.html?ts=scroll3d)  
-`scrollCover`		页面视差滚入滚出（前后页面速度不一致） | [![](https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/gif/scrollCover.gif)](http://u.boy.im/pageswitch/pic.html?ts=scrollCover)  
+`scroll`			页面滚动 | [demo](http://u.boy.im/pageswitch/pic.html?ts=scroll)  
+`scroll3d`			3d页面滚动 | [demo](http://u.boy.im/pageswitch/pic.html?ts=scroll3d)  
+`scrollCover`		页面视差滚入滚出（前后页面速度不一致） | [demo](http://u.boy.im/pageswitch/pic.html?ts=scrollCover)  
 `scrollCoverReverse`同上反向 | [demo](http://u.boy.im/pageswitch/pic.html?ts=scrollCoverReverse)    
 `scrollCoverIn`  	总是下一张页面视差滚入 | [demo](http://u.boy.im/pageswitch/pic.html?ts=scrollCoverIn)   
 `scrollCoverOut` 	总是当前页面视差滚出 | [demo](http://u.boy.im/pageswitch/pic.html?ts=scrollCoverOut)     
   
-`slide`				滑动切换，后者页面有缩放效果 | [![](https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/gif/slide.gif)](http://u.boy.im/pageswitch/pic.html?ts=slide)   
+`slide`				滑动切换，后者页面有缩放效果 | [demo](http://u.boy.im/pageswitch/pic.html?ts=slide)   
 `slideCover`		页面滑入滑出 | [demo](http://u.boy.im/pageswitch/pic.html?ts=slideCover)   
 `slideCoverReverse`	同上反向 | [demo](http://u.boy.im/pageswitch/pic.html?ts=slideCoverReverse)   
 `slideCoverIn`  	总是下一张页面滑入 | [demo](http://u.boy.im/pageswitch/pic.html?ts=slideCoverIn)   
 `slideCoverOut` 	总是当前页面滑出 | [demo](http://u.boy.im/pageswitch/pic.html?ts=slideCoverOut)     
   
-`zoom`				缩放切换 | [![](https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/gif/zoom.gif)](http://u.boy.im/pageswitch/pic.html?ts=zoom)   
+`zoom`				缩放切换 | [demo](http://u.boy.im/pageswitch/pic.html?ts=zoom)   
 `zoomCover`			页面缩进缩出 | [demo](http://u.boy.im/pageswitch/pic.html?ts=zoomCover)   
 `zoomCoverReverse`	同上反向 | [demo](http://u.boy.im/pageswitch/pic.html?ts=zoomCoverReverse)    
 `zoomCoverIn`  		总是下一张页面缩入 | [demo](http://u.boy.im/pageswitch/pic.html?ts=zoomCoverIn)   
 `zoomCoverOut` 		总是当前页面缩出 | [demo](http://u.boy.im/pageswitch/pic.html?ts=zoomCoverOut)     
   
-`skew`				扭曲切换 | [![](https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/gif/skew.gif)](http://u.boy.im/pageswitch/pic.html?ts=skew)   
+`skew`				扭曲切换 | [demo](http://u.boy.im/pageswitch/pic.html?ts=skew)   
 `skewCover`			页面扭进扭出 | [demo](http://u.boy.im/pageswitch/pic.html?ts=skewCover)   
 `skewCoverReverse`	同上反向 | [demo](http://u.boy.im/pageswitch/pic.html?ts=skewCoverReverse)   
 `skewCoverIn`  		总是下一张页面扭入 | [demo](http://u.boy.im/pageswitch/pic.html?ts=skewCoverIn)   
 `skewCoverOut` 		总是当前页面扭出 | [demo](http://u.boy.im/pageswitch/pic.html?ts=skewCoverOut)    
   
-`flip`				翻转切换 | [![](https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/gif/flip.gif)](http://u.boy.im/pageswitch/pic.html?ts=flip)   
-`flip3d`			3d翻转切换 | [![](https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/gif/flip3d.gif)](http://u.boy.im/pageswitch/pic.html?ts=flip3d)   
-`flipClock`			翻页钟效果 | [![](https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/gif/flipClock.gif)](http://u.boy.im/pageswitch/pic.html?ts=flipClock)   
-`flipPaper`			翻书本效果 | [![](https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/gif/flipPaper.gif)](http://u.boy.im/pageswitch/pic.html?ts=flipPaper)   
+`flip`				翻转切换 | [demo](http://u.boy.im/pageswitch/pic.html?ts=flip)   
+`flip3d`			3d翻转切换 | [demo](http://u.boy.im/pageswitch/pic.html?ts=flip3d)   
+`flipClock`			翻页钟效果 | [demo](http://u.boy.im/pageswitch/pic.html?ts=flipClock)   
+`flipPaper`			翻书本效果 | [demo](http://u.boy.im/pageswitch/pic.html?ts=flipPaper)   
 `flipCover`			页面翻入翻出 | [demo](http://u.boy.im/pageswitch/pic.html?ts=flipCover)   
 `flipCoverReverse`	同上反向 | [demo](http://u.boy.im/pageswitch/pic.html?ts=flipCoverReverse)    
 `flipCoverIn`  		总是下一张页面翻入 | [demo](http://u.boy.im/pageswitch/pic.html?ts=flipCoverIn)   
 `flipCoverOut` 		总是当前页面翻出 | [demo](http://u.boy.im/pageswitch/pic.html?ts=flipCoverOut)    
   
-`bomb`				放大切换 | [![](https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/gif/bomb.gif)](http://u.boy.im/pageswitch/pic.html?ts=bomb)   
+`bomb`				放大切换 | [demo](http://u.boy.im/pageswitch/pic.html?ts=bomb)   
 `bombCover`			页面大入大出 | [demo](http://u.boy.im/pageswitch/pic.html?ts=bombCover)   
 `bombCoverReverse`	同上反向 | [demo](http://u.boy.im/pageswitch/pic.html?ts=bombCoverReverse)   
 `bombCoverIn`  		总是下一张页面大入 | [demo](http://u.boy.im/pageswitch/pic.html?ts=bombCoverIn)   
