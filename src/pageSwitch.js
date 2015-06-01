@@ -665,6 +665,9 @@
             isFunction(func) && (TRANSITION[name]=func);
             return this;
         },
+        isStatic:function(){
+            return !this.timer && !this.drag;
+        },
         on:function(ev,callback){
             var self=this;
             if(type(ev)=='object'){
@@ -889,7 +892,7 @@
                 case 'mousewheel':
                 case 'dommousescroll':
                     ev.preventDefault();
-                    if(!this.timer && !this.drag && +new Date-this.latestTime>Math.max(1000-this.duration,0)){
+                    if(this.isStatic() && +new Date-this.latestTime>Math.max(1000-this.duration,0)){
                         var wd=ev.wheelDelta||-ev.detail;
                         Math.abs(wd)>=3 && this[wd>0?'prev':'next']();
                     }
@@ -897,7 +900,7 @@
 
                 case 'keydown':
                     var nn=ev.target.nodeName.toLowerCase();
-                    if(!this.timer && !this.drag && nn!='input' && nn!='textarea'){
+                    if(this.isStatic() && nn!='input' && nn!='textarea'){
                         switch(ev.keyCode||ev.which){
                             case 33:
                             case 37:

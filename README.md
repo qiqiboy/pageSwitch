@@ -54,6 +54,7 @@ pw.append(DOM_NODE);		//后增页面
 pw.insertBefore(DOM_NODE,index);	//在index前添加
 pw.insertAfter(DOM_NODE,index);		//在index后添加
 pw.remove(index);			//删除第index页面
+pw.isStatic();				//是否静止状态
 
 pw.destroy();				//销毁pageSwitch效果对象
 
