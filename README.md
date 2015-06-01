@@ -141,25 +141,29 @@ pw.setTransition('fade'); //由于内置了fade效果，所以可以直接调用
 //假定没有内置fade，自定义转场函数如下
 pw.setTransition(function(cpage,cp,tpage,tp){
 	/* 过渡效果处理函数
-	 *
-	 * @param Element cpage 当前页面
-	 * @param Float cp      当前页面过度百分比。cp<0说明向上切换，反之向下
-	 * @param Element tpage 前序页面
-	 * @param Float tp      前序页面过度百分比 。tp<0说明向下切换，反之向上
-	 * 注意：后两个参数 tpage和tp可能为空（页面切换边缘时，第一张、最后一张的情况）
-	 */
+     * @param HTMLElement cpage 参与动画的前序页面
+     * @param Float cp 目标页面过渡比率，取值范围-1到1
+     * @param HTMLElement tpage 参与动画的后序页面；如果非循环loop模式，则在切换到边缘页面时可能不存在该参数
+     * @param Float tp 目标页面过渡比率，取值范围-1到1；如果非循环loop模式，则在切换到边缘页面时可能不存在该参数
+     */
 	 
 	if('opacity' in cpage.style){
-		cpage.style.opacity=Math.abs(tp);
+		cpage.style.opacity=1-Math.abs(cp);
 		if(tpage){
 			tpage.style.opacity=Math.abs(cp);
 		}
 	}else{
-		cpage.style.filter='alpha(opacity='+(Math.abs(tp))*100+')';
+		cpage.style.filter='alpha(opacity='+(1-Math.abs(cp))*100+')';
 		if(tpage){
 			tpage.style.filter='alpha(opacity='+Math.abs(cp)*100+')';
 		}
 	}
+});
+
+//如果你有jQuery类似组件，可以更简单
+pw.setTransition(function(cpage,cp,tpage,tp){
+	$(cpage).css('opacity',1-Math.abs(cp));
+	$(tpage).css('opacity',Math.abs(cp));
 });
 ````
 
