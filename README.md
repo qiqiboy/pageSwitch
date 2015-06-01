@@ -90,10 +90,14 @@ pw.setEase(function(t,b,c,d){
 ![fade](https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/gif/fade.gif)  
 
 `slice`				裁切效果 | [demo](http://u.boy.im/pageswitch/pic.html?ts=slice)   
+![slice](https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/gif/slice.gif)  
   
 `scroll`			页面滚动 | [demo](http://u.boy.im/pageswitch/pic.html?ts=scroll)  
+![scroll](https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/gif/scroll.gif)  
 `scroll3d`			3d页面滚动 | [demo](http://u.boy.im/pageswitch/pic.html?ts=scroll3d)  
+![scroll3d](https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/gif/scroll3d.gif)  
 `scrollCover`		页面视差滚入滚出（前后页面速度不一致） | [demo](http://u.boy.im/pageswitch/pic.html?ts=scrollCover)  
+![scrollCover](https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/gif/scrollCover.gif)  
 `scrollCoverReverse`同上反向 | [demo](http://u.boy.im/pageswitch/pic.html?ts=scrollCoverReverse)    
 `scrollCoverIn`  	总是下一张页面视差滚入 | [demo](http://u.boy.im/pageswitch/pic.html?ts=scrollCoverIn)   
 `scrollCoverOut` 	总是当前页面视差滚出 | [demo](http://u.boy.im/pageswitch/pic.html?ts=scrollCoverOut)     
