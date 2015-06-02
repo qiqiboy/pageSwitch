@@ -269,7 +269,7 @@
             return function(cpage,cp,tpage,tp){
                 var prop=name||['X','Y'][1-this.direction],
                     isSelf=this.pages[this.current]==cpage,
-                    zIndex=cp<0&&Math.abs(cp)<.5||cp>=0&&Math.abs(cp)<.5?1:0,
+                    zIndex=Number(Math.abs(cp)<.5),
                     fix=prop=='X'?1:-1,
                     m,n;
                 if(perspective){
