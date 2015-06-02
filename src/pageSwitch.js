@@ -7,7 +7,7 @@
 (function(ROOT, struct, undefined){
     "use strict";
     
-    var VERSION='2.2.5';
+    var VERSION='2.2.6';
     var lastTime=0,
         nextFrame=ROOT.requestAnimationFrame            ||
                 ROOT.webkitRequestAnimationFrame        ||
@@ -25,7 +25,8 @@
                 ROOT.mozCancelRequestAnimationFrame     ||
                 ROOT.msCancelRequestAnimationFrame      ||
                 clearTimeout,
-        isTouch=("createTouch" in document) || ('ontouchstart' in window),
+        DOC=ROOT.document,
+        isTouch=("createTouch" in DOC) || ('ontouchstart' in window),
         eventType=isTouch&&'touch'                      ||
                 ('PointerEvent' in ROOT)&&'pointer'     ||
                 ('MSPointerEvent' in ROOT)&&'MSPointer-'||
@@ -33,7 +34,7 @@
         EVENT=camelCase("down start move up end cancel".replace(/(^|\s)/g,'$1'+eventType)),
         STARTEVENT=EVENT.split(" ").slice(0,2).join(" "),
         MOVEEVENT=EVENT.split(" ").slice(2).join(" "),
-        divstyle=document.createElement('div').style,
+        divstyle=DOC.createElement('div').style,
         cssVendor=function(){
             var tests="-webkit- -moz- -o- -ms-".split(" "),
                 prop;
@@ -152,7 +153,7 @@
 
         TRANSITION['slice'+name]=function(){
             var createWrap=function(node,container){
-                    var wrap=document.createElement('div');
+                    var wrap=DOC.createElement('div');
                     wrap.style.cssText='position:absolute;top:0;left:0;height:100%;width:100%;overflow:hidden;';
                     wrap.appendChild(node);
                     container.appendChild(wrap);
@@ -239,7 +240,7 @@
                         origin=['50%',(off?0:100)+'%'][prop=='X'?'slice':'reverse']().join(' ');
 
                     if(!wrap||wrap==container){
-                        wrap=document.createElement('div');
+                        wrap=DOC.createElement('div');
                         wrap.style.cssText='position:absolute;top:0;left:0;height:100%;width:100%;overflow:hidden;display:none;';
                         wrap.style[transformOrigin]=origin;
                         wrap.style[backfaceVisibility]='hidden';
@@ -312,7 +313,7 @@
                     len=prop=='X'?'width':'height',
                     m=Math.abs(cp)*100;
                 if(!backDiv){
-                    backDiv=document.createElement('div');
+                    backDiv=DOC.createElement('div');
                     backDiv.style.cssText='position:absolute;z-index:2;top:0;left:0;height:0;width:0;background:no-repeat #fff;';
                     try{
                         backDiv.style.backgroundImage=cssVendor+'linear-gradient('+(prop=='X'?'right':'bottom')+', #aaa 0,#fff 20px)';
@@ -332,25 +333,27 @@
         TRANSITION['zoom'+name]=function(cpage,cp,tpage,tp){
             var zIndex=Number(Math.abs(cp)<.5);
             if(transform){
-                cpage.style[transform]='scale'+name+'('+Math.abs((1-Math.abs(cp)*2))+')'+fire3D;
+                cpage.style[transform]='scale'+name+'('+Math.abs(1-Math.abs(cp)*2)+')'+fire3D;
                 cpage.style.zIndex=zIndex;
                 if(tpage){
-                    tpage.style[transform]='scale'+name+'('+Math.abs((1-Math.abs(cp)*2))+')'+fire3D;
+                    tpage.style[transform]='scale'+name+'('+Math.abs(1-Math.abs(cp)*2)+')'+fire3D;
                     tpage.style.zIndex=1-zIndex;
                 }
             }else TRANSITION['scroll'+name].apply(this,arguments);
         }
 
         TRANSITION['bomb'+name]=function(cpage,cp,tpage,tp){
-            var zIndex=Number(cp<0);
+            var zIndex=Number(Math.abs(cp)<.5),
+                val=Math.abs(1-Math.abs(cp)*2);
             if(transform){
-                cpage.style[transform]='scale'+name+'('+(1+Math.abs(cp))+')'+fire3D;
+                cpage.style[transform]='scale'+name+'('+(2-val)+')'+fire3D;
+                cpage.style.opacity=zIndex?val:0;
                 cpage.style.zIndex=zIndex;
                 if(tpage){
-                    tpage.style[transform]='scale'+name+'('+(1+Math.abs(tp))+')'+fire3D;
+                    tpage.style[transform]='scale'+name+'('+(2-val)+')'+fire3D;
+                    tpage.style.opacity=zIndex?0:val;
                     tpage.style.zIndex=1-zIndex;
                 }
-                TRANSITION.fade.apply(this,arguments);
             }else TRANSITION['scroll'+name].apply(this,arguments);
         }
 
@@ -508,6 +511,11 @@
         return ret;
     }
 
+    function getStyle(elem,prop){
+		var style=ROOT.getComputedStyle&&ROOT.getComputedStyle(elem,null)||elem.currentStyle||elem.style;
+		return style[prop];
+    }
+
     function addListener(elem,evstr,handler){
         if(type(evstr)=='object'){
             return each(evstr,function(evstr,handler){
@@ -545,7 +553,7 @@
             if('empty' in range)range.empty();
             else if('removeAllRanges' in range)range.removeAllRanges();
         }else{
-            range=document.selection.createRange();
+            range=DOC.selection.createRange();
             range.moveEnd("character",-range.text.length);
             range.select();
         }
@@ -564,7 +572,7 @@
 
         ev.pointerType=oldEvent.pointerType||eventType;
 
-        ev.target=oldEvent.target||oldEvent.srcElement||document.documentElement;
+        ev.target=oldEvent.target||oldEvent.srcElement||DOC.documentElement;
         if(ev.target.nodeType===3){
             ev.target=ev.target.parentNode;
         }
@@ -612,7 +620,7 @@
             this.pageData=[];
 
             addListener(this.container,STARTEVENT+" click"+(this.mousewheel?" mousewheel DOMMouseScroll":""),handler);
-            addListener(document,MOVEEVENT+(this.arrowkey?" keydown":""),handler);
+            addListener(DOC,MOVEEVENT+(this.arrowkey?" keydown":""),handler);
 
             each(this.pages,function(page){
                 self.pageData.push({
@@ -791,6 +799,13 @@
             var pdata=this.pageData[index==null?this.current:index];
             return pdata&&(pdata.percent||0);
         },
+        getOffsetParent:function(){
+            var position=getStyle(this.container,'position');
+            if(position&&position!='static'){
+                return this.container;
+            }
+            return this.container.offsetParent||DOC.body;
+        },
         handleEvent:function(oldEvent){
             var ev=filterEvent(oldEvent),
                 canDrag=this.mouse||ev.pointerType!='mouse';
@@ -807,7 +822,7 @@
                             _rect=this.rect,
                             offset=rect[dir]-_rect[dir],
                             cpage=this.pages[cIndex],
-                            total=cpage['offset'+['Width','Height'][dir]],
+                            total=this.offsetParent['offset'+['Width','Height'][dir]],
                             tIndex,percent;
                         if(this.drag==null && _rect.toString()!=rect.toString()){
                             this.drag=Math.abs(offset)>=Math.abs(rect[1-dir]-_rect[1-dir]);
@@ -853,6 +868,7 @@
                             this.rect=[ev.clientX,ev.clientY];
                             this.percent=percent;
                             this.time=+new Date;
+                            this.offsetParent=this.getOffsetParent();
                             if(!isTouch && (nn=='a' || nn=='img')){
                                 ev.preventDefault();
                             }
@@ -861,7 +877,7 @@
                             isDrag=this.drag;
 
                             if(tm=this.time){
-                                each("rect drag time percent _offset".split(" "),function(prop){
+                                each("rect drag time percent _offset offsetParent".split(" "),function(prop){
                                     delete self[prop];
                                 });
                             }
@@ -928,7 +944,7 @@
             var pageData=this.pageData;
 
             offListener(this.container,STARTEVENT+" click"+(this.mousewheel?" mousewheel DOMMouseScroll":""),this.handler);
-            offListener(document,MOVEEVENT+(this.arrowkey?" keydown":""),this.handler);
+            offListener(DOC,MOVEEVENT+(this.arrowkey?" keydown":""),this.handler);
 
             each(this.pages,function(page,index){
                 page.style.cssText=pageData[index].cssText;
