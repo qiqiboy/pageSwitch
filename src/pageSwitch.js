@@ -181,16 +181,16 @@
                 if(cpage.parentNode==this.container){
                     createWrap(cpage,this.container);
                 }
-                cpage.parentNode.style.zIndex=cp<0?1:0;
-                cpage.parentNode.style[len]=(Math.min(cp==1?-1:cp,0)+1)*100+'%';
+                cpage.parentNode.style.zIndex=cp>0?0:1;
+                cpage.parentNode.style[len]=(Math.min(cp,0)+1)*100+'%';
 
                 if(tpage){
                     tpage.style[len]=end?'100%':total+'px';
                     if(tpage.parentNode==this.container){
                         createWrap(tpage,this.container);
                     }
-                    tpage.parentNode.style.zIndex=cp<0?0:1;
-                    tpage.parentNode.style[len]=(Math.min(tp==1?-1:tp,0)+1)*100+'%';
+                    tpage.parentNode.style.zIndex=cp>0?1:0;
+                    tpage.parentNode.style[len]=(Math.min(tp,0)+1)*100+'%';
                 }
 
                 fixBlock(cpage,tpage,this.pages,this.container);
@@ -277,7 +277,7 @@
                     createWrap(cpage._clone||(cpage._clone=cpage.cloneNode(true)),this.container,prop,.5);
 
                     m=n=-cp*180*fix;
-                    cp<=0?m=0:n=0;
+                    cp>0?n=0:m=0;
                     cpage.parentNode.style.zIndex=cpage._clone.parentNode.style.zIndex=zIndex;
                     cpage.parentNode.style[transform]='perspective(1000px) rotate'+prop+'('+m+'deg)';
                     cpage._clone.parentNode.style[transform]='perspective(1000px) rotate'+prop+'('+n+'deg)';
@@ -287,7 +287,7 @@
                         createWrap(tpage._clone||(tpage._clone=tpage.cloneNode(true)),this.container,prop,.5);
 
                         m=n=-tp*180*fix;
-                        cp<=0?n=0:m=0;
+                        cp>0?m=0:n=0;
                         tpage.parentNode.style.zIndex=tpage._clone.parentNode.style.zIndex=1-zIndex;
                         tpage.parentNode.style[transform]='perspective(1000px) rotate'+prop+'('+m+'deg)';
                         tpage._clone.parentNode.style[transform]='perspective(1000px) rotate'+prop+'('+n+'deg)';
