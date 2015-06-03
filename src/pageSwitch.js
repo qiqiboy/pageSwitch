@@ -277,7 +277,7 @@
                     createWrap(cpage._clone||(cpage._clone=cpage.cloneNode(true)),this.container,prop,.5);
 
                     m=n=-cp*180*fix;
-                    cp<0?m=0:n=0;
+                    cp<=0?m=0:n=0;
                     cpage.parentNode.style.zIndex=cpage._clone.parentNode.style.zIndex=zIndex;
                     cpage.parentNode.style[transform]='perspective(1000px) rotate'+prop+'('+m+'deg)';
                     cpage._clone.parentNode.style[transform]='perspective(1000px) rotate'+prop+'('+n+'deg)';
@@ -287,7 +287,7 @@
                         createWrap(tpage._clone||(tpage._clone=tpage.cloneNode(true)),this.container,prop,.5);
 
                         m=n=-tp*180*fix;
-                        cp<0?n=0:m=0;
+                        cp<=0?n=0:m=0;
                         tpage.parentNode.style.zIndex=tpage._clone.parentNode.style.zIndex=1-zIndex;
                         tpage.parentNode.style[transform]='perspective(1000px) rotate'+prop+'('+m+'deg)';
                         tpage._clone.parentNode.style[transform]='perspective(1000px) rotate'+prop+'('+n+'deg)';
