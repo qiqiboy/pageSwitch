@@ -553,10 +553,9 @@
             if('empty' in range)range.empty();
             else if('removeAllRanges' in range)range.removeAllRanges();
         }else{
-            range=DOC.selection.createRange();
-            range.moveEnd("character",-range.text.length);
-            range.select();
+            DOC.selection.clear();
         }
+
     }
 
     function filterEvent(oldEvent){
