@@ -172,7 +172,7 @@
             return function(cpage,cp,tpage,tp){
                 var prop=name||['X','Y'][this.direction],
                     len=prop=='X'?'width':'height',
-                    total=this.container[camelCase('offset-'+len)],
+                    total=this.container[camelCase('client-'+len)],
                     m=Math.abs(cp)*100,
                     n=Math.abs(tp)*100,
                     end=cp==0||tp==0;
