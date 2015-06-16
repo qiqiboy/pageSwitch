@@ -512,8 +512,8 @@
     }
 
     function getStyle(elem,prop){
-		var style=ROOT.getComputedStyle&&ROOT.getComputedStyle(elem,null)||elem.currentStyle||elem.style;
-		return style[prop];
+        var style=ROOT.getComputedStyle&&ROOT.getComputedStyle(elem,null)||elem.currentStyle||elem.style;
+        return style[prop];
     }
 
     function addListener(elem,evstr,handler){
