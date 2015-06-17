@@ -897,7 +897,6 @@
                     break;
 
                 case 1:
-                    var startEv=true;
                 case 3:
                     if(canDrag){
                         var self=this,
