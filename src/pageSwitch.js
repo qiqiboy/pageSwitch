@@ -586,7 +586,7 @@
             ev.clientY=oldEvent.touches.item(0).clientY;
         }
         
-        ev.button=which<4?which-1:button&4&&1||button&2; // left:0 middle:1 right:2
+        ev.button=which<4?Math.max(0,which-1):button&4&&1||button&2; // left:0 middle:1 right:2
         ev.touchNum=oldEvent.touches&&oldEvent.touches.length||0;
 
         return ev;
@@ -807,7 +807,7 @@
         },
         handleEvent:function(oldEvent){
             var ev=filterEvent(oldEvent),
-                canDrag=this.mouse||ev.pointerType!='mouse';
+                canDrag=ev.button<1&&(this.mouse||ev.pointerType!='mouse');
 
             switch(ev.type.toLowerCase()){
                 case 'mousemove':
@@ -845,7 +845,7 @@
                 case 'touchstart':
                 case 'pointerdown':
                 case 'mspointerdown':
-                    var startEv=!ev.button;
+                    var startEv=true;
                 case 'mouseup':
                 case 'touchend':
                 case 'touchcancel':
