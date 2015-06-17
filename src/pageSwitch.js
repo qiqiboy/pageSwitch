@@ -7,7 +7,7 @@
 (function(ROOT, struct, undefined){
     "use strict";
     
-    var VERSION='2.2.6';
+    var VERSION='2.2.7';
     var lastTime=0,
         nextFrame=ROOT.requestAnimationFrame            ||
                 ROOT.webkitRequestAnimationFrame        ||
@@ -57,6 +57,22 @@
         }(),
         toString=Object.prototype.toString,
         class2type={},
+        event2type={
+            click:4,
+            mousewheel:5,
+            dommousescroll:5,
+            keydown:6
+        },
+        TOUCHES={
+            item:function(n){
+                var i=0,key;
+                for(key in this){
+                    if(key!='item'&&i++==n){
+                        return this[key];
+                    }
+                }
+            }
+        },
         EASE={
             linear:function(t,b,c,d){ return c*t/d + b; },
             ease:function(t,b,c,d){ return -c * ((t=t/d-1)*t*t*t - 1) + b; },
@@ -86,6 +102,10 @@
                 }
             }
         };
+
+    each(EVENT.toLowerCase().split(" "),function(name){
+        event2type[name]=/(?:start|down)$/.test(name)?1:/move$/.test(name)?2:3;
+    });
 
     /pointer/i.test(eventType) && (eventType='pointer');
 
@@ -480,6 +500,20 @@
     function isFunction(func){
         return type(func)=='function';
     }
+
+    function getObjLength(obj){
+        var len=0,key;
+        if('length' in obj && type(obj.length)=='number'){
+            len=obj.length;
+        }else{
+            for(key in obj){
+                if(obj.hasOwnProperty(key)&&key!='item'){
+                    len++;
+                }
+            }
+        }
+        return len;
+    }
     
     function each(arr, iterate){
         if(isArrayLike(arr)){
@@ -561,14 +595,16 @@
     function filterEvent(oldEvent){
         var ev={},
             which=oldEvent.which,
-            button=oldEvent.button;
+            button=oldEvent.button,
+            touch;
 
-        each("clientX clientY type wheelDelta detail which keyCode".split(" "),function(prop){
+        each("wheelDelta detail which keyCode".split(" "),function(prop){
             ev[prop]=oldEvent[prop];
         });
 
         ev.oldEvent=oldEvent;
-
+        
+        ev.type=oldEvent.type.toLowerCase();
         ev.pointerType=oldEvent.pointerType||eventType;
 
         ev.target=oldEvent.target||oldEvent.srcElement||DOC.documentElement;
@@ -581,13 +617,35 @@
             ev.returnValue=oldEvent.returnValue=false;
         }
 
-        if(oldEvent.touches && oldEvent.touches.length){
-            ev.clientX=oldEvent.touches.item(0).clientX;
-            ev.clientY=oldEvent.touches.item(0).clientY;
+        switch(event2type[ev.type]){
+            case 1:
+            case 2:
+                if(eventType=='pointer'){
+                    TOUCHES[oldEvent.pointerId]=oldEvent;
+                }else if(eventType=='touch'){
+                    TOUCHES=oldEvent.touches;
+                }else{
+                    TOUCHES[0]=oldEvent;
+                }
+                break;
+            case 3:
+                if(eventType=='pointer'){
+                    delete TOUCHES[oldEvent.pointerId];
+                }else if(eventType=='touch'){
+                    TOUCHES=oldEvent.touches;
+                }else{
+                    delete TOUCHES[0];
+                }
+                break;
+        }
+
+        if(touch=TOUCHES.item(0)){
+            ev.clientX=touch.clientX;
+            ev.clientY=touch.clientY;
         }
         
         ev.button=which<4?Math.max(0,which-1):button&4&&1||button&2; // left:0 middle:1 right:2
-        ev.touchNum=oldEvent.touches&&oldEvent.touches.length||0;
+        ev.length=getObjLength(TOUCHES);
 
         return ev;
     }
@@ -809,12 +867,9 @@
             var ev=filterEvent(oldEvent),
                 canDrag=ev.button<1&&(this.mouse||ev.pointerType!='mouse');
 
-            switch(ev.type.toLowerCase()){
-                case 'mousemove':
-                case 'touchmove':
-                case 'pointermove':
-                case 'mspointermove':
-                    if(canDrag && this.rect&&ev.touchNum<2){
+            switch(event2type[ev.type]){
+                case 2:
+                    if(canDrag && this.rect&&ev.length<2){
                         var cIndex=this.current,
                             dir=this.direction,
                             rect=[ev.clientX,ev.clientY],
@@ -841,24 +896,15 @@
                     }
                     break;
 
-                case 'mousedown':
-                case 'touchstart':
-                case 'pointerdown':
-                case 'mspointerdown':
+                case 1:
                     var startEv=true;
-                case 'mouseup':
-                case 'touchend':
-                case 'touchcancel':
-                case 'pointerup':
-                case 'mspointerup':
-                case 'pointercancel':
-                case 'mspointercancel':
+                case 3:
                     if(canDrag){
                         var self=this,
                             index=this.current,
                             percent=this.getPercent(),
                             isDrag,offset,tm,nn;
-                        if(!this.time&&startEv||ev.touchNum){
+                        if(ev.length){
                             nn=ev.target.nodeName.toLowerCase();
                             if(this.timer){
                                 cancelFrame(this.timer);
@@ -898,14 +944,13 @@
                     }
                     break;
 
-                case 'click':
+                case 4:
                     if(this.timer){
                         ev.preventDefault();
                     }
                     break;
 
-                case 'mousewheel':
-                case 'dommousescroll':
+                case 5:console.log(ev)
                     ev.preventDefault();
                     if(this.isStatic() && +new Date-this.latestTime>Math.max(1000-this.duration,0)){
                         var wd=ev.wheelDelta||-ev.detail;
@@ -913,7 +958,7 @@
                     }
                     break;
 
-                case 'keydown':
+                case 6:
                     var nn=ev.target.nodeName.toLowerCase();
                     if(this.isStatic() && nn!='input' && nn!='textarea'){
                         switch(ev.keyCode||ev.which){
