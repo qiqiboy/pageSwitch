@@ -950,7 +950,7 @@
                     }
                     break;
 
-                case 5:console.log(ev)
+                case 5:
                     ev.preventDefault();
                     if(this.isStatic() && +new Date-this.latestTime>Math.max(1000-this.duration,0)){
                         var wd=ev.wheelDelta||-ev.detail;
