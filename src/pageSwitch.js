@@ -88,10 +88,6 @@
         };
 
     /pointer/i.test(eventType) && (eventType='pointer');
-    if(eventType!='mouse'){
-        STARTEVENT+=' mosuedown';
-        MOVEEVENT+='mousemove mouseup';
-    }
 
     each("Boolean Number String Function Array Date RegExp Object Error".split(" "),function(name){
         class2type["[object "+name+"]"]=name.toLowerCase();
@@ -811,8 +807,7 @@
         },
         handleEvent:function(oldEvent){
             var ev=filterEvent(oldEvent),
-                type=ev.type.toLowerCase(),
-                canDrag=(this.mouse||ev.pointerType!='mouse')&&(type.substring(0,5)!='mouse'||!this.hasInput);
+                canDrag=this.mouse||ev.pointerType!='mouse';
 
             switch(ev.type.toLowerCase()){
                 case 'mousemove':
@@ -846,11 +841,10 @@
                     }
                     break;
 
+                case 'mousedown':
                 case 'touchstart':
                 case 'pointerdown':
                 case 'mspointerdown':
-                    this.hasInput=true;
-                case 'mousedown':
                     var startEv=!ev.button;
                 case 'mouseup':
                 case 'touchend':
@@ -882,7 +876,7 @@
                             isDrag=this.drag;
 
                             if(tm=this.time){
-                                each("rect drag time percent hasInput _offset offsetParent".split(" "),function(prop){
+                                each("rect drag time percent _offset offsetParent".split(" "),function(prop){
                                     delete self[prop];
                                 });
                             }
