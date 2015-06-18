@@ -613,7 +613,6 @@
         }else{
             DOC.selection.clear();
         }
-
     }
 
     function filterEvent(oldEvent){
