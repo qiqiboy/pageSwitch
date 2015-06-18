@@ -951,7 +951,7 @@
                             isDrag=this.drag;
 
                             if(tm=this.time){
-                                each("rect drag time percent pointerType _offset offsetParent".split(" "),function(prop){
+                                each("rect drag time percent _offset offsetParent".split(" "),function(prop){
                                     delete self[prop];
                                 });
                             }
@@ -971,6 +971,11 @@
                             }
                         }
                     }
+
+                    if(!ev.length){
+                        delete this.pointerType;
+                    }
+
                     break;
 
                 case 4:
