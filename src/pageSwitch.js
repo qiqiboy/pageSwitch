@@ -56,6 +56,12 @@
             dommousescroll:5,
             keydown:6
         },
+        POINTERTYPES={
+            2:'touch',
+            3:'pen',
+            4:'mouse',
+            pen:'pen'
+        },
         STARTEVENT=[],
         MOVEEVENT=[],
         EVENT=function(){
@@ -71,6 +77,7 @@
             each("mouse touch pointer MSPointer-".split(" "),function(prefix){
                 var _prefix=/pointer/i.test(prefix)?'pointer':prefix;
                 ret[_prefix]=ret[_prefix]||{};
+                POINTERTYPES[_prefix]=_prefix;
                 each(states,function(endfix,code){
                     var ev=camelCase(prefix+endfix);
                     ret[_prefix][ev]=code;
@@ -630,7 +637,7 @@
         ev.type=oldEvent.type.toLowerCase();
         ev.eventType=eventtype=event2type[ev.type]||ev.type;
         ev.eventCode=eventcode=event2code[ev.type]||0;
-        ev.pointerType=oldEvent.pointerType||eventtype;
+        ev.pointerType=POINTERTYPES[oldEvent.pointerType]||oldEvent.pointerType||eventtype;
 
         ev.target=oldEvent.target||oldEvent.srcElement||DOC.documentElement;
         if(ev.target.nodeType===3){
