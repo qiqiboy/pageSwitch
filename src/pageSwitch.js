@@ -7,7 +7,7 @@
 (function(ROOT, struct, undefined){
     "use strict";
     
-    var VERSION='2.2.7';
+    var VERSION='2.3.0';
     var lastTime=0,
         nextFrame=ROOT.requestAnimationFrame            ||
                 ROOT.webkitRequestAnimationFrame        ||
@@ -26,14 +26,6 @@
                 ROOT.msCancelRequestAnimationFrame      ||
                 clearTimeout,
         DOC=ROOT.document,
-        isTouch=("createTouch" in DOC) || ('ontouchstart' in window),
-        eventType=isTouch&&'touch'                      ||
-                ('PointerEvent' in ROOT)&&'pointer'     ||
-                ('MSPointerEvent' in ROOT)&&'MSPointer-'||
-                'mouse',
-        EVENT=camelCase("down start move up end cancel".replace(/(^|\s)/g,'$1'+eventType)),
-        STARTEVENT=EVENT.split(" ").slice(0,2).join(" "),
-        MOVEEVENT=EVENT.split(" ").slice(2).join(" "),
         divstyle=DOC.createElement('div').style,
         cssVendor=function(){
             var tests="-webkit- -moz- -o- -ms-".split(" "),
@@ -57,21 +49,46 @@
         }(),
         toString=Object.prototype.toString,
         class2type={},
-        event2type={
+        event2type={},
+        event2code={
             click:4,
             mousewheel:5,
             dommousescroll:5,
             keydown:6
         },
-        TOUCHES={
-            item:function(n){
-                var i=0,key;
-                for(key in this){
-                    if(key!='item'&&i++==n){
-                        return this[key];
+        STARTEVENT=[],
+        MOVEEVENT=[],
+        EVENT=function(){
+            var ret={},
+                states={
+                    start:1,
+                    down:1,
+                    move:2,
+                    end:3,
+                    up:3,
+                    cancel:3
+                };
+            each("mouse touch pointer MSPointer-".split(" "),function(prefix){
+                var _prefix=/pointer/i.test(prefix)?'pointer':prefix;
+                ret[_prefix]=ret[_prefix]||{};
+                each(states,function(endfix,code){
+                    var ev=camelCase(prefix+endfix);
+                    ret[_prefix][ev]=code;
+                    event2type[ev.toLowerCase()]=_prefix;
+                    event2code[ev.toLowerCase()]=code;
+                    if(code==1){
+                        STARTEVENT.push(ev);
+                    }else{
+                        MOVEEVENT.push(ev);
                     }
-                }
-            }
+                });
+            });
+            return ret;
+        }(),
+        POINTERS={
+            touch:{},
+            pointer:{},
+            mouse:{}
         },
         EASE={
             linear:function(t,b,c,d){ return c*t/d + b; },
@@ -102,12 +119,6 @@
                 }
             }
         };
-
-    each(EVENT.toLowerCase().split(" "),function(name){
-        event2type[name]=/(?:start|down)$/.test(name)?1:/move$/.test(name)?2:3;
-    });
-
-    /pointer/i.test(eventType) && (eventType='pointer');
 
     each("Boolean Number String Function Array Date RegExp Object Error".split(" "),function(name){
         class2type["[object "+name+"]"]=name.toLowerCase();
@@ -501,18 +512,31 @@
         return type(func)=='function';
     }
 
-    function getObjLength(obj){
+    function pointerLength(obj){
         var len=0,key;
-        if('length' in obj && type(obj.length)=='number'){
+        if(type(obj.length)=='number'){
             len=obj.length;
+        }else if('keys' in Object){
+            len=Object.keys(obj).length;
         }else{
             for(key in obj){
-                if(obj.hasOwnProperty(key)&&key!='item'){
+                if(obj.hasOwnProperty(key)){
                     len++;
                 }
             }
         }
         return len;
+    }
+
+    function pointerItem(obj,n){
+        return 'item' in obj?obj.item(n):function(){
+            var i=0,key;
+            for(key in this){
+                if(i++==n){
+                    return this[key];
+                }
+            }
+        }.call(obj,n);
     }
     
     function each(arr, iterate){
@@ -596,7 +620,7 @@
         var ev={},
             which=oldEvent.which,
             button=oldEvent.button,
-            touch;
+            pointers,pointer,eventtype,eventcode;
 
         each("wheelDelta detail which keyCode".split(" "),function(prop){
             ev[prop]=oldEvent[prop];
@@ -605,7 +629,9 @@
         ev.oldEvent=oldEvent;
         
         ev.type=oldEvent.type.toLowerCase();
-        ev.pointerType=oldEvent.pointerType||eventType;
+        ev.eventType=eventtype=event2type[ev.type]||ev.type;
+        ev.eventCode=eventcode=event2code[ev.type]||0;
+        ev.pointerType=oldEvent.pointerType||eventtype;
 
         ev.target=oldEvent.target||oldEvent.srcElement||DOC.documentElement;
         if(ev.target.nodeType===3){
@@ -617,35 +643,37 @@
             ev.returnValue=oldEvent.returnValue=false;
         }
 
-        switch(event2type[ev.type]){
-            case 1:
-            case 2:
-                if(eventType=='pointer'){
-                    TOUCHES[oldEvent.pointerId]=oldEvent;
-                }else if(eventType=='touch'){
-                    TOUCHES=oldEvent.touches;
-                }else{
-                    TOUCHES[0]=oldEvent;
-                }
-                break;
-            case 3:
-                if(eventType=='pointer'){
-                    delete TOUCHES[oldEvent.pointerId];
-                }else if(eventType=='touch'){
-                    TOUCHES=oldEvent.touches;
-                }else{
-                    delete TOUCHES[0];
-                }
-                break;
-        }
+        if(pointers=POINTERS[eventtype]){
+            switch(eventcode){
+                case 1:
+                case 2:
+                    if(eventtype=='pointer'){
+                        pointers[oldEvent.pointerId]=oldEvent;
+                    }else if(eventtype=='touch'){
+                        POINTERS[eventtype]=pointers=oldEvent.touches;
+                    }else{
+                        pointers[0]=oldEvent;
+                    }
+                    break;
+                case 3:
+                    if(eventtype=='pointer'){
+                        delete pointers[oldEvent.pointerId];
+                    }else if(eventtype=='touch'){
+                        POINTERS[eventtype]=pointers=oldEvent.touches;
+                    }else{
+                        delete pointers[0];
+                    }
+                    break;
+            }
 
-        if(touch=TOUCHES.item(0)){
-            ev.clientX=touch.clientX;
-            ev.clientY=touch.clientY;
+            if(pointer=pointerItem(pointers,0)){
+                ev.clientX=pointer.clientX;
+                ev.clientY=pointer.clientY;
+            }
+            
+            ev.button=which<4?Math.max(0,which-1):button&4&&1||button&2; // left:0 middle:1 right:2
+            ev.length=pointerLength(pointers);
         }
-        
-        ev.button=which<4?Math.max(0,which-1):button&4&&1||button&2; // left:0 middle:1 right:2
-        ev.length=getObjLength(TOUCHES);
 
         return ev;
     }
@@ -676,8 +704,8 @@
 
             this.pageData=[];
 
-            addListener(this.container,STARTEVENT+" click"+(this.mousewheel?" mousewheel DOMMouseScroll":""),handler);
-            addListener(DOC,MOVEEVENT+(this.arrowkey?" keydown":""),handler);
+            addListener(this.container,STARTEVENT.join(" ")+" click"+(this.mousewheel?" mousewheel DOMMouseScroll":""),handler);
+            addListener(DOC,MOVEEVENT.join(" ")+(this.arrowkey?" keydown":""),handler);
 
             each(this.pages,function(page){
                 self.pageData.push({
@@ -865,9 +893,9 @@
         },
         handleEvent:function(oldEvent){
             var ev=filterEvent(oldEvent),
-                canDrag=ev.button<1&&(this.mouse||ev.pointerType!='mouse');
+                canDrag=ev.button<1&&(!this.pointerType||this.pointerType==event2type[ev.type])&&(this.mouse||ev.pointerType!='mouse');
 
-            switch(event2type[ev.type]){
+            switch(ev.eventCode){
                 case 2:
                     if(canDrag && this.rect&&ev.length<2){
                         var cIndex=this.current,
@@ -897,6 +925,9 @@
                     break;
 
                 case 1:
+                    if(!this.pointerType){
+                        this.pointerType=ev.eventType;
+                    }
                 case 3:
                     if(canDrag){
                         var self=this,
@@ -913,7 +944,7 @@
                             this.percent=percent;
                             this.time=+new Date;
                             this.offsetParent=this.getOffsetParent();
-                            if(!isTouch && (nn=='a' || nn=='img')){
+                            if(ev.eventType!='touch' && (nn=='a' || nn=='img')){
                                 ev.preventDefault();
                             }
                         }else if(this.time){
@@ -921,7 +952,7 @@
                             isDrag=this.drag;
 
                             if(tm=this.time){
-                                each("rect drag time percent _offset offsetParent".split(" "),function(prop){
+                                each("rect drag time percent pointerType _offset offsetParent".split(" "),function(prop){
                                     delete self[prop];
                                 });
                             }
