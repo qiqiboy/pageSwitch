@@ -400,10 +400,10 @@
                     zIndex=Number(type=='In'||!type&&cp<0||type=='Reverse'&&cp>0),
                     cr=100,tr=100;
                 zIndex?cr=20:tr=20;
-                transform?cpage.style[transform]='translate'+prop+'('+cp*cr+'%)'+fire3D:cpage.style[XY[prop]]=cp*100+'%';
+                transform?cpage.style[transform]='translate'+prop+'('+cp*cr+'%)'+fire3D:cpage.style[XY[prop]]=cp*cr+'%';
                 cpage.style.zIndex=1-zIndex;
                 if(tpage){
-                    transform?tpage.style[transform]='translate'+prop+'('+tp*tr+'%)'+fire3D:tpage.style[XY[prop]]=tp*100+'%';
+                    transform?tpage.style[transform]='translate'+prop+'('+tp*tr+'%)'+fire3D:tpage.style[XY[prop]]=tp*tr+'%';
                     tpage.style.zIndex=zIndex;
                 }
             }
@@ -411,23 +411,27 @@
             TRANSITION['slideCover'+type+name]=function(cpage,cp,tpage,tp){
                 var prop=name||['X','Y'][this.direction],
                     zIndex=Number(type=='In'||!type&&cp<0||type=='Reverse'&&cp>0);
-                transform?cpage.style[transform]='translate'+prop+'('+cp*(100-zIndex*100)+'%) scale('+((1-Math.abs(zIndex&&cp))*.2+.8)+')'+fire3D:cpage.style[XY[prop]]=cp*100+'%';
-                cpage.style.zIndex=1-zIndex;
-                if(tpage){
-                    transform?tpage.style[transform]='translate'+prop+'('+tp*zIndex*100+'%) scale('+((1-Math.abs(zIndex?0:tp))*.2+.8)+')'+fire3D:tpage.style[XY[prop]]=tp*100+'%';
-                    tpage.style.zIndex=zIndex;
-                }
+                if(transform){
+                    cpage.style[transform]='translate'+prop+'('+cp*(100-zIndex*100)+'%) scale('+((1-Math.abs(zIndex&&cp))*.2+.8)+')'+fire3D;
+                    cpage.style.zIndex=1-zIndex;
+                    if(tpage){
+                        tpage.style[transform]='translate'+prop+'('+tp*zIndex*100+'%) scale('+((1-Math.abs(zIndex?0:tp))*.2+.8)+')'+fire3D;
+                        tpage.style.zIndex=zIndex;
+                    }
+                }else TRANSITION['scrollCover'+type+name].apply(this,arguments);
             }
 
             TRANSITION['flowCover'+type+name]=function(cpage,cp,tpage,tp){
                 var prop=name||['X','Y'][this.direction],
                     zIndex=Number(type=='In'||!type&&cp<0||type=='Reverse'&&cp>0);
-                transform?cpage.style[transform]='translate'+prop+'('+cp*(100-zIndex*50)+'%) scale('+((1-Math.abs(cp))*.5+.5)+')'+fire3D:cpage.style[XY[prop]]=cp*100+'%';
-                cpage.style.zIndex=1-zIndex;
-                if(tpage){
-                    transform?tpage.style[transform]='translate'+prop+'('+tp*(50+zIndex*50)+'%) scale('+((1-Math.abs(tp))*.5+.5)+')'+fire3D:tpage.style[XY[prop]]=tp*100+'%';
-                    tpage.style.zIndex=zIndex;
-                }
+                if(transform){
+                    cpage.style[transform]='translate'+prop+'('+cp*(100-zIndex*50)+'%) scale('+((1-Math.abs(cp))*.5+.5)+')'+fire3D;
+                    cpage.style.zIndex=1-zIndex;
+                    if(tpage){
+                        tpage.style[transform]='translate'+prop+'('+tp*(50+zIndex*50)+'%) scale('+((1-Math.abs(tp))*.5+.5)+')'+fire3D;
+                        tpage.style.zIndex=zIndex;
+                    }
+                }else TRANSITION['scrollCover'+type+name].apply(this,arguments);
             }
 
             TRANSITION['flipCover'+type+name]=function(cpage,cp,tpage,tp){
