@@ -109,6 +109,12 @@ pw.setEase(function(t,b,c,d){
 `slideCoverReverse`	同上反向 | [demo](http://u.boy.im/pageswitch/pic.html?ts=slideCoverReverse)   
 `slideCoverIn`  	总是下一张页面滑入 | [demo](http://u.boy.im/pageswitch/pic.html?ts=slideCoverIn)   
 `slideCoverOut` 	总是当前页面滑出 | [demo](http://u.boy.im/pageswitch/pic.html?ts=slideCoverOut)     
+
+`flow`				封面滑动切换 | [demo](http://u.boy.im/pageswitch/pic.html?ts=flow)   
+`flowCover`		页面滑入滑出 | [demo](http://u.boy.im/pageswitch/pic.html?ts=flowCover)   
+`flowCoverReverse`	同上反向 | [demo](http://u.boy.im/pageswitch/pic.html?ts=flowCoverReverse)   
+`flowCoverIn`  	总是下一张页面滑入 | [demo](http://u.boy.im/pageswitch/pic.html?ts=flowCoverIn)   
+`flowCoverOut` 	总是当前页面滑出 | [demo](http://u.boy.im/pageswitch/pic.html?ts=flowCoverOut)  
   
 `zoom`				缩放切换 | [demo](http://u.boy.im/pageswitch/pic.html?ts=zoom)   
 `zoomCover`			页面缩进缩出 | [demo](http://u.boy.im/pageswitch/pic.html?ts=zoomCover)   
