@@ -171,11 +171,11 @@
         TRANSITION['slide'+name]=function(cpage,cp,tpage,tp){
             var prop=name||['X','Y'][this.direction],
                 zIndex=cp<0?1:0;
-            transform?cpage.style[transform]='translate'+prop+'('+(zIndex?cp*100:0)+'%) scale('+((1-Math.abs(cp))*.5+.5)+')'+fire3D:cpage.style[XY[prop]]=cp*100+'%';
-            cpage.style.zIndex=zIndex;
+            transform?cpage.style[transform]='translate'+prop+'('+cp*(100-zIndex*50)+'%) scale('+((1-Math.abs(cp))*.5+.5)+')'+fire3D:cpage.style[XY[prop]]=cp*100+'%';
+            cpage.style.zIndex=1-zIndex;
             if(tpage){
-                transform?tpage.style[transform]='translate'+prop+'('+(zIndex?0:tp*100)+'%) scale('+((1-Math.abs(tp))*.5+.5)+')'+fire3D:tpage.style[XY[prop]]=tp*100+'%';
-                tpage.style.zIndex=1-zIndex;
+                transform?tpage.style[transform]='translate'+prop+'('+tp*(50+zIndex*50)+'%) scale('+((1-Math.abs(tp))*.5+.5)+')'+fire3D:tpage.style[XY[prop]]=tp*100+'%';
+                tpage.style.zIndex=zIndex;
             }
         }
 
@@ -990,7 +990,7 @@
 
                 case 6:
                     var nn=ev.target.nodeName.toLowerCase();
-                    if(this.isStatic() && nn!='input' && nn!='textarea'){
+                    if(this.isStatic() && nn!='input' && nn!='textarea' && nn!='select'){
                         switch(ev.keyCode||ev.which){
                             case 33:
                             case 37:
