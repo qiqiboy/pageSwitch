@@ -1,9 +1,9 @@
 pageSwitch
 =========
 
-Just a page Switch Javascript Library, and it has supported 106 switching animations.
+Just a page Switch Javascript Library, and it has supported 121 switching animations.
 
-页面切换器，支持多达106种切页效果，更可支持自定义切页动画， 尽情发挥想象力！  
+页面切换器，支持多达121种切页效果，更可支持自定义切页动画， 尽情发挥想象力！  
 
 http://u.boy.im/pageswitch/pic.html  
 
