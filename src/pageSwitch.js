@@ -169,24 +169,14 @@
         }
 
         TRANSITION['slide'+name]=function(cpage,cp,tpage,tp){
-            var prop=name||['X','Y'][this.direction];
-            if(transform){
-                if(cp<0){
-                    cpage.style[transform]='translate'+prop+'('+cp*100+'%)'+fire3D;
-                    cpage.style.zIndex=1;
-                    if(tpage){
-                        tpage.style[transform]='scale('+(-cp*.2+.8)+')'+fire3D;
-                        tpage.style.zIndex=0;
-                    }
-                }else{
-                    if(tpage){
-                        tpage.style[transform]='translate'+prop+'('+tp*100+'%)'+fire3D;
-                        tpage.style.zIndex=1;
-                    }
-                    cpage.style[transform]='scale('+((1-cp)*.2+.8)+')'+fire3D;
-                    cpage.style.zIndex=0;
-                }
-            }else TRANSITION['slideCover'+name].apply(this,arguments);
+            var prop=name||['X','Y'][this.direction],
+                zIndex=cp<0?1:0;
+            transform?cpage.style[transform]='translate'+prop+'('+(zIndex?cp*100:0)+'%) scale('+((1-Math.abs(cp))*.5+.5)+')'+fire3D:cpage.style[XY[prop]]=cp*100+'%';
+            cpage.style.zIndex=zIndex;
+            if(tpage){
+                transform?tpage.style[transform]='translate'+prop+'('+(zIndex?0:tp*100)+'%) scale('+((1-Math.abs(tp))*.5+.5)+')'+fire3D:tpage.style[XY[prop]]=tp*100+'%';
+                tpage.style.zIndex=1-zIndex;
+            }
         }
 
         TRANSITION['slice'+name]=function(){
@@ -424,11 +414,10 @@
             TRANSITION['slideCover'+type+name]=function(cpage,cp,tpage,tp){
                 var prop=name||['X','Y'][this.direction],
                     zIndex=Number(type=='In'||!type&&cp<0||type=='Reverse'&&cp>0);
-                zIndex?cp=0:tp=0;
-                transform?cpage.style[transform]='translate'+prop+'('+cp*100+'%)'+fire3D:cpage.style[XY[prop]]=cp*100+'%';
+                transform?cpage.style[transform]='translate'+prop+'('+(zIndex?0:cp*100)+'%) scale('+(zIndex?(1-Math.abs(cp))*.2+.8:1)+')'+fire3D:cpage.style[XY[prop]]=cp*100+'%';
                 cpage.style.zIndex=1-zIndex;
                 if(tpage){
-                    transform?tpage.style[transform]='translate'+prop+'('+tp*100+'%)'+fire3D:tpage.style[XY[prop]]=tp*100+'%';
+                    transform?tpage.style[transform]='translate'+prop+'('+(zIndex?tp*100:0)+'%) scale('+(zIndex?1:(1-Math.abs(tp))*.2+.8)+')'+fire3D:tpage.style[XY[prop]]=tp*100+'%';
                     tpage.style.zIndex=zIndex;
                 }
             }
