@@ -7,7 +7,7 @@
 (function(ROOT, struct, undefined){
     "use strict";
     
-    var VERSION='2.3.0';
+    var VERSION='2.3.1';
     var lastTime=0,
         nextFrame=ROOT.requestAnimationFrame            ||
                 ROOT.webkitRequestAnimationFrame        ||
@@ -1028,12 +1028,14 @@
         destroy:function(){
             var pageData=this.pageData;
 
-            offListener(this.container,STARTEVENT+" click"+(this.mousewheel?" mousewheel DOMMouseScroll":""),this.handler);
-            offListener(DOC,MOVEEVENT+(this.arrowkey?" keydown":""),this.handler);
+            offListener(this.container,STARTEVENT.join(" ")+" click"+(this.mousewheel?" mousewheel DOMMouseScroll":""),this.handler);
+            offListener(DOC,MOVEEVENT.join(" ")+(this.arrowkey?" keydown":""),this.handler);
 
             each(this.pages,function(page,index){
                 page.style.cssText=pageData[index].cssText;
             });
+
+            this.length=0;
             
             return this.pause();
         },
