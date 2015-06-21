@@ -651,25 +651,15 @@
         }
 
         if(pointers=POINTERS[eventtype]){
-            switch(eventcode){
-                case 1:
-                case 2:
-                    if(eventtype=='pointer'){
-                        pointers[oldEvent.pointerId]=oldEvent;
-                    }else if(eventtype=='touch'){
-                        POINTERS[eventtype]=pointers=oldEvent.touches;
-                    }else{
-                        pointers[0]=oldEvent;
-                    }
+            switch(eventtype){
+                case 'mouse':
+                case 'pointer':
+                    eventcode==3 ?
+                        delete pointers[oldEvent.pointerId||0] :
+                        pointers[oldEvent.pointerId||0]=oldEvent;
                     break;
-                case 3:
-                    if(eventtype=='pointer'){
-                        delete pointers[oldEvent.pointerId];
-                    }else if(eventtype=='touch'){
-                        POINTERS[eventtype]=pointers=oldEvent.touches;
-                    }else{
-                        delete pointers[0];
-                    }
+                case 'touch':
+                    POINTERS[eventtype]=pointers=oldEvent.touches;
                     break;
             }
 
@@ -900,11 +890,11 @@
         },
         handleEvent:function(oldEvent){
             var ev=filterEvent(oldEvent),
-                canDrag=ev.button<1&&(!this.pointerType||this.pointerType==event2type[ev.type])&&(this.mouse||ev.pointerType!='mouse');
+                canDrag=ev.length<2&&ev.button<1&&(!this.pointerType||this.pointerType==event2type[ev.type])&&(this.mouse||ev.pointerType!='mouse');
 
             switch(ev.eventCode){
                 case 2:
-                    if(canDrag && this.rect&&ev.length<2){
+                    if(canDrag&&this.rect){
                         var cIndex=this.current,
                             dir=this.direction,
                             rect=[ev.clientX,ev.clientY],
@@ -932,7 +922,7 @@
                     break;
 
                 case 1:
-                    if(!this.pointerType){
+                    if(canDrag&&!this.pointerType){
                         this.pointerType=ev.eventType;
                     }
                 case 3:
@@ -954,12 +944,12 @@
                             if(ev.eventType!='touch' && (nn=='a' || nn=='img')){
                                 ev.preventDefault();
                             }
-                        }else if(this.time){
+                        }else{
                             offset=this._offset;
                             isDrag=this.drag;
 
                             if(tm=this.time){
-                                each("rect drag time percent _offset offsetParent".split(" "),function(prop){
+                                each("rect drag time percent _offset offsetParent pointerType".split(" "),function(prop){
                                     delete self[prop];
                                 });
                             }
@@ -978,10 +968,6 @@
                                 this.slide(index);
                             }
                         }
-                    }
-
-                    if(!ev.length){
-                        delete this.pointerType;
                     }
 
                     break;
