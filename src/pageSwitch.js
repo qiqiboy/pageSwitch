@@ -944,15 +944,13 @@
                             if(ev.eventType!='touch' && (nn=='a' || nn=='img')){
                                 ev.preventDefault();
                             }
-                        }else{
+                        }else if(tm=this.time){
                             offset=this._offset;
                             isDrag=this.drag;
 
-                            if(tm=this.time){
-                                each("rect drag time percent _offset offsetParent pointerType".split(" "),function(prop){
-                                    delete self[prop];
-                                });
-                            }
+                            each("rect drag time percent _offset offsetParent pointerType".split(" "),function(prop){
+                                delete self[prop];
+                            });
 
                             if(isDrag){
                                 if(+new Date-tm<500 && Math.abs(offset)>20){
