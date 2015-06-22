@@ -890,7 +890,7 @@
         },
         handleEvent:function(oldEvent){
             var ev=filterEvent(oldEvent),
-                canDrag=ev.length<2&&ev.button<1&&(!this.pointerType||this.pointerType==event2type[ev.type])&&(this.mouse||ev.pointerType!='mouse');
+                canDrag=ev.length<2&&ev.button<1&&(!this.pointerType||this.pointerType==ev.eventType)&&(this.mouse||ev.pointerType!='mouse');
 
             switch(ev.eventCode){
                 case 2:
