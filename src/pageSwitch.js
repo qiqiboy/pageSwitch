@@ -654,9 +654,8 @@
             switch(eventtype){
                 case 'mouse':
                 case 'pointer':
-                    eventcode==3 ?
-                        delete pointers[oldEvent.pointerId||0] :
-                        pointers[oldEvent.pointerId||0]=oldEvent;
+                    var id=oldEvent.pointerId||0;
+                    eventcode==3?delete pointers[id]:pointers[id]=oldEvent;
                     break;
                 case 'touch':
                     POINTERS[eventtype]=pointers=oldEvent.touches;
