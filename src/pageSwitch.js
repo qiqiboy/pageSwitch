@@ -627,7 +627,7 @@
         var ev={},
             which=oldEvent.which,
             button=oldEvent.button,
-            pointers,pointer,eventtype,eventcode;
+            pointers,pointer;
 
         each("wheelDelta detail which keyCode".split(" "),function(prop){
             ev[prop]=oldEvent[prop];
@@ -636,9 +636,9 @@
         ev.oldEvent=oldEvent;
         
         ev.type=oldEvent.type.toLowerCase();
-        ev.eventType=eventtype=event2type[ev.type]||ev.type;
-        ev.eventCode=eventcode=event2code[ev.type]||0;
-        ev.pointerType=POINTERTYPES[oldEvent.pointerType]||oldEvent.pointerType||eventtype;
+        ev.eventType=event2type[ev.type]||ev.type;
+        ev.eventCode=event2code[ev.type]||0;
+        ev.pointerType=POINTERTYPES[oldEvent.pointerType]||oldEvent.pointerType||ev.eventtype;
 
         ev.target=oldEvent.target||oldEvent.srcElement||DOC.documentElement;
         if(ev.target.nodeType===3){
@@ -650,15 +650,15 @@
             ev.returnValue=oldEvent.returnValue=false;
         }
 
-        if(pointers=POINTERS[eventtype]){
-            switch(eventtype){
+        if(pointers=POINTERS[ev.eventType]){
+            switch(ev.eventType){
                 case 'mouse':
                 case 'pointer':
                     var id=oldEvent.pointerId||0;
-                    eventcode==3?delete pointers[id]:pointers[id]=oldEvent;
+                    ev.eventCode==3?delete pointers[id]:pointers[id]=oldEvent;
                     break;
                 case 'touch':
-                    POINTERS[eventtype]=pointers=oldEvent.touches;
+                    POINTERS[ev.eventType]=pointers=oldEvent.touches;
                     break;
             }
 
