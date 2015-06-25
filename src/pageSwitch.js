@@ -902,7 +902,7 @@
                             _rect=this.rect,
                             offset=rect[dir]-_rect[dir],
                             cpage=this.pages[cIndex],
-                            total=this.offsetParent['client'+['Width','Height'][dir]],
+                            total=this.offsetParent[dir?'clientHeight':'clientWidth'],
                             tIndex,percent;
                         if(this.drag==null && _rect.toString()!=rect.toString()){
                             this.drag=Math.abs(offset)>=Math.abs(rect[1-dir]-_rect[1-dir]);
