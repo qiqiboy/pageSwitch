@@ -954,10 +954,8 @@
                             });
 
                             if(isDrag){
-                                if(+new Date-tm<500 && Math.abs(offset)>20){
+                                if(+new Date-tm<500&&Math.abs(offset)>20 || Math.abs(percent)>.5){
                                     index+=offset>0?-1:1;
-                                }else if(Math.abs(percent)>.5){
-                                    index+=percent>0?-1:1;
                                 }
                                 this.fire('dragEnd',ev);
                                 ev.preventDefault();
