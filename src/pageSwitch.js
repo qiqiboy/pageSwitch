@@ -619,7 +619,7 @@
             if('empty' in range)range.empty();
             else if('removeAllRanges' in range)range.removeAllRanges();
         }else{
-            DOC.selection.clear();
+            DOC.selection.empty();
         }
     }
 
@@ -713,9 +713,8 @@
             this.pages[this.current].style.display='block';
 
             this.on({
-                before:function(){clearTimeout(self.playTimer)},
-                dragStart:function(){clearTimeout(self.playTimer)},
-                dragMove:function(){removeRange();},
+                before:function(){clearTimeout(self.playTimer);},
+                dragStart:function(){clearTimeout(self.playTimer);removeRange();},
                 after:function(){
                     if(self.playing){
                         self.playTimer=setTimeout(function(){
@@ -725,6 +724,9 @@
                 },
                 update:null
             }).fire('after');
+
+            this.comment=document.createComment(' Powered by pageSwitch v'+this.version+'  https://github.com/qiqiboy/pageSwitch ');
+            this.container.appendChild(this.comment);
 
             this.setEase(config.ease);
             this.setTransition(config.transition);
@@ -1017,6 +1019,8 @@
             each(this.pages,function(page,index){
                 page.style.cssText=pageData[index].cssText;
             });
+
+            this.container.removeChild(this.comment);
 
             this.length=0;
             
