@@ -639,7 +639,7 @@
         ev.type=oldEvent.type.toLowerCase();
         ev.eventType=event2type[ev.type]||ev.type;
         ev.eventCode=event2code[ev.type]||0;
-        ev.pointerType=POINTERTYPES[oldEvent.pointerType]||oldEvent.pointerType||ev.eventtype;
+        ev.pointerType=POINTERTYPES[oldEvent.pointerType]||oldEvent.pointerType||ev.eventType;
 
         ev.target=oldEvent.target||oldEvent.srcElement||DOC.documentElement;
         if(ev.target.nodeType===3){
