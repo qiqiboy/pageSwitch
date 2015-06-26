@@ -714,11 +714,9 @@
             this.pages[this.current].style.display='block';
 
             this.on({
-                before:function(){clearTimeout(self.playTimer);},
-                dragStart:function(){clearTimeout(self.playTimer);removeRange();},
-                after:function(){
-                    self.firePlay();
-                },
+                before:function(){clearTimeout(this.playTimer);},
+                dragStart:function(){clearTimeout(this.playTimer);removeRange();},
+                after:this.firePlay,
                 update:null
             }).firePlay();
 
@@ -850,7 +848,7 @@
             var self=this;
             if(this.playing){
                 this.playTimer=setTimeout(function(){
-                    self.next();
+                    self.slide((self.current+1)%(self.loop&&self.length?self.length:Infinity));
                 },this.interval);
             }
             return this;
@@ -861,7 +859,7 @@
             return this;
         },
         fixIndex:function(index){
-            return this.length>1&&(this.loop||this.playing)?(this.length+index%this.length)%this.length:index;
+            return this.length&&this.loop?(this.length+index)%this.length:index;
         },
         fixBlock:function(cIndex,tIndex){
             each(this.pages,function(page,index){
