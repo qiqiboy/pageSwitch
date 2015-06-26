@@ -48,6 +48,7 @@
             return divstyle[transformStyle]=='preserve-3d';
         }(),
         toString=Object.prototype.toString,
+        slice=[].slice,
         class2type={},
         event2type={},
         event2code={
@@ -716,14 +717,10 @@
                 before:function(){clearTimeout(self.playTimer);},
                 dragStart:function(){clearTimeout(self.playTimer);removeRange();},
                 after:function(){
-                    if(self.playing){
-                        self.playTimer=setTimeout(function(){
-                            self.next();
-                        },self.interval);
-                    }
+                    self.firePlay();
                 },
                 update:null
-            }).fire('after');
+            }).firePlay();
 
             this.comment=document.createComment(' Powered by pageSwitch v'+this.version+'  https://github.com/qiqiboy/pageSwitch ');
             this.container.appendChild(this.comment);
@@ -775,7 +772,7 @@
         },
         fire:function(ev){
             var self=this,
-                args=[].slice.call(arguments,1);
+                args=slice.call(arguments,1);
             each(this.events[ev]||[],function(func){
                 if(isFunction(func)){
                     func.apply(self,args);
@@ -847,7 +844,16 @@
         },
         play:function(){
             this.playing=true;
-            return this.slide(this.current);
+            return this.firePlay();
+        },
+        firePlay:function(){
+            var self=this;
+            if(this.playing){
+                this.playTimer=setTimeout(function(){
+                    self.next();
+                },this.interval);
+            }
+            return this;
         },
         pause:function(){
             this.playing=false;

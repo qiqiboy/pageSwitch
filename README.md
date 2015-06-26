@@ -1,5 +1,9 @@
 pageSwitch
 =========
+> **与 [TouchSlider.js](https://github.com/qiqiboy/touchslider) 的区别**  
+pageSwitch.js适用场景为全屏切换，即一切一屏，并且在此基础上实现了超过一百种切换效果。而TouchSlider.js则侧重于在滑动效果下，不仅支持全屏切换，还支持不固定尺寸的幻灯切换。  
+具体使用请参看各组件所提供的示例。
+
 
 Just a page Switch Javascript Library, and it has supported 121 switching animations.
 
