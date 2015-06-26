@@ -793,16 +793,12 @@
                 cpage=this.pages[current],
                 percent=this.getPercent(),
                 tIndex=this.fixIndex(fixIndex==current?current+(percent>0?-1:1):fixIndex),
+                tpage=this.pages[tIndex],
                 target=index>current?-1:1,
-                _tpage=cpage,tpage;
+                _tpage=cpage;
             
             cancelFrame(this.timer);
 
-            if(current==tIndex){
-                tIndex=-1;
-            }
-            
-            tpage=this.pages[tIndex];
             if(fixIndex==current){
                 target=0;
                 _tpage=tpage;
@@ -863,7 +859,7 @@
             return this;
         },
         fixIndex:function(index){
-            return this.loop?(this.length+index)%this.length:index;
+            return this.length>1&&this.loop?(this.length+index)%this.length:index;
         },
         fixBlock:function(cIndex,tIndex){
             each(this.pages,function(page,index){
@@ -918,9 +914,8 @@
                         }
                         if(this.drag){
                             percent=this.percent+(total&&offset/total);
-                            if(!this.pages[tIndex=this.fixIndex(cIndex+(percent>0?-1:1))]||tIndex==cIndex){
+                            if(!this.pages[tIndex=this.fixIndex(cIndex+(percent>0?-1:1))]){
                                 percent/=Math.abs(offset)/total+2;
-                                tIndex=-1;
                             }
                             this.fixBlock(cIndex,tIndex);
                             this.fire('dragMove',ev);
