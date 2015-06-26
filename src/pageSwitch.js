@@ -773,7 +773,7 @@
             }
             return this;
         },
-        fire:function(ev,percent,tpageIndex){
+        fire:function(ev){
             var self=this,
                 args=[].slice.call(arguments,1);
             each(this.events[ev]||[],function(func){
