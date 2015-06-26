@@ -793,19 +793,23 @@
                 cpage=this.pages[current],
                 percent=this.getPercent(),
                 tIndex=this.fixIndex(fixIndex==current?current+(percent>0?-1:1):fixIndex),
-                tpage=this.pages[tIndex],
                 target=index>current?-1:1,
-                _tpage=cpage;
+                _tpage=cpage,tpage;
             
             cancelFrame(this.timer);
 
+            if(current==tIndex){
+                tIndex=-1;
+            }
+            
+            tpage=this.pages[tIndex];
             if(fixIndex==current){
                 target=0;
                 _tpage=tpage;
             }else if(tpage.style.display=='none'){
                 percent=0;
             }
-
+            
             this.fixBlock(current,tIndex);
             this.fire('before',current,fixIndex);
             this.current=fixIndex;
@@ -848,7 +852,7 @@
             var self=this;
             if(this.playing){
                 this.playTimer=setTimeout(function(){
-                    self.slide((self.current+1)%(self.loop&&self.length?self.length:Infinity));
+                    self.slide((self.current+1)%(self.loop?Infinity:self.length));
                 },this.interval);
             }
             return this;
@@ -859,7 +863,7 @@
             return this;
         },
         fixIndex:function(index){
-            return this.length&&this.loop?(this.length+index)%this.length:index;
+            return this.loop?(this.length+index)%this.length:index;
         },
         fixBlock:function(cIndex,tIndex){
             each(this.pages,function(page,index){
@@ -914,8 +918,9 @@
                         }
                         if(this.drag){
                             percent=this.percent+(total&&offset/total);
-                            if(!this.pages[tIndex=this.fixIndex(cIndex+(percent>0?-1:1))]){
+                            if(!this.pages[tIndex=this.fixIndex(cIndex+(percent>0?-1:1))]||tIndex==cIndex){
                                 percent/=Math.abs(offset)/total+2;
+                                tIndex=-1;
                             }
                             this.fixBlock(cIndex,tIndex);
                             this.fire('dragMove',ev);
