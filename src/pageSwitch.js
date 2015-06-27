@@ -928,6 +928,7 @@
 
                 case 1:
                     if(canDrag&&!this.pointerType){
+                        clearTimeout(this.eventTimer);
                         this.pointerType=ev.eventType;
                     }
                 case 3:
@@ -953,7 +954,7 @@
                             offset=this._offset;
                             isDrag=this.drag;
 
-                            each("rect drag time percent _offset offsetParent pointerType".split(" "),function(prop){
+                            each("rect drag time percent _offset offsetParent".split(" "),function(prop){
                                 delete self[prop];
                             });
 
@@ -968,6 +969,10 @@
                             if(percent){
                                 this.slide(index);
                             }
+
+                            this.eventTimer=setTimeout(function(){
+                                delete self.pointerType;
+                            },30);
                         }
                     }
                     break;
