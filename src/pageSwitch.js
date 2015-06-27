@@ -895,11 +895,11 @@
         },
         handleEvent:function(oldEvent){
             var ev=filterEvent(oldEvent),
-                canDrag=ev.length<2&&ev.button<1&&(!this.pointerType||this.pointerType==ev.eventType)&&(this.mouse||ev.pointerType!='mouse');
+                canDrag=ev.button<1&&(!this.pointerType||this.pointerType==ev.eventType)&&(this.mouse||ev.pointerType!='mouse');
 
             switch(ev.eventCode){
                 case 2:
-                    if(canDrag&&this.rect){
+                    if(canDrag&&ev.length<2&&this.rect){
                         var cIndex=this.current,
                             dir=this.direction,
                             rect=[ev.clientX,ev.clientY],
@@ -927,9 +927,11 @@
                     break;
 
                 case 1:
-                    this.start=true;
+                    if(canDrag){
+                        this.start=true;
+                    }
                 case 3:
-                    if(canDrag&&this.start){
+                    if(canDrag&&ev.length<2&&this.start){
                         var self=this,
                             index=this.current,
                             percent=this.getPercent(),
