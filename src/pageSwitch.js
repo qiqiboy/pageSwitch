@@ -927,8 +927,9 @@
                     break;
 
                 case 1:
+                    this.start=true;
                 case 3:
-                    if(canDrag){
+                    if(canDrag&&this.start){
                         var self=this,
                             index=this.current,
                             percent=this.getPercent(),
