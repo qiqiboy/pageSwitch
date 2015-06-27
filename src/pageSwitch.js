@@ -927,9 +927,6 @@
                     break;
 
                 case 1:
-                    if(canDrag&&!this.pointerType){
-                        this.pointerType=ev.eventType;
-                    }
                 case 3:
                     if(canDrag){
                         var self=this,
@@ -939,6 +936,9 @@
                         if(ev.length){
                             nn=ev.target.nodeName.toLowerCase();
                             clearTimeout(this.eventTimer);
+                            if(!this.pointerType){
+                                this.pointerType=ev.eventType;
+                            }
                             if(this.timer){
                                 cancelFrame(this.timer);
                                 delete this.timer;
