@@ -928,7 +928,6 @@
 
                 case 1:
                     if(canDrag&&!this.pointerType){
-                        clearTimeout(this.eventTimer);
                         this.pointerType=ev.eventType;
                     }
                 case 3:
@@ -939,6 +938,7 @@
                             isDrag,offset,tm,nn;
                         if(ev.length){
                             nn=ev.target.nodeName.toLowerCase();
+                            clearTimeout(this.eventTimer);
                             if(this.timer){
                                 cancelFrame(this.timer);
                                 delete this.timer;
