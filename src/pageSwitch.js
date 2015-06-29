@@ -968,6 +968,8 @@
 
                             if(percent){
                                 this.slide(index);
+                            }else if(isDrag){
+                                this.firePlay();
                             }
 
                             this.eventTimer=setTimeout(function(){
