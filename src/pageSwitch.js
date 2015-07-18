@@ -1082,7 +1082,11 @@
         struct['add'+name]=struct.prototype['add'+name];
     });
 
-    ROOT.pageSwitch=struct;
+    if(type(define)=='function' && define.amd){
+        define([],function(){
+            return struct;
+        });
+    }else ROOT.pageSwitch=struct;
 	
 })(window, function(wrap,config){
     if(!(this instanceof arguments.callee)){
