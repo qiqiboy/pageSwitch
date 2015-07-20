@@ -1082,7 +1082,7 @@
         struct['add'+name]=struct.prototype['add'+name];
     });
 
-    if(type(define)=='function' && define.amd){
+    if(typeof define=='function' && define.amd){
         define([],function(){
             return struct;
         });
