@@ -1083,7 +1083,7 @@
     });
 
     if(typeof define=='function' && define.amd){
-        define([],function(){
+        define('pageSwitch',function(){
             return struct;
         });
     }else ROOT.pageSwitch=struct;
