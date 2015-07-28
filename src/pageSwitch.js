@@ -974,7 +974,7 @@
 
                             this.eventTimer=setTimeout(function(){
                                 delete self.pointerType;
-                            },30);
+                            },400);
                         }
                     }
                     break;
