@@ -1,3 +1,11 @@
+[招聘] 与我一起工作
+=========
+> ［北京地区］国内最大美股券商 － [老虎证券](https://www.tigerbrokers.com)   
+［地点］东三环亮马桥  
+［职位］web前端开发工程师  
+［要求］无。实习全职都可以。只求和我面基，看对眼  
+［联系］我的github主页上邮箱 [qiqiboy](https://github.com/qiqiboy)
+
 pageSwitch
 =========
 > **与 [TouchSlider.js](https://github.com/qiqiboy/touchslider) 的区别**  
