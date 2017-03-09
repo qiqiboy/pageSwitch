@@ -33,8 +33,15 @@ http://u.boy.im/pageswitch/pic.html
 [![flip](https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/gif/flip.gif)](http://u.boy.im/pageswitch/pic.html?ts=flip) 
 [![flip3d](https://raw.githubusercontent.com/qiqiboy/qiqiboy.github.com/master/images/gif/flip3d.gif)](http://u.boy.im/pageswitch/pic.html?ts=flip3d)
 
+## 安装
+    npm install pageswitch
+
 ## 如何使用
 ```javascript
+// 如果使用webpack或者requirejs或者browserify等构建工具，可以这样：
+var pageSwitch = require('pageswitch');
+
+// 也可以直接在下载本文件，直接在页面中引入
 // 首先在页面中引入pageSwitch.js
 // 调用 pageSwitch 方法
 
