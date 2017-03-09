@@ -1,0 +1,19 @@
+{
+  "name": "pageswitch",
+  "version": "2.3.2",
+  "description": "Just a page Switch Javascript Library, and it has supported 121 switching animations.",
+  "main": "src/pageSwitch.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://qiqiboy@github.com/qiqiboy/pageSwitch.git"
+  },
+  "author": "qiqiboy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/qiqiboy/pageSwitch/issues"
+  },
+  "homepage": "https://github.com/qiqiboy/pageSwitch#readme"
+}

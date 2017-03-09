@@ -1,11 +1,3 @@
-[招聘] 与我一起工作
-=========
-> ［北京地区］国内最大美股券商 － [老虎证券](https://www.tigerbrokers.com)   
-［地点］东三环亮马桥  
-［职位］web前端开发工程师  
-［要求］无。实习全职都可以。只求和我面基，看对眼  
-［联系］我的github主页上邮箱 [qiqiboy](https://github.com/qiqiboy)
-
 pageSwitch
 =========
 > **与 [TouchSlider.js](https://github.com/qiqiboy/touchslider) 的区别**  
@@ -16,6 +8,18 @@ pageSwitch.js适用场景为全屏切换，即一切一屏，并且在此基础�
 Just a page Switch Javascript Library, and it has supported 121 switching animations.
 
 页面切换器，支持多达121种切页效果，更可支持自定义切页动画， 尽情发挥想象力！  
+
+## 无法滑动？
+
+最新版本的chrome的实现了pointer事件，pageSwitch会优先使用pointer事件，但是会和系统触摸滚动冲突。
+解决该问题，可以通过对滚动容器设置 [touch-action](https://developer.mozilla.org/en-US/docs/Web/CSS/touch-action) 样式来fix。
+```scss
+.my-slider-container {
+    touch-action: pan-y; //横向滚动时 or
+    touch-action: pan-x; //纵向滑动时
+}
+```
+## 查看效果
 
 http://u.boy.im/pageswitch/pic.html  
 
