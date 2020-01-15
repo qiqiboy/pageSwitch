@@ -21,7 +21,7 @@ Just a page Switch Javascript Library, and it has supported 121 switching animat
 ```
 ## 查看效果
 
-http://u.boy.im/pageswitch/pic.html  
+http://github.boy.im/pageSwitch/pic.html
 
 手机扫描下面二维码查看例子：  
 
@@ -230,6 +230,6 @@ $(container_id).ps().next(); //由于链式调用返回依然是jq对象自身�
 兼容全平台，包括IE6+
 
 ## DEMO
-http://u.boy.im/pageswitch  
+http://github.boy.im/pageSwitch/index.html
 
-http://u.boy.im/pageswitch/pic.html  
+http://github.boy.im/pageSwitch/pic.html  
