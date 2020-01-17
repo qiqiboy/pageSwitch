@@ -118,6 +118,7 @@ body {
     min-height:100%;
     _height:100%;
     overflow:hidden;
+    touch-action: none;
 }
 #pages{
     position:absolute;
