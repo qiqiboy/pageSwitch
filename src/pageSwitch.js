@@ -938,6 +938,11 @@
                             ev.preventDefault();
                         }
                     }
+
+                    if (this.drag && this.pointerType !== 'touch' && ev.eventType === 'touch') {
+                         ev.preventDefault();
+                    }
+
                     break;
 
                 case 1:
