@@ -1,10 +1,10 @@
-// Type definitions for pageswitch>=2.3.5
+// Type definitions for pageswitch>=3.0.0
 // Project: pageSwitch
 // Definitions by: qiqiboy
 
-declare type PageSwitchEaseString = 'linear' | 'ease' | 'ease-in' | 'ease-out' | 'ease-in-out' | 'bounce';
-declare type PageSwitchEaseFunc = (current: number, begin: number, changed: number, duration: number) => number;
-declare type PageSwitchTransitionString =
+export declare type PageSwitchEaseString = 'linear' | 'ease' | 'ease-in' | 'ease-out' | 'ease-in-out' | 'bounce';
+export declare type PageSwitchEaseFunc = (current: number, begin: number, changed: number, duration: number) => number;
+export declare type PageSwitchTransitionString =
     | 'fade'
     | 'slice'
     | 'sliceX'
@@ -127,9 +127,14 @@ declare type PageSwitchTransitionString =
     | 'bombCoverOutX'
     | 'bombCoverOutY';
 
-declare type PageSwitchTransitionFunc = (cpage: HTMLElement, cp: number, tpage?: HTMLElement, tp?: number) => void;
+export declare type PageSwitchTransitionFunc = (
+    cpage: HTMLElement,
+    cp: number,
+    tpage?: HTMLElement,
+    tp?: number
+) => void;
 
-declare interface PageSwitchConfig {
+export declare interface PageSwitchConfig {
     duration?: number;
     direction?: 0 | 1;
     start?: number;
@@ -144,7 +149,7 @@ declare interface PageSwitchConfig {
     transition?: PageSwitchTransitionString | PageSwitchTransitionFunc;
 }
 
-declare interface PageSwitch {
+export declare interface PageSwitch {
     pages: HTMLElement[];
     length: number;
     frozen: boolean;
@@ -191,13 +196,13 @@ declare interface PageSwitch {
     destroy(): PageSwitch;
 }
 
-interface PageSwitchConstructor {
+export interface PageSwitchConstructor {
     new (idOrElement: string | HTMLElement, config?: PageSwitchConfig): PageSwitch;
     (idOrElement: string | HTMLElement, config?: PageSwitchConfig): PageSwitch;
 }
 
 declare const pageSwitch: PageSwitchConstructor;
 
-export = pageSwitch;
+export default pageSwitch;
 
 export as namespace pageSwitch;
