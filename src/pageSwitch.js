@@ -8,6 +8,8 @@
 (function(ROOT, struct, undefined){
     "use strict";
 
+    if (typeof window === 'undefined') { return }
+
     var VERSION='2.3.2';
     var lastTime=0,
         nextFrame=ROOT.requestAnimationFrame            ||

@@ -1,6 +1,6 @@
 {
   "name": "pageswitch",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "description": "Just a page Switch Javascript Library, and it has supported 121 switching animations.",
   "main": "src/pageSwitch.js",
   "scripts": {
