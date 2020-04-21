@@ -1110,7 +1110,7 @@
         });
     }else ROOT.pageSwitch=struct;
 
-})(window, function(wrap,config){
+})(typeof window !== 'undefined' ? window : global, function(wrap,config){
     if(!(this instanceof arguments.callee)){
         return new arguments.callee(wrap,config);
     }
